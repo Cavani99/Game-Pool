@@ -37,6 +37,9 @@ public class User {
     @NotNull
     private UserRole role;
 
+    @Column(name = "is_banned")
+    private boolean isBanned;
+
     @ManyToMany
     @JoinTable(name = "users_games",
             joinColumns = @JoinColumn(name = "owner_id", referencedColumnName = "id"),
