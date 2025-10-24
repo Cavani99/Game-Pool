@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Inter:wght@400;600;800&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="/css/pre-login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="auth-page">
+<!-- Water animation background -->
+<div class="ocean" aria-hidden="true">
+    <div class="wave w1"></div>
+    <div class="wave w2"></div>
+    <div class="wave w3"></div>
+</div>
+
+<main class="auth-modal register">
+    <a class="auth-close" href="/" aria-label="Back to home"
+       style="color: var(--muted); position: absolute; right: 16px; top: 16px;">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+        </svg>
+    </a>
+
+    <h1 class="auth-title">Game Pool — Register</h1>
+
+    <form class="auth-form" th:action="@{/register}" th:method="POST" th:object="${user}">
+        <!-- Username -->
+        <div class="form-group">
+            <label for="reg-username"><span>Username</span></label>
+            <span class="badge badge-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+            <span class="badge badge-soft">Username must be between 4 and 25 characters</span>
+            <input th:field="*{username}" class="form-control" id="reg-username" type="text"
+                   placeholder="Enter your username" required>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+            <label for="reg-password"><span>Password</span></label>
+            <span class="badge badge-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            <span class="badge badge-soft">Password must have more than 4 characters</span>
+            <div class="password-wrap">
+                <input th:field="*{password}" class="form-control" id="reg-password" type="password"
+                       placeholder="Enter your password" required>
+                <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordReg()" id="toggleIconReg"
+                   aria-label="Show password"></i>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="avatarUrl"><span>Avatar URL</span></label>
+            <span class="badge badge-error" th:if="${#fields.hasErrors('avatarUrl')}" th:errors="*{avatarUrl}"></span>
+            <input th:field="*{avatarUrl}" class="form-control" id="avatarUrl" type="url" placeholder="Paste image URL"
+                   oninput="previewAvatar(this.value)">
+            <div id="avatarPreview"></div>
+        </div>
+
+        <!-- Role -->
+        <div class="form-group">
+            <label for="role"><span>Role</span></label>
+            <span class="badge badge-error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+            <span class="badge badge-soft">Create a user account or request admin access</span>
+            <select th:field="*{role}" class="form-select" style="color: black;" id="role">
+                <option value="">Select your role</option>
+                <option th:each="role : ${T(main.model.UserRole).values()}" th:value="${role}"
+                        th:text="${role.name()}"></option>
+            </select>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary full">Create Account</button>
+
+        <p class="switch-line">Already have an account? <a href="/login">Log In</a></p>
+    </form>
+</main>
+<script>
+    function togglePasswordReg() {
+        const input = document.getElementById("reg-password");
+        const icon = document.getElementById("toggleIconReg");
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.replace("fa-eye", "fa-eye-slash");
+            icon.setAttribute('aria-label', 'Hide password');
+        } else {
+            input.type = "password";
+            icon.classList.replace("fa-eye-slash", "fa-eye");
+            icon.setAttribute('aria-label', 'Show password');
+        }
+    }
+
+    function previewAvatar(url) {
+        const box = document.getElementById('avatarPreview');
+        if (!box) return;
+        if (!url) {
+            box.innerHTML = "";
+            return;
+        }
+        box.innerHTML = `<img src="${url}" alt="Avatar preview" onerror="this.style.display='none'">`;
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const avatarInput = document.getElementById("avatarUrl");
+      if (avatarInput && avatarInput.value) {
+          previewAvatar(avatarInput.value);
+      }
+    });
+</script>
+</body>
+</html>

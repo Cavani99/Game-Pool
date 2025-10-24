@@ -3,11 +3,15 @@ package main.service;
 import main.model.User;
 import main.repository.UserRepository;
 import main.security.AuthenticationDetails;
+import main.web.dto.RegisterRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -24,5 +28,19 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User does not exist!"));
 
         return new AuthenticationDetails(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isBanned());
+    }
+
+    public void create(RegisterRequest registerRequest) {
+        User user = new User();
+        user.setUsername(registerRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setAvatarUrl(registerRequest.getAvatarUrl());
+        user.setRole(registerRequest.getRole());
+        user.setBanned(false);
+        user.setBalance(BigDecimal.ZERO);
+        user.setCreatedOn(LocalDateTime.now());
+        user.setUpdatedOn(LocalDateTime.now());
+
+        userRepository.save(user);
     }
 }

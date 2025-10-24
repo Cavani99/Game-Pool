@@ -42,21 +42,21 @@ public class AuthenticationDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return this.isBanned;
+        return !this.isBanned;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return this.isBanned;
+        return !this.isBanned;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return this.isBanned;
+        return !this.isBanned;
     }
 
     @Override
     public boolean isEnabled() {
-        return this.isBanned;
+        return !this.isBanned;
     }
 }
