@@ -25,6 +25,10 @@ public class User {
     @NotNull
     private String username;
 
+    @Column(name = "email", unique = true)
+    @NotNull
+    private String email;
+
     @Column(name = "password")
     @NotNull
     private String password;

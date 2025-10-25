@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -33,6 +34,7 @@ public class UserService implements UserDetailsService {
     public void create(RegisterRequest registerRequest) {
         User user = new User();
         user.setUsername(registerRequest.getUsername());
+        user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setAvatarUrl(registerRequest.getAvatarUrl());
         user.setRole(registerRequest.getRole());
@@ -42,5 +44,9 @@ public class UserService implements UserDetailsService {
         user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
+    }
+
+    public User getById(UUID id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist!"));
     }
 }

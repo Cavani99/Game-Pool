@@ -38,6 +38,14 @@
                    placeholder="Enter your username" required>
         </div>
 
+        <!-- Email -->
+        <div class="form-group">
+            <label for="reg-username"><span>Email</span></label>
+            <span class="badge badge-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            <input th:field="*{email}" class="form-control" id="reg-email" type="text"
+                   placeholder="Enter your email" required>
+        </div>
+
         <!-- Password -->
         <div class="form-group">
             <label for="reg-password"><span>Password</span></label>
