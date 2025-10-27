@@ -1,7 +1,9 @@
 package main.web;
 
+import main.model.Company;
 import main.model.User;
 import main.security.AuthenticationDetails;
+import main.service.CompanyService;
 import main.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")

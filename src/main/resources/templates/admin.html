@@ -25,7 +25,7 @@
                         <div class="smart-wallet-nav-bar-name">Admin Panel</div>
                     </div>
                     <div class="func-block">
-                        <a href="/admin" class="active">
+                        <a th:href="@{/admin}" class="active">
                             <p>Profile</p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -47,7 +47,7 @@
                     </div>
                     <div class="func-block">
                         <span>Games Settings</span>
-                        <a href="admin/companies">
+                        <a th:href="@{/admin/companies}">
                             <p>Game Companies</p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -56,7 +56,7 @@
                                       stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"></path>
                             </svg>
                         </a>
-                        <a href="admin/categories">
+                        <a th:href="@{/admin/categories}">
                             <p>Game Categories</p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -69,7 +69,7 @@
                                       clip-rule="evenodd"></path>
                             </svg>
                         </a>
-                        <a href="admin/games">
+                        <a th:href="@{/admin/games}">
                             <p>Games</p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -78,7 +78,7 @@
                                       stroke-width="2" d="M8 20V7m0 13-4-4m4 4 4-4m4-12v13m0-13 4 4m-4-4-4 4"></path>
                             </svg>
                         </a>
-                        <a href="admin/discount">
+                        <a th:href="@{/admin/discount}">
                             <p>Discounts</p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -90,7 +90,7 @@
                     </div>
                     <div class="func-block">
                         <span>Utility</span>
-                        <a href="/admin/transactions">
+                        <a th:href="@{/admin/transactions}">
                             <p>Transactions</p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -101,7 +101,7 @@
                         </a>
                     </div>
                     <div class="func-block">
-                        <a class="logout" href="/logout">
+                        <a class="logout"  th:href="@{/logout}">
                             <p>Logout</p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"

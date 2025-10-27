@@ -190,9 +190,6 @@
     .switch-line { text-align: center; margin-top: 1rem; font-size: 0.9rem; }
     .switch-line a { color: #3bd1ff; text-decoration: underline; }
 
-    .badge-error { color: #a30707; font-size: 0.8rem; display: block; }
-    .badge-soft { color: #ebc934; font-size: 0.8rem; }
-
     #avatarPreview img {
         width: 80px;
         height: 80px;

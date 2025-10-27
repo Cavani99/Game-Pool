@@ -1,0 +1,12 @@
+.admin-btn{
+    float:right;
+}
+
+.message-box{
+    border-radius: 15px;
+    padding: 10px;
+    background: green;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+}

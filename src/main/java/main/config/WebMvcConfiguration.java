@@ -19,6 +19,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         httpSecurity.authorizeHttpRequests(matchers -> matchers
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/", "/register").permitAll()
+                .requestMatchers("/login", "/error", "/css/**", "/js/**").permitAll()
                 .anyRequest().authenticated()
         ).formLogin(form -> form
                 .loginPage("/login")
