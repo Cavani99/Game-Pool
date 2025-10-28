@@ -32,6 +32,8 @@ public class CompaniesAdminController {
         List<Company> companyList = companyService.findAll();
 
         modelAndView.addObject("companies", companyList);
+        modelAndView.addObject("page", "companies");
+        modelAndView.addObject("title", "Companies");
 
         return modelAndView;
     }
@@ -42,6 +44,8 @@ public class CompaniesAdminController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/company_form");
         modelAndView.addObject("company", new CreateCompanyRequest());
+        modelAndView.addObject("page", "companies");
+        modelAndView.addObject("title", "Companies");
 
         return modelAndView;
     }
@@ -53,6 +57,8 @@ public class CompaniesAdminController {
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView("admin/company_form");
             mav.addObject("company", createCompanyRequest);
+            mav.addObject("page", "companies");
+            mav.addObject("title", "Companies");
             return mav;
         }
 
@@ -65,6 +71,8 @@ public class CompaniesAdminController {
             bindingResult.rejectValue("name", "error.company", "A company with this name already exists.");
             ModelAndView mav = new ModelAndView("admin/company_form");
             mav.addObject("company", createCompanyRequest);
+            mav.addObject("page", "companies");
+            mav.addObject("title", "Companies");
             return mav;
         }
     }
@@ -79,6 +87,8 @@ public class CompaniesAdminController {
         modelAndView.setViewName("admin/company_form");
         modelAndView.addObject("company", createCompanyRequest);
         modelAndView.addObject("company_id", company.getId());
+        modelAndView.addObject("page", "companies");
+        modelAndView.addObject("title", "Companies");
 
         return modelAndView;
     }
@@ -90,6 +100,8 @@ public class CompaniesAdminController {
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView("admin/company_form");
             mav.addObject("company", createCompanyRequest);
+            mav.addObject("page", "companies");
+            mav.addObject("title", "Companies");
             return mav;
         }
 

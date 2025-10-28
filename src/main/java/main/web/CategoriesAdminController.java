@@ -33,6 +33,8 @@ public class CategoriesAdminController {
         List<Category> categories = categoryService.findAll();
 
         modelAndView.addObject("categories", categories);
+        modelAndView.addObject("page", "categories");
+        modelAndView.addObject("title", "Categories");
 
         return modelAndView;
     }
@@ -43,6 +45,8 @@ public class CategoriesAdminController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/category_form");
         modelAndView.addObject("category", new CreateCategoryRequest());
+        modelAndView.addObject("page", "categories");
+        modelAndView.addObject("title", "Categories");
 
         return modelAndView;
     }
@@ -54,6 +58,8 @@ public class CategoriesAdminController {
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView("admin/category_form");
             mav.addObject("category", createCategoryRequest);
+            mav.addObject("page", "categories");
+            mav.addObject("title", "Categories");
             return mav;
         }
 
@@ -66,6 +72,8 @@ public class CategoriesAdminController {
             bindingResult.rejectValue("name", "error.category", "A category with this name already exists.");
             ModelAndView mav = new ModelAndView("admin/category_form");
             mav.addObject("category", createCategoryRequest);
+            mav.addObject("page", "categories");
+            mav.addObject("title", "Categories");
             return mav;
         }
     }
@@ -80,6 +88,8 @@ public class CategoriesAdminController {
         modelAndView.setViewName("admin/category_form");
         modelAndView.addObject("category", createCategoryRequest);
         modelAndView.addObject("category_id", category.getId());
+        modelAndView.addObject("page", "categories");
+        modelAndView.addObject("title", "Categories");
 
         return modelAndView;
     }
@@ -91,6 +101,8 @@ public class CategoriesAdminController {
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView("admin/category_form");
             mav.addObject("category", createCategoryRequest);
+            mav.addObject("page", "categories");
+            mav.addObject("title", "Categories");
             return mav;
         }
 
