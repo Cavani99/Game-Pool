@@ -31,12 +31,12 @@ public class UserService implements UserDetailsService {
         return new AuthenticationDetails(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isBanned());
     }
 
-    public void create(RegisterRequest registerRequest) {
+    public void create(RegisterRequest registerRequest, String avatarPath) {
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setAvatarUrl(registerRequest.getAvatarUrl());
+        user.setAvatar(avatarPath);
         user.setRole(registerRequest.getRole());
         user.setBanned(false);
         user.setBalance(BigDecimal.ZERO);

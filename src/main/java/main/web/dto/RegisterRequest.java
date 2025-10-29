@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import main.model.UserRole;
-import org.hibernate.validator.constraints.URL;
+import org.springframework.web.multipart.MultipartFile;
 
 @Builder
 @Getter
@@ -27,9 +27,7 @@ public class RegisterRequest {
     @Size(min = 4, message = "Characters must be more than 4 symbols")
     private String password;
 
-    @NotBlank(message = "URL must be set")
-    @URL(message = "Please, write a valid url")
-    private String avatarUrl;
+    private MultipartFile avatar;
 
     @NotNull(message = "You must pick a role")
     private UserRole role;

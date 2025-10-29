@@ -6,6 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Inter:wght@400;600;800&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="/css/pre-login.css">
+    <link rel="stylesheet" href="/css/form-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -28,7 +29,7 @@
 
     <h1 class="auth-title">Game Pool — Register</h1>
 
-    <form class="auth-form" th:action="@{/register}" th:method="POST" th:object="${user}">
+    <form class="auth-form" th:action="@{/register}" th:method="POST" th:object="${user}" enctype="multipart/form-data">
         <!-- Username -->
         <div class="form-group">
             <label for="reg-username"><span>Username</span></label>
@@ -59,11 +60,12 @@
             </div>
         </div>
 
+        <!-- Avatar -->
         <div class="form-group">
-            <label for="avatarUrl"><span>Avatar URL</span></label>
-            <span class="badge badge-error" th:if="${#fields.hasErrors('avatarUrl')}" th:errors="*{avatarUrl}"></span>
-            <input th:field="*{avatarUrl}" class="form-control" id="avatarUrl" type="url" placeholder="Paste image URL"
-                   oninput="previewAvatar(this.value)">
+            <label for="avatar"><span>Avatar</span></label>
+            <span class="badge badge-error" th:if="${errorMessage}" th:text="${errorMessage}"></span>
+            <input class="form-control" id="avatar" th:field="*{avatar}" type="file" accept="image/*"
+                   onchange="previewAvatarFile(event)">
             <div id="avatarPreview"></div>
         </div>
 
@@ -100,14 +102,33 @@
         }
     }
 
-    function previewAvatar(url) {
-        const box = document.getElementById('avatarPreview');
-        if (!box) return;
-        if (!url) {
-            box.innerHTML = "";
-            return;
+       function previewAvatarFile(event) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+        const maxSize = 10 * 1024 * 1024; // 10 MB limit
+        const previewContainer = document.getElementById('avatarPreview');
+        previewContainer.innerHTML = '';
+
+        if (!file) return;
+
+        if (file.size > maxSize) {
+          alert(`File too large! Please choose an image under ${maxSize / (1024 * 1024)} MB.`);
+          fileInput.value = ''; // clears the selected file
+          return;
         }
-        box.innerHTML = `<img src="${url}" alt="Avatar preview" onerror="this.style.display='none'">`;
+
+        // Optional: preview the selected image
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.alt = 'Avatar preview';
+          img.style.maxWidth = '150px';
+          img.style.borderRadius = '8px';
+          img.style.boxShadow = '0 0 4px rgba(0,0,0,0.2)';
+          previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
     }
 
     window.addEventListener("DOMContentLoaded", () => {

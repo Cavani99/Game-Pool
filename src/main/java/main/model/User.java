@@ -35,7 +35,7 @@ public class User {
 
     @Column(name = "avatar_url")
     @NotNull
-    private String avatarUrl;
+    private String avatar;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
