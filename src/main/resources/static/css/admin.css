@@ -10,3 +10,39 @@
     font-weight: 500;
     color: white;
 }
+
+
+
+.profile-form{
+    width: 160px;
+    height: 150px;
+    margin-bottom: 10px;
+    align-self: center;
+    justify-self: center;
+}
+
+.profile-form-edit{
+    width: 260px;
+    height: 250px;
+    margin-bottom: 10px;
+    align-self: center;
+    justify-self: center;
+    border: 10px solid;
+    border-color: brown;
+}
+
+.active-box{
+    border: 3px solid;
+    border-color: #054b07;
+    padding: 5px 10px 5px 40px;
+    border-radius: 4px;
+    background: #63ff01;
+}
+
+.inactive-box{
+    border: 3px solid;
+    border-color: #650d0d;
+    padding: 5px 10px 5px 40px;
+    border-radius: 4px;
+    background: #fd291f;
+}

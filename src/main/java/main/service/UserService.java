@@ -1,6 +1,7 @@
 package main.service;
 
 import main.model.User;
+import main.model.UserRole;
 import main.repository.UserRepository;
 import main.security.AuthenticationDetails;
 import main.web.dto.RegisterRequest;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -48,5 +50,17 @@ public class UserService implements UserDetailsService {
 
     public User getById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist!"));
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAllByRole(UserRole.USER);
+    }
+
+    public void changeBanStatus(UUID id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist!"));
+
+        user.setBanned(!user.isBanned());
+
+        userRepository.save(user);
     }
 }

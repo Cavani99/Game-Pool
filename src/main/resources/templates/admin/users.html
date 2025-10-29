@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title} ?: 'Admin Panel'">Admin Panel</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/nav-side-bar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/home-common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+</head>
+<body th:replace="fragments/admin_layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information">
+        <div>
+            <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
+        </div>
+        <div th:if="${users.isEmpty()}">
+            <h3>There are no registered users!</h3>
+        </div>
+        <div th:unless="${users.isEmpty()}">
+            <table class="table">
+                <thead>
+                <tr class="thead-dark">
+                    <th class="text-center">
+                        Image
+                    </th>
+                    <th class="text-center">
+                        Username
+                    </th>
+                    <th class="text-center">
+                        Email
+                    </th>
+                    <th class="text-center">
+                        Wallet Balance
+                    </th>
+                    <th class="text-center">
+                        Banned
+                    </th>
+                    <th class="text-center">
+                        Actions
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user, stat : ${users}"
+                    th:classappend="${stat.index % 2 != 0} ? 'table-active'">
+                    <td>
+                        <img th:src="@{${user.avatar}}" alt="Profile Picture"
+                             class="profile-form">
+                    </td>
+                    <td th:text="${user.username}">
+                    </td>
+                    <td th:text="${user.email}">
+                    </td>
+                    <td th:text="${user.balance}">
+                    </td>
+                    <td>
+                        <span th:if="${user.isBanned == false}" class="active-box">
+                            Active
+                        </span>
+                        <span th:if="${user.isBanned == true}" class="inactive-box">
+                            Banned
+                        </span>
+                    </td>
+                    <td>
+                        <a th:href="@{/admin/users/show/{id} (id=${user.id})}">
+                            <button class="btn btn-warning">
+                                See User
+                            </button>
+                        </a>
+                        <a th:if="${user.isBanned == false}" th:href="@{/admin/users/ban/{id} (id=${user.id})}">
+                            <button class="btn btn-danger">
+                                Ban User
+                            </button>
+                        </a>
+                        <a th:if="${user.isBanned == true}" th:href="@{/admin/users/ban/{id} (id=${user.id})}">
+                            <button class="btn btn-primary">
+                                Unban User
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

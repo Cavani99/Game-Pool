@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title} ?: 'Admin Panel'">Admin Panel</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/nav-side-bar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/home-common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/form-styles.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+</head>
+<body th:replace="fragments/admin_layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information">
+        <h2 class="text-center mb-4" th:text="${user.username}"></h2>
+
+        <img th:src="@{${user.avatar}}" alt="Profile Picture"
+             class="profile-form-edit">
+
+        <div class="form-group text-center form-field">
+            <label for="email" class="control-label col-sm-2" style="width: 5%"><span>Email:</span></label>
+            <div id="email" style="width: 300px;" th:text="${user.email}"></div>
+        </div>
+
+        <div class="form-group text-center form-field">
+            <label for="balance" class="control-label col-sm-2" style="width: 5%"><span>Balance:</span></label>
+            <div id="balance" style="width: 300px;" th:text="${user.balance}"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
