@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title} ?: 'Admin Panel'">Admin Panel</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/nav-side-bar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/home-common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/form-styles.css}">
+
+    <!-- CKEditor 5 Classic -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+    <!-- jQuery (required by Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body th:replace="fragments/admin_layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information">
+        <form class="auth-form"
+              th:action="${game_id} != null ? @{/admin/games/edit/{id} (id=${game_id})} : @{/admin/games/add}"
+              th:method="POST" th:object="${game}" enctype="multipart/form-data">
+            <h2 class="text-center mb-4">Add Game</h2>
+
+            <span class="badge badge-error" style="background-color : #ffffff;" th:if="${#fields.hasErrors('title')}"
+                  th:errors="*{title}"></span>
+            <div class="form-group text-center form-field">
+                <label for="title" class="control-label col-sm-2" style="width: 10%"><span>Name:</span></label>
+                <input th:field="*{title}" class="form-control input" id="title" name="title"
+                       type="text" placeholder="Enter Game title" style="width: 300px;">
+            </div>
+
+            <span class="badge badge-error" style="background-color : #ffffff;"
+                  th:if="${#fields.hasErrors('categoryId')}"
+                  th:errors="*{categoryId}"></span>
+            <div class="form-group text-center form-field">
+                <label for="categoryId" class="control-label col-sm-2" style="width: 10%"><span>Category:</span></label>
+                <select th:field="*{categoryId}" class="form-select select2" id="categoryId" style="width: 300px;">
+                    <option value="">Select category</option>
+                    <option th:each="category :  ${categories}" th:value="${category.id}"
+                            th:text="${category.name}" data-color="red">
+                    </option>
+                </select>
+            </div>
+
+            <span class="badge badge-error" style="background-color : #ffffff;"
+                  th:if="${#fields.hasErrors('companyId')}"
+                  th:errors="*{companyId}"></span>
+            <div class="form-group text-center form-field">
+                <label for="companyId" class="control-label col-sm-2" style="width: 10%"><span>Company:</span></label>
+                <select th:field="*{companyId}" class="form-select select2" id="companyId" style="width: 300px;">
+                    <option value="">Select company</option>
+                    <option th:each="company :  ${companies}" th:value="${company.id}"
+                            th:text="${company.name}">
+                    </option>
+                </select>
+            </div>
+
+            <span class="badge badge-error" style="background-color : #ffffff;"
+                  th:if="${#fields.hasErrors('image')}"
+                  th:errors="*{image}"></span>
+            <div class="form-group text-center form-field">
+                    <label for="image" class="control-label col-sm-2" style="width: 10%;">
+                        <span>Image:</span>
+                    </label>
+                    <input class="form-control" id="image" th:field="*{image}" type="file" accept="image/*"
+                           onchange="previewImage(event)" style="width: 300px;">
+            </div>
+
+            <div id="imagePreview">
+                <img th:if="${game.imagePath != null}" id="image_box"
+                     th:src="@{${game.imagePath}}"
+                     alt="Existing image">
+            </div>
+
+            <span class="badge badge-error" style="background-color : #ffffff;"
+                  th:if="${#fields.hasErrors('description')}"
+                  th:errors="*{description}"></span>
+            <div class="form-group text-center form-field">
+                <label for="description" class="control-label col-sm-2"
+                       style="width: 10%"><span>Description:</span></label>
+                <textarea th:field="*{description}" id="description" placeholder="Enter Game description" rows="5"
+                          cols="50"></textarea>
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    $(document).ready(function() {
+        $('#companyId').select2({
+           placeholder: 'Select a company',
+           allowClear: true,
+           width: 'resolve'
+        });
+
+         $('#categoryId').select2({
+           placeholder: 'Select a category',
+           allowClear: true,
+           width: 'resolve'
+       });
+    });
+
+   function previewImage(event) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+        const maxSize = 10 * 1024 * 1024; // 10 MB limit
+        const previewContainer = document.getElementById('imagePreview');
+        previewContainer.innerHTML = '';
+
+        if (!file) return;
+
+        if (file.size > maxSize) {
+          alert(`File too large! Please choose an image under ${maxSize / (1024 * 1024)} MB.`);
+          fileInput.value = '';
+          return;
+        }
+
+        // Optional: preview the selected image
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Image preview';
+            img.style.maxWidth = '350px';
+            img.style.maxHeight = '200px';
+            img.style.borderRadius = '8px';
+            img.style.marginTop = '10px';
+            img.style.boxShadow = '0 0 6px rgba(0,0,0,0.2)';
+            previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+   }
+
+    window.addEventListener("DOMContentLoaded", () => {
+          const imageInput = document.getElementById("image");
+          if (imageInput && imageInput.value) {
+              previewImage(imageInput.value);
+          }
+    });
+
+     ClassicEditor
+        .create(document.querySelector('#description'))
+        .catch(error => {
+            console.error(error);
+    });
+</script>
+</html>

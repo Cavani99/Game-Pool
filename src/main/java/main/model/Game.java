@@ -21,7 +21,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     @NotNull
     private String title;
 
@@ -38,10 +38,9 @@ public class Game {
     private Company company;
 
     @Column(name = "image")
-    @NotNull
     private String image;
 
-    @OneToOne(optional = false)
+    @OneToOne
     @JoinColumn(name = "discount_id", referencedColumnName = "id")
     private Discount discount;
 

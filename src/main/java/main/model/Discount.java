@@ -33,4 +33,25 @@ public class Discount {
     @NotNull
     private LocalDateTime createdOn;
 
+    public boolean isDiscountActive() {
+        LocalDateTime now = LocalDateTime.now();
+
+        if(amount <= 0) {
+            return false;
+        }
+
+        if (startDate != null && endDate != null) {
+            return !now.isBefore(startDate) && !now.isAfter(endDate);
+        }
+
+        if (startDate != null) {
+            return !now.isBefore(startDate);
+        }
+
+        if (endDate != null) {
+            return !now.isAfter(endDate);
+        }
+
+        return false;
+    }
 }

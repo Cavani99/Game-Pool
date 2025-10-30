@@ -12,3 +12,28 @@
     align-content: center;
     justify-content: center;
 }
+
+.select2-results { color: #000000; }
+
+.ck-editor__editable {
+    min-height: 150px;
+    resize: vertical;
+    overflow: auto;
+}
+
+#imagePreview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    margin-left: 10%;
+}
+
+#image_box{
+    max-width: 350px;
+    max-height: 200px;
+    border-radius: 8px;
+    margin-top: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 6px;
+}

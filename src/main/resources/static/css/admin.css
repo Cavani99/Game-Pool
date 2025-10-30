@@ -46,3 +46,8 @@
     border-radius: 4px;
     background: #fd291f;
 }
+
+.center-td{
+    text-align: center !important;
+    vertical-align: middle !important;
+}
