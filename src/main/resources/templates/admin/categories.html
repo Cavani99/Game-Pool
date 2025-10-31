@@ -26,7 +26,7 @@
 <body th:replace="fragments/admin_layout :: layout(~{::content})">
 <div th:fragment="content">
     <div class="single-section-box home-profile-information">
-        <div>
+        <div class="btn-header">
             <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
             <a th:href="@{/admin/categories/add}">
                 <button class="btn btn-primary admin-btn">
@@ -37,7 +37,7 @@
         <div th:if="${categories.isEmpty()}">
             <h3>There are no categories saved!</h3>
         </div>
-        <div th:unless="${categories.isEmpty()}">
+        <div class="table-container" th:unless="${categories.isEmpty()}">
             <table class="table">
                 <thead>
                 <tr class="thead-dark">
@@ -52,9 +52,9 @@
                 <tbody>
                 <tr th:each="category, stat : ${categories}"
                     th:classappend="${stat.index % 2 != 0} ? 'table-active'">
-                    <td th:text="${category.name}">
+                    <td class="center-td" th:text="${category.name}">
                     </td>
-                    <td>
+                    <td class="center-td">
                         <a th:href="@{/admin/categories/edit/{id} (id=${category.id})}">
                             <button class="btn btn-warning">
                                 Edit category

@@ -32,7 +32,7 @@
             <span class="badge badge-error" style="background-color : #ffffff;" th:if="${#fields.hasErrors('title')}"
                   th:errors="*{title}"></span>
             <div class="form-group text-center form-field">
-                <label for="title" class="control-label col-sm-2" style="width: 10%"><span>Name:</span></label>
+                <label for="title" class="control-label col-sm-2"><span>Name:</span></label>
                 <input th:field="*{title}" class="form-control input" id="title" name="title"
                        type="text" placeholder="Enter Game title" style="width: 300px;">
             </div>
@@ -41,7 +41,7 @@
                   th:if="${#fields.hasErrors('categoryId')}"
                   th:errors="*{categoryId}"></span>
             <div class="form-group text-center form-field">
-                <label for="categoryId" class="control-label col-sm-2" style="width: 10%"><span>Category:</span></label>
+                <label for="categoryId" class="control-label col-sm-2"><span>Category:</span></label>
                 <select th:field="*{categoryId}" class="form-select select2" id="categoryId" style="width: 300px;">
                     <option value="">Select category</option>
                     <option th:each="category :  ${categories}" th:value="${category.id}"
@@ -54,7 +54,7 @@
                   th:if="${#fields.hasErrors('companyId')}"
                   th:errors="*{companyId}"></span>
             <div class="form-group text-center form-field">
-                <label for="companyId" class="control-label col-sm-2" style="width: 10%"><span>Company:</span></label>
+                <label for="companyId" class="control-label col-sm-2"><span>Company:</span></label>
                 <select th:field="*{companyId}" class="form-select select2" id="companyId" style="width: 300px;">
                     <option value="">Select company</option>
                     <option th:each="company :  ${companies}" th:value="${company.id}"
@@ -67,7 +67,7 @@
                   th:if="${#fields.hasErrors('image')}"
                   th:errors="*{image}"></span>
             <div class="form-group text-center form-field">
-                    <label for="image" class="control-label col-sm-2" style="width: 10%;">
+                    <label for="image" class="control-label col-sm-2">
                         <span>Image:</span>
                     </label>
                     <input class="form-control" id="image" th:field="*{image}" type="file" accept="image/*"
@@ -84,8 +84,7 @@
                   th:if="${#fields.hasErrors('description')}"
                   th:errors="*{description}"></span>
             <div class="form-group text-center form-field">
-                <label for="description" class="control-label col-sm-2"
-                       style="width: 10%"><span>Description:</span></label>
+                <label for="description" class="control-label col-sm-2"><span>Description:</span></label>
                 <textarea th:field="*{description}" id="description" placeholder="Enter Game description" rows="5"
                           cols="50"></textarea>
             </div>

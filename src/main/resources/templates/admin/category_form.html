@@ -21,9 +21,8 @@
 
             <span class="badge badge-error" style="background-color : #ffffff;" th:if="${#fields.hasErrors('name')}"
                   th:errors="*{name}"></span>
-            <div class="form-group text-center"
-                 style="display: flex;flex-direction: row;align-items: center;align-content: center;justify-content: center;">
-                <label for="name" class="control-label col-sm-2" style="width: 5%"><span>Name:</span></label>
+            <div class="form-group text-center">
+                <label for="name" class="control-label col-sm-2"><span>Name:</span></label>
                 <input th:field="*{name}" class="form-control input" id="name" name="name"
                        type="text" placeholder="Enter category name" style="width: 300px;">
             </div>

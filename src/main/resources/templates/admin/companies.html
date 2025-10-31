@@ -24,51 +24,49 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body th:replace="fragments/admin_layout :: layout(~{::content})">
-<div th:fragment="content">
-    <div class="single-section-box home-profile-information">
-        <div>
-            <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
-            <a th:href="@{/admin/companies/add}">
-                <button class="btn btn-primary admin-btn">
-                    Add company
-                </button>
-            </a>
-        </div>
-        <div th:if="${companies.isEmpty()}">
-            <h3>There are no companies saved!</h3>
-        </div>
-        <div th:unless="${companies.isEmpty()}">
-            <table class="table">
-                <thead>
-                <tr class="thead-dark">
-                    <th class="text-center">
-                        Name
-                    </th>
-                    <th class="text-center">
-                        Actions
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="company, stat : ${companies}" th:classappend="${stat.index % 2 != 0} ? 'table-active'">
-                    <td th:text="${company.name}">
-                    </td>
-                    <td>
-                        <a th:href="@{/admin/companies/edit/{id} (id=${company.id})}">
-                            <button class="btn btn-warning">
-                                Edit company
-                            </button>
-                        </a>
-                        <a th:href="@{/admin/companies/delete/{id} (id=${company.id})}">
-                            <button class="btn btn-danger">
-                                Delete company
-                            </button>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="single-section-box home-profile-information" th:fragment="content">
+    <div class="btn-header">
+        <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
+        <a th:href="@{/admin/companies/add}">
+            <button class="btn btn-primary admin-btn">
+                Add company
+            </button>
+        </a>
+    </div>
+    <div th:if="${companies.isEmpty()}">
+        <h3>There are no companies saved!</h3>
+    </div>
+    <div class="table-container" th:unless="${companies.isEmpty()}">
+        <table class="table">
+            <thead>
+            <tr class="thead-dark">
+                <th class="text-center">
+                    Name
+                </th>
+                <th class="text-center">
+                    Actions
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="company, stat : ${companies}" th:classappend="${stat.index % 2 != 0} ? 'table-active'">
+                <td class="center-td" th:text="${company.name}">
+                </td>
+                <td class="center-td">
+                    <a th:href="@{/admin/companies/edit/{id} (id=${company.id})}">
+                        <button class="btn btn-warning">
+                            Edit company
+                        </button>
+                    </a>
+                    <a th:href="@{/admin/companies/delete/{id} (id=${company.id})}">
+                        <button class="btn btn-danger">
+                            Delete company
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>

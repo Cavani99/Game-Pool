@@ -37,3 +37,19 @@
     margin-top: 10px;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 6px;
 }
+
+.form-group{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.control-label{
+    color: yellow;
+}
+
+.form-text{
+    color: white;
+}

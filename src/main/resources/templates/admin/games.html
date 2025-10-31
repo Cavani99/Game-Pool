@@ -26,7 +26,7 @@
 <body th:replace="fragments/admin_layout :: layout(~{::content})">
 <div th:fragment="content">
     <div class="single-section-box home-profile-information">
-        <div>
+        <div class="btn-header">
             <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
             <a th:href="@{/admin/games/add}">
                 <button class="btn btn-primary admin-btn">
@@ -37,7 +37,7 @@
         <div th:if="${games.isEmpty()}">
             <h3>There are no games saved!</h3>
         </div>
-        <div th:unless="${games.isEmpty()}">
+        <div class="table-container" th:unless="${games.isEmpty()}">
             <table class="table">
                 <thead>
                 <tr class="thead-dark">
@@ -63,21 +63,23 @@
                 </thead>
                 <tbody>
                 <tr th:each="game, stat : ${games}" th:classappend="${stat.index % 2 != 0} ? 'table-active'">
-                    <td>
+                    <td class="center-td">
                         <img th:src="@{${game.image}}" alt="No Image"
-                             class="profile-form">
+                             class="img-list">
                     </td>
-                    <td th:text="${game.title}">
+                    <td class="center-td" th:text="${game.title}">
                     </td>
-                    <td th:text="${game.category.name}">
+                    <td class="center-td" th:text="${game.category.name}">
                     </td>
-                    <td th:text="${game.company.name}">
+                    <td class="center-td" th:text="${game.company.name}">
                     </td>
                     <td class="center-td">
-                        <span th:if="${game.discount != null && game.discount.isDiscountActive() == true}" class="active-box">
+                        <span th:if="${game.discount != null && game.discount.isDiscountActive() == true}"
+                              class="active-box">
                             Yes
                         </span>
-                        <span th:if="${game.discount == null || game.discount.isDiscountActive() == false}" class="inactive-box">
+                        <span th:if="${game.discount == null || game.discount.isDiscountActive() == false}"
+                              class="inactive-box">
                             No
                         </span>
                     </td>

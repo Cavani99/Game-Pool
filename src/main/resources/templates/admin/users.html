@@ -32,7 +32,7 @@
         <div th:if="${users.isEmpty()}">
             <h3>There are no registered users!</h3>
         </div>
-        <div th:unless="${users.isEmpty()}">
+        <div class="table-container" th:unless="${users.isEmpty()}">
             <table class="table">
                 <thead>
                 <tr class="thead-dark">
@@ -59,15 +59,15 @@
                 <tbody>
                 <tr th:each="user, stat : ${users}"
                     th:classappend="${stat.index % 2 != 0} ? 'table-active'">
-                    <td>
+                    <td class="center-td">
                         <img th:src="@{${user.avatar}}" alt="Profile Picture"
-                             class="profile-form">
+                             class="img-list">
                     </td>
-                    <td th:text="${user.username}">
+                    <td class="center-td" th:text="${user.username}">
                     </td>
-                    <td th:text="${user.email}">
+                    <td class="center-td" th:text="${user.email}">
                     </td>
-                    <td th:text="${user.balance}">
+                    <td class="center-td" th:text="${user.balance}">
                     </td>
                     <td class="center-td">
                         <span th:if="${user.isBanned == false}" class="active-box">
