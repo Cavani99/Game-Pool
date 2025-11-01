@@ -1,0 +1,78 @@
+<!-- fragments/layout.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<main th:fragment="layout(content)">
+    <div class="nav-bar">
+        <div class="bar-container">
+            <nav class="top-nav">
+                <div class="admin-header">
+                    <div class="admin-header-name">Game Pool</div>
+                </div>
+
+                <ul class="nav-links">
+                    <!-- Main nav link -->
+                    <li>
+                        <a th:href="@{/admin}" th:classappend="${page} == 'home' ? 'active'">
+                            <span>Profile</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a th:href="@{dashboard/games}" th:classappend="${page} == 'games' ? 'active'">
+                            <span>Game List</span>
+                        </a>
+                    </li>
+
+                    <!-- func-block group -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Quick Links ▾</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a th:href="@{dashboard/friends}" th:classappend="${page} == 'friends' ? 'active'">Friends</a>
+                            </li>
+                            <li>
+                                <a th:href="@{dashboard/wish_list}" th:classappend="${page} == 'wish_list' ? 'active'">Wish
+                                    List</a>
+                            </li>
+                            <li>
+                                <a th:href="@{dashboard/wallet}"
+                                   th:classappend="${page} == 'wallet' ? 'active'">Wallet</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Utility ▾</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a th:href="@{dashboard/subscriptions}"
+                                   th:classappend="${page} == 'subscriptions' ? 'active'">Subscriptions</a>
+                            </li>
+                            <li>
+                                <a th:href="@{dashboard/notifications}"
+                                   th:classappend="${page} == 'notifications' ? 'active'">Notifications</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="logout" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-section">
+        <div class="home-section" th:insert="${content}"></div>
+
+        <div class="footer"><p>© 2025 Smart Wallet. All rights reserved.</p></div>
+    </div>
+</main>
+</body>
+</html>

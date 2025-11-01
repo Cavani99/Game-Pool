@@ -1,4 +1,4 @@
-package main.web;
+package main.web.admin;
 
 import jakarta.validation.Valid;
 import main.model.Company;

@@ -1,4 +1,4 @@
-package main.web;
+package main.web.admin;
 
 import main.model.User;
 import main.service.UserService;

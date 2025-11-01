@@ -1,4 +1,4 @@
-package main.web;
+package main.web.admin;
 
 import main.model.User;
 import main.security.AuthenticationDetails;
@@ -24,7 +24,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ModelAndView getHomepage(@AuthenticationPrincipal AuthenticationDetails userDetails) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin");
+        modelAndView.setViewName("admin/admin");
 
         User user = userService.getById(userDetails.getId());
 
