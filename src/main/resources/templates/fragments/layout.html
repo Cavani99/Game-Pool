@@ -17,13 +17,13 @@
                 <ul class="nav-links">
                     <!-- Main nav link -->
                     <li>
-                        <a th:href="@{/admin}" th:classappend="${page} == 'home' ? 'active'">
+                        <a th:href="@{/dashboard}" th:classappend="${page} == 'home' ? 'active'">
                             <span>Profile</span>
                         </a>
                     </li>
 
                     <li>
-                        <a th:href="@{dashboard/games}" th:classappend="${page} == 'games' ? 'active'">
+                        <a th:href="@{/dashboard/games}" th:classappend="${page} == 'games' ? 'active'">
                             <span>Game List</span>
                         </a>
                     </li>
@@ -33,14 +33,14 @@
                         <a href="#" class="dropdown-toggle">Quick Links ▾</a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a th:href="@{dashboard/friends}" th:classappend="${page} == 'friends' ? 'active'">Friends</a>
+                                <a th:href="@{/dashboard/friends}" th:classappend="${page} == 'friends' ? 'active'">Friends</a>
                             </li>
                             <li>
-                                <a th:href="@{dashboard/wish_list}" th:classappend="${page} == 'wish_list' ? 'active'">Wish
+                                <a th:href="@{/dashboard/wish_list}" th:classappend="${page} == 'wish_list' ? 'active'">Wish
                                     List</a>
                             </li>
                             <li>
-                                <a th:href="@{dashboard/wallet}"
+                                <a th:href="@{/dashboard/wallet}"
                                    th:classappend="${page} == 'wallet' ? 'active'">Wallet</a>
                             </li>
                         </ul>
@@ -50,11 +50,11 @@
                         <a href="#" class="dropdown-toggle">Utility ▾</a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a th:href="@{dashboard/subscriptions}"
+                                <a th:href="@{/dashboard/subscriptions}"
                                    th:classappend="${page} == 'subscriptions' ? 'active'">Subscriptions</a>
                             </li>
                             <li>
-                                <a th:href="@{dashboard/notifications}"
+                                <a th:href="@{/dashboard/notifications}"
                                    th:classappend="${page} == 'notifications' ? 'active'">Notifications</a>
                             </li>
                         </ul>

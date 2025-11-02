@@ -133,3 +133,19 @@ div.single-section-box {
     align-self: center;
     justify-self: center;
 }
+
+div.games-section{
+     background: #0916cb1a;
+     margin-top: 3%;
+     border-radius: 8px;
+     box-shadow: 0 4px 8px rgba(255, 255, 255, 0);
+     border: 1px solid transparent;
+     color: #333333;
+     text-align: center;
+     min-width: 300px;
+     display: flex;
+     flex-direction: row;
+     height: 90vh;
+     overflow: hidden;
+     justify-content: flex-start;
+}

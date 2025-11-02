@@ -1,0 +1,15 @@
+.filter-box{
+    width: 15%;
+    height: 100%;
+    background: #1c2633;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#label-filter{
+    font-size: 25px;
+    font-family: serif;
+    color: white;
+    padding-top: 10px;
+}
