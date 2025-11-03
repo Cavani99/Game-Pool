@@ -55,4 +55,8 @@ public class CategoryService {
     public void deleteById(UUID id) {
         categoryRepository.deleteById(id);
     }
+
+    public List<Category> findByCategoriesList(List<UUID> categoryIds) {
+        return categoryRepository.findAllById(categoryIds);
+    }
 }

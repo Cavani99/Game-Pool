@@ -40,6 +40,9 @@ public class Game {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "price", nullable = false)
+    private Double price;
+
     @OneToOne
     @JoinColumn(name = "discount_id", referencedColumnName = "id")
     private Discount discount;

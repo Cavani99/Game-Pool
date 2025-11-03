@@ -20,6 +20,20 @@
     <div class="games-section">
         <div class="filter-box">
             <label style="margin-top: 5%"><span id="label-filter">Filter</span></label>
+            <div class="filter-category">By Category:
+                <label class="filter-element" th:each="category : ${categories}">
+                    <span th:text="${category.name}"></span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <div class="filter-category">By Company:
+                <label class="filter-element" th:each="company : ${companies}">
+                    <span th:text="${company.name}"></span>
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
         </div>
         <div class="list-box">
             <div class="game-item" th:each="game : ${games}">
@@ -27,7 +41,8 @@
                     <img th:src="${game.image}" alt="${game.title}">
                 </div>
                 <div class="game-info">
-                    <span th:text="${game.title}"></span>
+                    <span class="game-title" th:text="${game.title}"></span>
+                    <span class="game-price" th:text="${game.price} + ' €'"></span>
                 </div>
             </div>
         </div>

@@ -1,5 +1,14 @@
-.badge-error { color: #a30707; font-size: 0.8rem; display: block; }
-.badge-soft { color: #ebc934; font-size: 0.8rem; }
+.badge-error {
+     color: #ff0000;
+     background-color: transparent;
+     font-size: 1.2rem;
+     display: block;
+ }
+
+.badge-soft {
+    color: #ebc934;
+    font-size: 1.2rem;
+}
 
 .badge{
 

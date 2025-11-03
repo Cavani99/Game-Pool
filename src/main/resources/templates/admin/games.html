@@ -54,6 +54,9 @@
                         Company
                     </th>
                     <th class="text-center">
+                        Price
+                    </th>
+                    <th class="text-center">
                         Discounted
                     </th>
                     <th class="text-center">
@@ -72,6 +75,8 @@
                     <td class="center-td" th:text="${game.category.name}">
                     </td>
                     <td class="center-td" th:text="${game.company.name}">
+                    </td>
+                    <td class="center-td" th:text="${game.price} + '€'">
                     </td>
                     <td class="center-td">
                         <span th:if="${game.discount != null && game.discount.isDiscountActive() == true}"

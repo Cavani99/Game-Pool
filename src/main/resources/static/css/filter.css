@@ -13,3 +13,64 @@
     color: white;
     padding-top: 10px;
 }
+
+.filter-category{
+    height: 50%;
+    margin-top: 10%;
+    color: white;
+}
+
+.filter-element {
+ display: block;
+ position: relative;
+ padding-left: 25px;
+ margin: 12px;
+ cursor: pointer;
+ font-size: 20px;
+ user-select: none;
+}
+
+.filter-element input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.filter-element .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+}
+
+.filter-element:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.filter-element input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+.filter-element .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.filter-element input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.filter-element .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}

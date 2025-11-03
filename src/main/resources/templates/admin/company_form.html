@@ -19,7 +19,7 @@
               th:method="POST" th:object="${company}">
             <h2 class="text-center mb-4">Add Company</h2>
 
-            <span class="badge badge-error" style="background-color : #ffffff;" th:if="${#fields.hasErrors('name')}"
+            <span class="badge badge-error" th:if="${#fields.hasErrors('name')}"
                   th:errors="*{name}"></span>
             <div class="form-group text-center form-field">
                 <label for="name" class="control-label col-sm-2"><span>Name:</span></label>

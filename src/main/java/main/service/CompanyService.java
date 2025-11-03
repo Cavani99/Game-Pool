@@ -56,4 +56,8 @@ public class CompanyService {
     public void deleteById(UUID id) {
         companyRepository.deleteById(id);
     }
+
+    public List<Company> findByCompaniesList(List<UUID> companyIds) {
+        return companyRepository.findAllById(companyIds);
+    }
 }

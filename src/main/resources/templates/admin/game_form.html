@@ -29,7 +29,7 @@
               th:method="POST" th:object="${game}" enctype="multipart/form-data">
             <h2 class="text-center mb-4">Add Game</h2>
 
-            <span class="badge badge-error" style="background-color : #ffffff;" th:if="${#fields.hasErrors('title')}"
+            <span class="badge badge-error" th:if="${#fields.hasErrors('title')}"
                   th:errors="*{title}"></span>
             <div class="form-group text-center form-field">
                 <label for="title" class="control-label col-sm-2"><span>Name:</span></label>
@@ -37,7 +37,7 @@
                        type="text" placeholder="Enter Game title" style="width: 300px;">
             </div>
 
-            <span class="badge badge-error" style="background-color : #ffffff;"
+            <span class="badge badge-error"
                   th:if="${#fields.hasErrors('categoryId')}"
                   th:errors="*{categoryId}"></span>
             <div class="form-group text-center form-field">
@@ -50,7 +50,7 @@
                 </select>
             </div>
 
-            <span class="badge badge-error" style="background-color : #ffffff;"
+            <span class="badge badge-error"
                   th:if="${#fields.hasErrors('companyId')}"
                   th:errors="*{companyId}"></span>
             <div class="form-group text-center form-field">
@@ -63,15 +63,23 @@
                 </select>
             </div>
 
-            <span class="badge badge-error" style="background-color : #ffffff;"
+            <span class="badge badge-error" th:if="${#fields.hasErrors('price')}"
+                  th:errors="*{price}"></span>
+            <div class="form-group text-center form-field">
+                <label for="price" class="control-label col-sm-2"><span>Price:</span></label>
+                <input th:field="*{price}" class="form-control input" id="price" name="price"
+                       type="text" placeholder="Enter Price" style="width: 300px;">
+            </div>
+
+            <span class="badge badge-error"
                   th:if="${#fields.hasErrors('image')}"
                   th:errors="*{image}"></span>
             <div class="form-group text-center form-field">
-                    <label for="image" class="control-label col-sm-2">
-                        <span>Image:</span>
-                    </label>
-                    <input class="form-control" id="image" th:field="*{image}" type="file" accept="image/*"
-                           onchange="previewImage(event)" style="width: 300px;">
+                <label for="image" class="control-label col-sm-2">
+                    <span>Image:</span>
+                </label>
+                <input class="form-control" id="image" th:field="*{image}" type="file" accept="image/*"
+                       onchange="previewImage(event)" style="width: 300px;">
             </div>
 
             <div id="imagePreview">
@@ -80,7 +88,7 @@
                      alt="Existing image">
             </div>
 
-            <span class="badge badge-error" style="background-color : #ffffff;"
+            <span class="badge badge-error"
                   th:if="${#fields.hasErrors('description')}"
                   th:errors="*{description}"></span>
             <div class="form-group text-center form-field">

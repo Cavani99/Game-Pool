@@ -28,4 +28,9 @@ public class CreateGameRequest {
     private UUID companyId;
 
     private String imagePath;
+
+    @NotNull(message = "You must set a price")
+    @DecimalMax(value = "300.00", message = "The Price must not be over 300 €")
+    @DecimalMin(value = "10.00", message = "The Price must be over 10 €")
+    private Double price;
 }

@@ -136,7 +136,7 @@ public class GamesAdminController {
     public ModelAndView editGame(@PathVariable("id") UUID id) {
         Game game = gameService.findById(id);
         CreateGameRequest createGameRequest = new CreateGameRequest(game.getTitle(), game.getDescription(), null,
-                game.getCategory().getId(), game.getCompany().getId(), game.getImage());
+                game.getCategory().getId(), game.getCompany().getId(), game.getImage(), game.getPrice());
 
         List<Category> categories = categoryService.findAll();
         List<Company> companies = companyService.findAll();
@@ -159,9 +159,14 @@ public class GamesAdminController {
                                  BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
         List<Category> categories = categoryService.findAll();
         List<Company> companies = companyService.findAll();
+
         if (bindingResult.hasErrors()) {
+            Game game = gameService.findById(id);
+            createGameRequest.setImagePath(game.getImage());
+
             ModelAndView mav = new ModelAndView("admin/game_form");
             mav.addObject("game", createGameRequest);
+            mav.addObject("game_id", game.getId());
             mav.addObject("page", "games");
             mav.addObject("title", "Games");
             mav.addObject("categories", categories);
@@ -170,7 +175,7 @@ public class GamesAdminController {
         }
 
         MultipartFile image = createGameRequest.getImage();
-        String imagePath =null;
+        String imagePath = null;
         if (image != null && !image.isEmpty()) {
             String uploadDir = "uploads/games/";
             Files.createDirectories(Paths.get(uploadDir));

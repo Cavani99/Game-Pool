@@ -42,6 +42,7 @@ public class GameService {
         game.setCategory(category);
         game.setCompany(company);
         game.setDiscount(discount);
+        game.setPrice(createGameRequest.getPrice());
         game.setCreatedOn(LocalDateTime.now());
         game.setUpdatedOn(LocalDateTime.now());
 
@@ -67,6 +68,7 @@ public class GameService {
         game.setImage(imagePath == null ? game.getImage() : imagePath);
         game.setCategory(category);
         game.setCompany(company);
+        game.setPrice(createGameRequest.getPrice());
         game.setUpdatedOn(LocalDateTime.now());
 
         gameRepository.save(game);
