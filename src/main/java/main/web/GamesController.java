@@ -9,10 +9,13 @@ import main.service.CategoryService;
 import main.service.CompanyService;
 import main.service.GameService;
 import main.service.UserService;
+import main.web.dto.GameFilterRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,7 +41,6 @@ public class GamesController {
     }
 
     @GetMapping
-    @RequestMapping
     @PreAuthorize("hasAuthority('USER')")
     public ModelAndView getGamesView(@AuthenticationPrincipal AuthenticationDetails userDetails) {
         ModelAndView modelAndView = new ModelAndView();
@@ -90,5 +92,28 @@ public class GamesController {
                 .toList();
 
         return companyService.findByCompaniesList(companyIds);
+    }
+
+    @PostMapping("filter")
+    public ModelAndView getGamesByFilter(
+            @RequestBody GameFilterRequest gameFilterRequest,
+            @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        ModelAndView modelAndView = new ModelAndView("/fragments/game-list :: games");
+
+        User user = userService.getById(userDetails.getId());
+
+        List<Game> boughtGames = user.getGames();
+
+        List<Game> filteredGames = gameService.getFilteredGames(
+                gameFilterRequest.getCategories(),
+                gameFilterRequest.getCompanies()
+        );
+
+        List<Game> availableGames = filteredGames.stream()
+                .filter(game -> !boughtGames.contains(game))
+                .toList();
+
+        modelAndView.addObject("games", availableGames);
+        return modelAndView;
     }
 }

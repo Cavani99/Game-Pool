@@ -14,7 +14,11 @@
 
     <link rel="stylesheet" type="text/css" href="/css/filter.css">
     <link rel="stylesheet" type="text/css" href="/css/game_list.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/game-list.js"></script>
 </head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <body th:replace="fragments/layout :: layout(~{::content})">
 <div th:fragment="content">
     <div class="games-section">
@@ -23,14 +27,14 @@
             <div class="filter-category">By Category:
                 <label class="filter-element" th:each="category : ${categories}">
                     <span th:text="${category.name}"></span>
-                    <input type="checkbox">
+                    <input type="checkbox" name="categories" th:id="|category${category.id}|" th:value="${category.id}">
                     <span class="checkmark"></span>
                 </label>
             </div>
             <div class="filter-category">By Company:
                 <label class="filter-element" th:each="company : ${companies}">
                     <span th:text="${company.name}"></span>
-                    <input type="checkbox">
+                    <input type="checkbox" name="companies" th:id="|company${company.id}|" th:value="${company.id}">
                     <span class="checkmark"></span>
                 </label>
             </div>

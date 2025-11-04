@@ -77,4 +77,14 @@ public class GameService {
     public void deleteById(UUID id) {
         gameRepository.deleteById(id);
     }
+
+    public List<Game> getFilteredGames(List<UUID> categories, List<UUID> companies) {
+
+        if ((categories == null || categories.isEmpty()) &&
+                (companies == null || companies.isEmpty())) {
+            return findAll();
+        }
+
+        return gameRepository.findAllByCategoryIdOrCompanyIdList(categories, companies);
+    }
 }
