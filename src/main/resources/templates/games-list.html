@@ -27,20 +27,20 @@
             <div class="filter-category">By Category:
                 <label class="filter-element" th:each="category : ${categories}">
                     <span th:text="${category.name}"></span>
-                    <input type="checkbox" name="categories" th:id="|category${category.id}|" th:value="${category.id}">
+                    <input type="checkbox" name="categories" th:value="${category.id}">
                     <span class="checkmark"></span>
                 </label>
             </div>
             <div class="filter-category">By Company:
                 <label class="filter-element" th:each="company : ${companies}">
                     <span th:text="${company.name}"></span>
-                    <input type="checkbox" name="companies" th:id="|company${company.id}|" th:value="${company.id}">
+                    <input type="checkbox" name="companies" th:value="${company.id}">
                     <span class="checkmark"></span>
                 </label>
             </div>
         </div>
         <div class="list-box">
-            <div class="game-item" th:each="game : ${games}">
+            <a class="game-item" th:each="game : ${games}" th:href="@{/dashboard/games/details/{id} (id=${game.id})}">
                 <div class="game-image">
                     <img th:src="${game.image}" alt="${game.title}">
                 </div>
@@ -48,7 +48,7 @@
                     <span class="game-title" th:text="${game.title}"></span>
                     <span class="game-price" th:text="${game.price} + ' €'"></span>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </div>

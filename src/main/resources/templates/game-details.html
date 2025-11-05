@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${title} ?: 'Home Page'">Home Page</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/user-common.css">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/home.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/game-details.css">
+</head>
+<body th:replace="fragments/layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="game-section">
+        <div id="game-title" th:text="${game.title}"></div>
+        <div id="game-image">
+            <img th:src="${game.image}" alt="${game.title}">
+        </div>
+        <div id="game-cat" th:text="'Category: ' + ${game.category.name}"></div>
+        <div id="game-company" th:text="'Company: ' + ${game.company.name}"></div>
+        <div id="game-desc" th:utext="${game.description}"></div>
+
+        <div id="buttons-container">
+            <button id="wishlist-btn">Add to Wishlist</button>
+
+            <div id="buy-section">
+                <div id="game-price" th:text="${game.price} + '€'"></div>
+                <button id="buy-btn">Buy</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

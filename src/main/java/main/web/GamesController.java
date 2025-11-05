@@ -13,13 +13,9 @@ import main.web.dto.GameFilterRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -114,6 +110,21 @@ public class GamesController {
                 .toList();
 
         modelAndView.addObject("games", availableGames);
+        return modelAndView;
+    }
+
+    @GetMapping("details/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ModelAndView getGameDetails(@PathVariable("id") UUID id) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("game-details");
+
+        Game game = gameService.findById(id);
+
+        modelAndView.addObject("game", game);
+        modelAndView.addObject("page", "games");
+        modelAndView.addObject("title", "games");
+
         return modelAndView;
     }
 }

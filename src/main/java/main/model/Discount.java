@@ -23,6 +23,11 @@ public class Discount {
     @NotNull
     private int amount;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    @NotNull
+    private DiscountType type;
+
     @Column(name = "start_date")
     private LocalDateTime startDate;
 
@@ -36,7 +41,7 @@ public class Discount {
     public boolean isDiscountActive() {
         LocalDateTime now = LocalDateTime.now();
 
-        if(amount <= 0) {
+        if (amount <= 0) {
             return false;
         }
 

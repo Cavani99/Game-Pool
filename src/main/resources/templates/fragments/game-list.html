@@ -1,4 +1,5 @@
-<div th:fragment="games" class="game-item" th:each="game : ${games}" xmlns:th="http://www.w3.org/1999/xhtml">
+<a th:fragment="games" class="game-item" th:each="game : ${games}"
+   th:href="@{/dashboard/games/details/{id} (id=${game.id})}" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="game-image">
         <img th:src="${game.image}" alt="${game.title}">
     </div>
@@ -6,4 +7,4 @@
         <span class="game-title" th:text="${game.title}"></span>
         <span class="game-price" th:text="${game.price} + ' €'"></span>
     </div>
-</div>
+</a>
