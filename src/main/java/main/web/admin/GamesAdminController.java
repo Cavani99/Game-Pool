@@ -1,12 +1,12 @@
 package main.web.admin;
 
 import jakarta.validation.Valid;
-import main.model.Category;
-import main.model.Company;
-import main.model.Game;
+import main.model.*;
 import main.service.CategoryService;
 import main.service.CompanyService;
+import main.service.DiscountService;
 import main.service.GameService;
+import main.web.dto.CreateDiscountRequest;
 import main.web.dto.CreateGameRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -29,11 +29,13 @@ import java.util.UUID;
 public class GamesAdminController {
 
     private final GameService gameService;
+    private final DiscountService discountService;
     private final CategoryService categoryService;
     private final CompanyService companyService;
 
-    public GamesAdminController(GameService gameService, CategoryService categoryService, CompanyService companyService) {
+    public GamesAdminController(GameService gameService, DiscountService discountService, CategoryService categoryService, CompanyService companyService) {
         this.gameService = gameService;
+        this.discountService = discountService;
         this.categoryService = categoryService;
         this.companyService = companyService;
     }
@@ -208,6 +210,83 @@ public class GamesAdminController {
         gameService.deleteById(id);
 
         redirectAttributes.addFlashAttribute("message", "Game deleted!");
+
+        return new ModelAndView("redirect:/admin/games");
+    }
+
+    @GetMapping("/discount/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ModelAndView addDiscount(@PathVariable("id") UUID id) {
+        Game game = gameService.findById(id);
+        Discount discount = game.getDiscount();
+
+        CreateDiscountRequest createDiscountRequest;
+        if (discount != null) {
+            createDiscountRequest = new CreateDiscountRequest(
+                    discount.getAmount(), discount.getType(), discount.getStartDate(), discount.getEndDate()
+            );
+        } else {
+            createDiscountRequest = new CreateDiscountRequest();
+        }
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/discount_form");
+        modelAndView.addObject("discount", createDiscountRequest);
+        modelAndView.addObject("game_id", id);
+        modelAndView.addObject("page", "games");
+        modelAndView.addObject("title", "Games");
+
+        return modelAndView;
+    }
+
+    @PostMapping("/discount/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ModelAndView addDiscount(@PathVariable("id") UUID id, @Valid @ModelAttribute("discount") CreateDiscountRequest createDiscountRequest,
+                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        setManualValidations(bindingResult, createDiscountRequest);
+        if (bindingResult.hasErrors()) {
+            ModelAndView mav = new ModelAndView("admin/discount_form");
+            mav.addObject("discount", createDiscountRequest);
+            mav.addObject("game_id", id);
+            mav.addObject("page", "games");
+            mav.addObject("title", "Games");
+            return mav;
+        }
+
+        Game game = gameService.findById(id);
+        Discount discount = game.getDiscount();
+
+        discount = discountService.persist(discount, createDiscountRequest);
+        game = gameService.addDiscount(id, discount);
+
+        redirectAttributes.addFlashAttribute("message", "Discount for " + game.getTitle() + " saved successfully!");
+
+        return new ModelAndView("redirect:/admin/games");
+    }
+
+    private void setManualValidations(BindingResult bindingResult, CreateDiscountRequest createDiscountRequest) {
+        if (createDiscountRequest.getAmount() <= 0) {
+            bindingResult.rejectValue("amount", "amount.empty", "Write a discount amount more than 0");
+        } else if (createDiscountRequest.getAmount() > 100 && createDiscountRequest.getType().equals(DiscountType.PERCENT)) {
+            bindingResult.rejectValue("amount", "amount.empty", "Discount Percentage can not be more than 100%");
+        }
+
+        if (createDiscountRequest.getStartDate() != null && createDiscountRequest.getEndDate() != null &&
+                createDiscountRequest.getStartDate().isAfter(createDiscountRequest.getEndDate())) {
+            bindingResult.rejectValue("startDate", "startDate.empty", "Start Date cannot be after the End Date");
+        }
+    }
+
+    @GetMapping("/remove_discount/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ModelAndView removeDiscount(@PathVariable("id") UUID id, RedirectAttributes redirectAttributes) {
+        Game game = gameService.findById(id);
+        Discount discount = game.getDiscount();
+
+        discountService.unsetDiscount(discount);
+
+        redirectAttributes.addFlashAttribute("message", "Discount for " + game.getTitle() + " removed!");
 
         return new ModelAndView("redirect:/admin/games");
     }

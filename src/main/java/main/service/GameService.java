@@ -87,4 +87,18 @@ public class GameService {
 
         return gameRepository.findAllByCategoryIdOrCompanyIdList(categories, companies);
     }
+
+    public Game addDiscount(UUID id, Discount discount) {
+        Game game = findById(id);
+        game.setDiscount(discount);
+        game.setUpdatedOn(LocalDateTime.now());
+
+        return gameRepository.save(game);
+    }
+
+    public void removeDiscount(Game game) {
+        game.setDiscount(null);
+
+        gameRepository.save(game);
+    }
 }

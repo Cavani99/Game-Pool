@@ -22,6 +22,10 @@
     justify-content: center;
 }
 
+.extra-space{
+    justify-content: space-around !important;
+}
+
 .select2-results { color: #000000; }
 
 .ck-editor__editable {

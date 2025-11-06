@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title} ?: 'Admin Panel'">Admin Panel</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/side-bar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin-common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/form-styles.css}">
+
+    <!-- jQuery (required by Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body th:replace="fragments/admin_layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information">
+        <form class="auth-form"
+              th:action="@{/admin/games/discount/{id} (id=${game_id})}"
+              th:method="POST" th:object="${discount}">
+            <h2 class="text-center mb-4">Put Discount</h2>
+
+            <span class="badge badge-error" th:if="${#fields.hasErrors('amount')}"
+                  th:errors="*{amount}"></span>
+            <div class="form-group text-center form-field extra-space">
+                <label for="amount" class="control-label col-sm-3"><span>Amount:</span></label>
+                <input th:field="*{amount}" class="form-control input" id="amount" name="amount"
+                       type="text" placeholder="Enter Discount Amount" style="width: 300px;">
+            </div>
+
+            <span class="badge badge-error"
+                  th:if="${#fields.hasErrors('type')}"
+                  th:errors="*{type}"></span>
+            <div class="form-group text-center form-field extra-space">
+                <label for="type" class="control-label col-sm-3"><span>Discount Type:</span></label>
+                <select th:field="*{type}" class="form-select" id="type" style="height: 35px; width: 300px;">
+                    <option value="">Pick discount type</option>
+                    <option th:each="discountType :  ${T(main.model.DiscountType).values()}" th:value="${discountType}"
+                            th:text="${discountType.getDisplayName()}">
+                    </option>
+                </select>
+            </div>
+
+            <span class="badge badge-error" th:if="${#fields.hasErrors('startDate')}"
+                  th:errors="*{startDate}"></span>
+            <div class="form-group text-center form-field extra-space">
+                <label for="startDate" class="control-label col-sm-3"><span>Start Date:</span></label>
+                <input th:field="*{startDate}" class="form-control input" id="startDate" name="startDate"
+                       type="datetime-local" placeholder="Enter Start Date" style="width: 300px;">
+            </div>
+
+            <span class="badge badge-error" th:if="${#fields.hasErrors('startDate')}"
+                  th:errors="*{endDate}"></span>
+            <div class="form-group text-center form-field extra-space">
+                <label for="endDate" class="control-label col-sm-3"><span>End Date:</span></label>
+                <input th:field="*{endDate}" class="form-control input" id="endDate" name="endDate"
+                       type="datetime-local" placeholder="Enter End Date" style="width: 300px;">
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

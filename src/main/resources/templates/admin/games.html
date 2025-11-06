@@ -99,6 +99,22 @@
                                 Delete game
                             </button>
                         </a>
+                        <a th:href="@{/admin/games/discount/{id} (id=${game.id})}">
+                            <button class="btn btn-success"
+                                    th:if="${game.discount != null && game.discount.isDiscountActive() == true}">
+                                Edit Discount
+                            </button>
+                            <button class="btn btn-success"
+                                    th:unless="${game.discount != null && game.discount.isDiscountActive() == true}">
+                                Add Discount
+                            </button>
+                        </a>
+                        <a th:href="@{/admin/games/remove_discount/{id} (id=${game.id})}"
+                           th:if="${game.discount != null && game.discount.isDiscountActive() == true}">
+                            <button class="btn btn-dark">
+                                Remove Discount
+                            </button>
+                        </a>
                     </td>
                 </tr>
                 </tbody>
