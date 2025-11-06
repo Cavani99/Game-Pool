@@ -73,4 +73,20 @@ public class Game {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public Double getPromoPrice() {
+        int amount = this.discount.getAmount();
+
+        if (this.discount.getType().equals(DiscountType.FIXED) && amount >= this.price) {
+            return 0.0;
+        }
+
+        if (this.discount.getType().equals(DiscountType.FIXED)) {
+            return this.price - amount;
+        } else {
+            double percent = amount / 100.0;
+            double result = price - price * percent;
+            return Math.round(result * 100.0) / 100.0;
+        }
+    }
 }

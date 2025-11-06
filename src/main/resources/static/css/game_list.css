@@ -79,4 +79,11 @@
    display: flex;
    justify-content: center;
    align-items: center;
+   gap: 7px;
+}
+
+.normal-price{
+    font-weight: bold;
+    text-decoration: line-through;
+    color: darkblue;
 }

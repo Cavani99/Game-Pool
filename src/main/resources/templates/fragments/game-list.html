@@ -5,6 +5,13 @@
     </div>
     <div class="game-info">
         <span class="game-title" th:text="${game.title}"></span>
-        <span class="game-price" th:text="${game.price} + ' €'"></span>
+        <span class="game-price">
+            <p class="promo-price"
+               th:if="${game.discount != null && game.discount.isDiscountActive() == true && game.getPromoPrice() > 0}"
+               th:text="${game.getPromoPrice()} + ' €'">
+            </p>
+            <p th:classappend="${game.discount != null && game.discount.isDiscountActive() == true && game.getPromoPrice() > 0} ? 'normal-price'"
+               th:text="${game.price} + ' €'"></p>
+        </span>
     </div>
 </a>
