@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class AuthenticationDetails implements UserDetails {
     private String username;
     private String password;
     private UserRole role;
+    private BigDecimal balance;
     private boolean isBanned;
 
     @Override

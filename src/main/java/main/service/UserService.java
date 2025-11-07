@@ -30,7 +30,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User does not exist!"));
 
-        return new AuthenticationDetails(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isBanned());
+        return new AuthenticationDetails(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.getBalance(), user.isBanned());
     }
 
     public void create(RegisterRequest registerRequest, String avatarPath) {

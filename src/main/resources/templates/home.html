@@ -10,46 +10,42 @@
     <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
     <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
     <link rel="stylesheet" type="text/css" href="/css/user-common.css">
-    <link rel="stylesheet" type="text/css" href="/css/from-wallet/home.css">
+    <link rel="stylesheet" type="text/css" href="/css/user.css">
 </head>
 <body th:replace="fragments/layout :: layout(~{::content})">
 <div th:fragment="content">
-    <div class="single-section-box home-profile-information">
-        <div class="profile-header">
-            <img th:src="${user.avatar}" alt="Profile Picture"
-                 class="profile-avatar">
-            <h2 class="profile-name" th:text="${user.username}">
-                Mandarin0016</h2>
-            <div class="details-section">
-                <div class="details-section-container">
-                    <strong>User id: </strong>
-                    <p th:text="${user.id}">55b23a12-71a1-4ccd-918d-08b2b09409b0</p>
+    <div class="single-section-box home-profile-information" style="padding: 0 !important;">
+        <div class="profile-section">
+            <div class="profile-header">
+                <img th:src="${user.avatar}" alt="Profile Picture"
+                     class="profile-avatar">
+            </div>
+            <div class="profile-info">
+                <div class="info">
+                    <h2 class="profile-name" th:text="${user.username}"></h2>
+                    <div class="details-section-container">
+                        <strong>Email: </strong>
+                        <p th:text="${user.email}">abv@bg</p>
+                    </div>
+                    <div class="details-section-container">
+                        <strong>Joined: </strong>
+                        <p th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}">
+                            09 Dec 2024 21:39</p>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <a href="/users/profile" class="profile-actions-button">
+                        <p>Edit Profile</p>
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg"
+                             width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M16 4h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5"></path>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="profile-info">
-            <div class="details-section-container">
-                <strong>Username: </strong>
-                <p th:text="${user.username}">ivan123</p>
-            </div>
-            <div class="details-section-container">
-                <strong>Email: </strong>
-                <p th:text="${user.email}">abv@bg</p>
-            </div>
-            <div class="details-section-container">
-                <strong>Joined: </strong>
-                <p th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}">
-                    09 Dec 2024 21:39</p>
-            </div>
-        </div>
-        <a href="/users/profile" class="profile-actions-button">
-            <p>Edit Profile</p>
-            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                 width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M16 4h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5"></path>
-            </svg>
-        </a>
     </div>
 </div>
 </body>

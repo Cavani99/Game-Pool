@@ -29,7 +29,14 @@
             <button id="wishlist-btn">Add to Wishlist</button>
 
             <div id="buy-section">
-                <div id="game-price" th:text="${game.price} + '€'"></div>
+                <div id="game-price">
+                    <p th:classappend="${game.discount != null && game.discount.isDiscountActive() == true && game.getPromoPrice() > 0} ? 'normal-price'"
+                       th:text="${game.price} + '€'"></p>
+                    <p id="promo-price"
+                       th:if="${game.discount != null && game.discount.isDiscountActive() == true && game.getPromoPrice() > 0}"
+                       th:text="${game.getPromoPrice()} + ' €'">
+                    </p>
+                </div>
                 <button id="buy-btn">Buy</button>
             </div>
         </div>

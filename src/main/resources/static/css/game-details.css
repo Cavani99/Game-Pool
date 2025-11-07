@@ -73,6 +73,7 @@ div.game-section{
     display: block;
     width: 15%;
     cursor: pointer;
+    height: 90px;
 }
 
 #wishlist-btn:hover {
@@ -81,7 +82,7 @@ div.game-section{
 
 #buy-section {
     margin-left: 4%;
-    width: 15%;
+    width: 25%;
     display: flex;
     flex-direction: row;
     background: #000;
@@ -90,13 +91,16 @@ div.game-section{
 }
 
 #game-price {
-    flex: 1;
-    color: floralwhite;
-    background: #444046e6;
-    padding: 15px 15px;
-    font-size: 1.2rem;
-    text-align: center;
-    font-weight: bold;
+   flex: 1;
+   color: floralwhite;
+   background: #444046e6;
+   padding: 15px 15px;
+   font-size: 1.2rem;
+   text-align: center;
+   font-weight: bold;
+   display: flex;
+   align-items: center;
+   gap: 15px;
 }
 
 #buy-btn {
@@ -113,8 +117,20 @@ div.game-section{
   border-radius: 10px;
   box-shadow: 0 0 5px #eee;
   cursor: pointer;
+  height: 90px;
 }
 
 #buy-btn:hover {
   background-position: right center;
+}
+
+.normal-price{
+    font-weight: bold;
+    text-decoration: line-through;
+    color: #000000;
+    white-space: nowrap;
+}
+
+#promo-price{
+   white-space: nowrap;
 }
