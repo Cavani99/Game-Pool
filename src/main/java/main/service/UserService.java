@@ -4,6 +4,7 @@ import main.model.User;
 import main.model.UserRole;
 import main.repository.UserRepository;
 import main.security.AuthenticationDetails;
+import main.web.dto.EditProfileRequest;
 import main.web.dto.RegisterRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -62,5 +64,21 @@ public class UserService implements UserDetailsService {
         user.setBanned(!user.isBanned());
 
         userRepository.save(user);
+    }
+
+    public void edit(UUID id, EditProfileRequest editProfileRequest, String avatarPath) {
+        User user = getById(id);
+
+        user.setUsername(editProfileRequest.getUsername());
+        user.setAvatar(avatarPath == null ? user.getAvatar() : avatarPath);
+        user.setUpdatedOn(LocalDateTime.now());
+
+        userRepository.save(user);
+    }
+
+    public boolean findByUsername(UUID id, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        return user.isPresent() && !user.get().getId().equals(id);
     }
 }

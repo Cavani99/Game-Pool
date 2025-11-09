@@ -27,7 +27,9 @@
 }
 
 .profile-name {
-  font-size: 1.5rem;
+  font-size: xxx-large;
+  font-style: oblique;
+  font-weight: bold;
   color: #333;
 }
 
@@ -35,54 +37,36 @@
   margin-top: 20px;
 }
 
-.profile-actions .btn {
-  padding: 10px 15px;
-  font-size: 14px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  color: #ffffff;
-  background-color: rgba(13, 13, 26, 0.20);
-  font-weight: 300;
-  margin: 5px;
-}
-
 .profile-actions {
   text-align: center;
 }
 
 .profile-actions-button {
-  align-self: center;
-  text-align: center;
-  padding: 0 10px;
-  width: 120px;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  gap: 4px;
-  font-size: 14px;
-  font-family: 'Poppins', sans-serif;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  color: #ffffff;
-  background-color: rgba(13, 13, 26, 0.42);
-  font-weight: 300;
-  text-decoration: none;
-  z-index: 2;
+     align-self: center;
+     text-align: center;
+     padding: 0 10px;
+     width: 120px;
+     align-items: center;
+     justify-content: center;
+     display: flex;
+     gap: 4px;
+     font-size: 14px;
+     font-family: 'Poppins', sans-serif;
+     border-radius: 5px;
+     border: none;
+     cursor: pointer;
+     background-color: rgb(24 67 225);
+     text-decoration: none;
 }
 
 .profile-actions-button p {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.profile-actions-button svg {
-  width: 16px;
+     margin-top: 10px;
+     margin-bottom: 10px;
+     color: white;
 }
 
 .profile-actions-button:hover {
-  background: radial-gradient(circle at 90% top, #746ab0 0%, #6a61a4 10%, #605899 20%, #56508d 30%, #4c477f 40%, #423f73 50%, #383666 60%, #2e2d5a 70%, #24244d 80%, #1a1a41 90%, #101035 100%);
+  background: linear-gradient(90deg,rgba(0, 0, 46, 1) 33%, rgba(0, 212, 255, 1) 95%);
   color: white;
   border-radius: 5px;
   border: none;
@@ -117,13 +101,13 @@
   align-items: center;
 }
 
-.profile-info p {
+.details-section-container p {
   margin: 5px 0;
   color: #666;
 }
 
 .home-profile-information a.profile-actions-button {
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .profile-section{
@@ -132,4 +116,34 @@
     height: 100%;
     flex-wrap: nowrap;
     flex-direction: row;
+}
+
+.details-section-container{
+   display: flex;
+   align-items: center;
+   gap: 5px;
+   font-size: 15px;
+}
+
+.notification-icon {
+      position: relative;
+      color: #FFD43B;
+      font-size: 30px;
+      margin: 15px;
+      display: inline-block;
+}
+
+.messages-count {
+     position: absolute;
+     top: -6px;
+     right: -10px;
+     background: red;
+     color: white;
+     font-size: 12px;
+     padding: 2px 3px;
+     border-radius: 50%;
+     line-height: 1;
+     min-width: 18px;
+     text-align: center;
+     font-weight: bold;
 }
