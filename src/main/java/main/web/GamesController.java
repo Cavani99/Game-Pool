@@ -16,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -115,16 +117,35 @@ public class GamesController {
 
     @GetMapping("details/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ModelAndView getGameDetails(@PathVariable("id") UUID id) {
+    public ModelAndView getGameDetails(@PathVariable("id") UUID id, @AuthenticationPrincipal AuthenticationDetails userDetails) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("game-details");
 
         Game game = gameService.findById(id);
+        User user = userService.getById(userDetails.getId());
+        boolean isWishListed = user.gameIsWishlisted(game.getId());
 
         modelAndView.addObject("game", game);
+        modelAndView.addObject("isWishListed", isWishListed);
         modelAndView.addObject("page", "games");
         modelAndView.addObject("title", "games");
 
         return modelAndView;
+    }
+
+    @PostMapping("wishlist")
+    @ResponseBody
+    public Map<String, Object> wishlistGame(@RequestBody Map<String, String> request, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        UUID gameId = UUID.fromString(request.get("id"));
+        Game game = gameService.findById(gameId);
+
+        User user = userService.getById(userDetails.getId());
+        userService.wishlistGame(user, game);
+
+        boolean isWishlisted = user.gameIsWishlisted(game.getId());
+        Map<String, Object> response = new HashMap<>();
+        response.put("wishlisted", isWishlisted);
+
+        return response;
     }
 }

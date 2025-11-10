@@ -1,5 +1,6 @@
 package main.service;
 
+import main.model.Game;
 import main.model.User;
 import main.model.UserRole;
 import main.repository.UserRepository;
@@ -80,5 +81,19 @@ public class UserService implements UserDetailsService {
         Optional<User> user = userRepository.findByUsername(username);
 
         return user.isPresent() && !user.get().getId().equals(id);
+    }
+
+    public void wishlistGame(User user, Game game) {
+        List<Game> wishListedGames = user.getWishlistGames();
+        boolean isWishListed = user.gameIsWishlisted(game.getId());
+
+        if (isWishListed) {
+            wishListedGames.remove(game);
+        } else {
+            wishListedGames.add(game);
+        }
+        user.setWishlistGames(wishListedGames);
+
+        userRepository.save(user);
     }
 }

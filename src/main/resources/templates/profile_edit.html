@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${title} ?: 'Home Page'">Home Page</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/user-common.css">
+    <link rel="stylesheet" type="text/css" href="/css/user.css">
+</head>
+<body th:replace="fragments/layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information" style="padding: 0 !important;">
+        <form class="auth-form profile-section"
+              th:action="@{/dashboard/edit_profile}"
+              th:method="POST" th:object="${user}" enctype="multipart/form-data">
+            <div class="profile-header" id="imagePreview">
+                <img th:if="${user.avatarPath != null}"
+                     th:src="@{${user.avatarPath}}"
+                     class="profile-avatar">
+            </div>
+            <div class="profile-info">
+                <div class="info">
+                    <span class="badge badge-error" style="color: red;" th:if="${#fields.hasErrors('username')}"
+                          th:errors="*{username}"></span>
+                    <div class="details-section-container" style="margin-top: 30%;">
+                        <label for="username" class="control-label col-sm-2"><span>Username:</span></label>
+                        <input th:field="*{username}" class="form-control input" id="username" name="username"
+                               type="text" placeholder="Enter Username" style="width: 300px;">
+                    </div>
+
+                    <span class="badge badge-error"
+                          th:if="${#fields.hasErrors('avatar')}"
+                          th:errors="*{avatar}"></span>
+                    <div class="details-section-container">
+                        <label for="avatar" class="control-label col-sm-2">
+                            <span>Avatar:</span>
+                        </label>
+                        <input class="form-control" id="avatar" th:field="*{avatar}" type="file" accept="image/*"
+                               onchange="previewImage(event)" style="width: 300px;">
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <div class="text-center mt-3">
+                        <button type="submit" class="profile-actions-button" style="height: 40px;">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    function previewImage(event) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+        const maxSize = 10 * 1024 * 1024; // 10 MB
+        const previewContainer = document.getElementById('imagePreview');
+
+        previewContainer.innerHTML = '';
+
+        if (!file) return;
+
+        if (file.size > maxSize) {
+            alert(`File too large! Please choose an image under ${maxSize / (1024 * 1024)} MB.`);
+            fileInput.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Image preview';
+            img.classList.add('profile-avatar');
+
+            previewContainer.appendChild(img);
+        };
+
+        reader.readAsDataURL(file);
+    }
+</script>
+</html>

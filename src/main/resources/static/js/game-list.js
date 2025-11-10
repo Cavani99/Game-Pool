@@ -35,7 +35,7 @@ $(document).ready(function () {
            },
            error: function(xhr) {
                console.error("Error loading filtered games:", xhr);
-                   }
+           }
         });
     }
 });

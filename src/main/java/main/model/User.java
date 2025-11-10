@@ -7,6 +7,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Builder
@@ -91,5 +92,13 @@ public class User {
 
     @Column(name = "updated_on")
     private LocalDateTime updatedOn;
+
+    public boolean gameIsWishlisted(UUID gameId) {
+        if (wishlistGames == null) return false;
+
+        return wishlistGames.stream()
+                .filter(Objects::nonNull)
+                .anyMatch(game -> gameId.equals(game.getId()));
+    }
 
 }

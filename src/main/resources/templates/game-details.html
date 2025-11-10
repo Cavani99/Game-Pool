@@ -6,6 +6,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
     <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
@@ -13,7 +15,12 @@
     <link rel="stylesheet" type="text/css" href="/css/from-wallet/home.css">
 
     <link rel="stylesheet" type="text/css" href="/css/game-details.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/game-details.js"></script>
 </head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <body th:replace="fragments/layout :: layout(~{::content})">
 <div th:fragment="content">
     <div class="game-section">
@@ -26,7 +33,21 @@
         <div id="game-desc" th:utext="${game.description}"></div>
 
         <div id="buttons-container">
-            <button id="wishlist-btn">Add to Wishlist</button>
+            <a class="wishlist-btn wishlist-add"
+               href="#"
+               title="Add to Wishlist"
+               th:data-game-id="${game.id}"
+               th:classappend="${isWishListed} ? 'hidden' : ''">
+                <i class="fa-regular fa-heart fa-2xl" style="color: #091c2a;"></i>
+            </a>
+
+            <a class="wishlist-btn wishlist-remove"
+               href="#"
+               title="Remove from Wishlist"
+               th:data-game-id="${game.id}"
+               th:classappend="${isWishListed} ? '' : 'hidden'">
+                <i class="fa-solid fa-heart fa-2xl" style="color: #091c2a;"></i>
+            </a>
 
             <div id="buy-section">
                 <div id="game-price">
