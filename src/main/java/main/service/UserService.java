@@ -5,6 +5,7 @@ import main.model.User;
 import main.model.UserRole;
 import main.repository.UserRepository;
 import main.security.AuthenticationDetails;
+import main.web.dto.ChangePasswordRequest;
 import main.web.dto.EditProfileRequest;
 import main.web.dto.RegisterRequest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -93,6 +94,19 @@ public class UserService implements UserDetailsService {
             wishListedGames.add(game);
         }
         user.setWishlistGames(wishListedGames);
+
+        userRepository.save(user);
+    }
+
+    public void changePassword(UUID id, ChangePasswordRequest changePasswordRequest) {
+        User user = getById(id);
+
+        String password = changePasswordRequest.getPassword();
+        String passwordRepeat = changePasswordRequest.getRepeat_password();
+
+        if (password.equals(passwordRepeat)) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
 
         userRepository.save(user);
     }
