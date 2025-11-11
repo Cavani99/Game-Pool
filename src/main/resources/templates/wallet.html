@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${title} ?: 'Home Page'">Home Page</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/user-common.css">
+    <link rel="stylesheet" type="text/css" href="/css/wallet.css">
+</head>
+<body th:replace="fragments/layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information" style="padding: 0 !important;">
+        <div class="wallet-section">
+            <div class="info-side">
+                <div class="labels">
+                    <h1 id="title">Wallet</h1>
+                    <div class="balance" th:text="${'Current funds: ' + user.balance + ' €'}"></div>
+                </div>
+                <div class="operations-section">
+                    <h3>Operations: </h3>
+                    <a href="/dashboard/wallet/add" class="wallet-actions-button add-btn">
+                        <p>Add Funds</p>
+                    </a>
+                    <a href="/dashboard/wallet/send" class="wallet-actions-button send-btn">
+                        <p>Send Funds</p>
+                    </a>
+                </div>
+            </div>
+            <div class="transaction-side">
+                <h3>Transactions: </h3>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>
