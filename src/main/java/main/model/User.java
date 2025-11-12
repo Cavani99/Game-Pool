@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -62,8 +63,6 @@ public class User {
     @NotNull
     private BigDecimal balance;
 
-    //TODO: Add friends to other users, if there is time
-    /*
     @ManyToMany
     @JoinTable(name = "friends",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -72,20 +71,6 @@ public class User {
 
     @ManyToMany(mappedBy = "friends")
     private List<User> friendOf = new ArrayList<>();
-
-    public void addFriend(User user) {
-        friends.add(user);
-        user.getFriends().add(this);
-    }
-
-    public List<User> getFriends() {
-        return friends;
-    }
-
-    public void removeFriend(User user) {
-        friends.remove(user);
-        user.getFriends().remove(this);
-    }*/
 
     @Column(name = "created_on")
     private LocalDateTime createdOn;

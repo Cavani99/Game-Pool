@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${title} ?: 'Home Page'">Home Page</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/user-common.css">
+    <link rel="stylesheet" type="text/css" href="/css/wallet.css">
+    <link rel="stylesheet" type="text/css" href="/css/form-styles.css">
+</head>
+<body th:replace="fragments/layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information" style="padding: 0 !important;">
+        <div class="wallet-section">
+            <div class="info-side">
+                <div class="labels">
+                    <h1 id="title">Wallet</h1>
+                    <div class="balance" th:text="${'Current funds: ' + user.balance + ' €'}"></div>
+                </div>
+                <div class="operations-section">
+                    <form th:action="@{/dashboard/wallet/send}" th:method="POST" th:object="${send_request}">
+
+                        <div class="center-field">
+                            <span class="badge badge-error" th:if="${#fields.hasErrors('friend')}"
+                                  th:errors="*{friend}"></span>
+                            <div class="input-section">
+                                <label for="friend" class="dashboard-label col-sm-2"><span>Pick friend:</span></label>
+                                <select th:field="*{friend}" class="form-select" style="color: black;" id="friend">
+                                    <option value="">Pick a friend</option>
+                                    <option th:each="user : ${friends}" th:value="${user.id}"
+                                            th:text="${user.username}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field-box">
+                            <span class="badge badge-error"
+                                  th:if="${#fields.hasErrors('amount')}"
+                                  th:errors="*{amount}"></span>
+                            <div class="input-section">
+                                <label for="amount" class="dashboard-label col-sm-2"><span>Amount:</span></label>
+                                <input th:field="*{amount}" class="form-control input" id="amount"
+                                       name="amount"
+                                       type="text" placeholder="Enter Amount">
+                            </div>
+                        </div>
+
+                        <div class="submit-box">
+                            <div class="text-center mt-3">
+                                <button type="submit" class="wallet-add-button" style="height: 40px;">Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="transaction-side">
+                <h3>Transactions: </h3>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(document).ready(function() {
+      $('#friend').select2({
+        placeholder: 'Pick a friend',
+        allowClear: true,
+        width: '100%'
+      });
+    });
+</script>
+</html>

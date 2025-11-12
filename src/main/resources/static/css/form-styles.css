@@ -63,6 +63,72 @@
     color: yellow;
 }
 
+.dashboard-label{
+    color: #000000;
+    font-weight: 900;
+    font-size: large;
+}
+
 .form-text{
     color: white;
+}
+
+.center-field{
+    margin-top: 30%;
+}
+
+.field-box {
+    margin-top:10px
+}
+
+.input{
+    width: 300px;
+}
+
+.wallet-add-button {
+     align-self: center;
+     text-align: center;
+     padding: 0 10px;
+     width: 120px;
+     align-items: center;
+     justify-content: center;
+     display: flex;
+     gap: 4px;
+     font-size: 14px;
+     font-family: 'Poppins', sans-serif;
+     border-radius: 5px;
+     border: none;
+     cursor: pointer;
+     background-color: rgb(24 67 225);
+     text-decoration: none;
+}
+
+.wallet-add-button p {
+     margin-top: 10px;
+     margin-bottom: 10px;
+     color: white;
+}
+
+.wallet-add-button:hover {
+  background: linear-gradient(90deg,rgba(0, 0, 46, 1) 33%, rgba(0, 212, 255, 1) 95%);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  font-weight: 300;
+  transition: background 0.9s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.submit-box {
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.input-section{
+   display: flex;
+   align-items: center;
+   gap: 5px;
+   font-size: 15px;
 }

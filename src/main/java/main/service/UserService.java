@@ -5,9 +5,7 @@ import main.model.User;
 import main.model.UserRole;
 import main.repository.UserRepository;
 import main.security.AuthenticationDetails;
-import main.web.dto.ChangePasswordRequest;
-import main.web.dto.EditProfileRequest;
-import main.web.dto.RegisterRequest;
+import main.web.dto.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -109,5 +107,30 @@ public class UserService implements UserDetailsService {
         }
 
         userRepository.save(user);
+    }
+
+    public void addFunds(UUID id, AddFundsRequest addFundsRequest) {
+        User user = getById(id);
+
+        user.setBalance(user.getBalance().add(addFundsRequest.getAmount()));
+
+        userRepository.save(user);
+    }
+
+    public void sendFunds(UUID id, SendFundsRequest sendFundsRequest) {
+        User user = getById(id);
+        User friend = getById(sendFundsRequest.getFriend());
+
+        user.setBalance(user.getBalance().subtract(sendFundsRequest.getAmount()));
+        friend.setBalance(friend.getBalance().add(sendFundsRequest.getAmount()));
+
+        userRepository.save(user);
+        userRepository.save(friend);
+    }
+
+    public boolean hasFunds(UUID id, BigDecimal amount) {
+        User user = getById(id);
+
+        return user.getBalance().compareTo(amount) >= 0;
     }
 }
