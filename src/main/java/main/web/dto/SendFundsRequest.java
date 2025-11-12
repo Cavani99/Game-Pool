@@ -17,6 +17,7 @@ public class SendFundsRequest {
     @NotNull(message = "Please, pick a friend!")
     private UUID friend;
 
+    @NotNull(message = "Write any number!")
     @Min(value = 1, message = "You must put a number more than 0!")
     private BigDecimal amount;
 }

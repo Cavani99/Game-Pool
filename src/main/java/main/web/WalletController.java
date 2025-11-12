@@ -103,8 +103,8 @@ public class WalletController {
                                         BindingResult bindingResult) {
         User user = userService.getById(userDetails.getId());
 
-        if (!userService.hasFunds(userDetails.getId(), sendFundsRequest.getAmount())
-                && sendFundsRequest.getAmount().compareTo(BigDecimal.ZERO) > 0) {
+        if (sendFundsRequest.getAmount() != null && sendFundsRequest.getAmount().compareTo(BigDecimal.ZERO) > 0 &&
+                !userService.hasFunds(userDetails.getId(), sendFundsRequest.getAmount())) {
             bindingResult.rejectValue("amount", "amount.empty", "The user does not have enough funds to send!");
         }
 
