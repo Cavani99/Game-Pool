@@ -7,6 +7,10 @@ $(document).ready(function () {
         filterGames();
     });
 
+    $('.filter-wishlist input[type="checkbox"]').on('change', function() {
+        filterWishlistedGames();
+    });
+
     function filterGames() {
         // Collect selected values
         const categories = $('input[name="categories"]:checked')
@@ -24,6 +28,37 @@ $(document).ready(function () {
 
         $.ajax({
            url: '/dashboard/games/filter',
+           type: 'POST',
+           contentType: 'application/json',
+           data: JSON.stringify(filterData),
+           beforeSend: function(xhr) {
+               xhr.setRequestHeader(header, token);
+           },
+           success: function(response) {
+               $('.list-box').html(response);
+           },
+           error: function(xhr) {
+               console.error("Error loading filtered games:", xhr);
+           }
+        });
+    }
+
+    function filterWishlistedGames() {
+        const categories = $('input[name="categories"]:checked')
+           .map(function() { return $(this).val(); })
+           .get();
+
+        const companies = $('input[name="companies"]:checked')
+           .map(function() { return $(this).val(); })
+           .get();
+
+        const filterData = {
+            categories: categories,
+            companies: companies
+        };
+
+        $.ajax({
+           url: '/dashboard/games/filter_wishlist',
            type: 'POST',
            contentType: 'application/json',
            data: JSON.stringify(filterData),

@@ -1,0 +1,21 @@
+<div class="wishlist-item" th:fragment="games" th:each="game : ${games}" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="wishlist-image">
+        <img th:src="${game.image}" alt="${game.title}">
+    </div>
+    <div class="wishlist-title" th:text="${game.title}"></div>
+    <div class="wishlist-price">
+        <p class="wishlist-promo-price"
+           th:if="${game.discount != null && game.discount.isDiscountActive() == true && game.getPromoPrice() > 0}"
+           th:text="${game.getPromoPrice()} + ' €'"></p>
+        <p th:classappend="${game.discount != null && game.discount.isDiscountActive() == true && game.getPromoPrice() > 0} ? 'wishlist-normal-price'"
+           th:text="${game.price} + ' €'"></p>
+    </div>
+    <div class="wishlist-actions">
+        <a class="remove-btn" th:href="@{/dashboard/games/remove_wishlist/{id} (id=${game.id})}">
+            Remove
+        </a>
+        <a class="details-btn" th:href="@{/dashboard/games/details/{id} (id=${game.id})}">
+            See More...
+        </a>
+    </div>
+</div>

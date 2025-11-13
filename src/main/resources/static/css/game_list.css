@@ -1,6 +1,5 @@
 .list-box {
     width: 85%;
-    height: 100%;
     background: #00000075;
     display: flex;
     flex-wrap: wrap;
@@ -8,6 +7,7 @@
     align-content: flex-start;
     gap: 30px;
     padding: 2%;
+    overflow: auto;
 }
 
 .game-item {
@@ -86,4 +86,126 @@
     font-weight: bold;
     text-decoration: line-through;
     color: darkblue;
+}
+
+.wishlist-item{
+    display: flex;
+    flex-direction: row;
+    border-radius: 20px;
+    background: white;
+    overflow: hidden;
+    height: 40%;
+    width: 95%;
+}
+
+.wishlist-image{
+    height: 100%;
+    width: 30%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wishlist-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wishlist-title{
+    height: 100%;
+    width: 20%;
+    background: #02051a;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    font-family: fantasy;
+}
+
+.wishlist-price{
+    height: 100%;
+    width: 30%;
+    color: #ffe200;
+    background: #4882bb;
+    display: flex;
+    font-size: 55px;
+    flex-direction: column-reverse;
+    justify-content: center;
+}
+
+.wishlist-promo-price{
+    margin: 3px;
+}
+
+.wishlist-normal-price{
+    margin: 0;
+    font-weight: bold;
+    text-decoration: line-through;
+    color: darkblue;
+}
+
+.wishlist-actions{
+    width: 22%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    background: #c2f2f7;
+}
+
+.remove-btn {
+    align-self: center;
+    text-align: center;
+    height: 50px;
+    width: 60%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(237 13 13);
+    text-decoration: none;
+    color: white;
+}
+
+.remove-btn:hover {
+    background: linear-gradient(90deg, rgb(62 3 3) 40%, rgb(225 81 81) 95% 95%);
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-weight: 300;
+    transition: background 0.9s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.details-btn {
+    align-self: center;
+    text-align: center;
+    height: 50px;
+    width: 60%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(22 43 100);
+    text-decoration: none;
+    color: white;
+}
+
+.details-btn:hover {
+    background: linear-gradient(90deg, rgb(14 14 78) 57%, rgb(135 225 243) 95%);
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-weight: 300;
+    transition: background 0.9s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

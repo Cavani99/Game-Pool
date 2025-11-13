@@ -148,4 +148,60 @@ public class GamesController {
 
         return response;
     }
+
+    @GetMapping("remove_wishlist/{id}")
+    @ResponseBody
+    public ModelAndView wishlistGame(@PathVariable("id") UUID gameId, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        Game game = gameService.findById(gameId);
+
+        User user = userService.getById(userDetails.getId());
+        userService.wishlistGame(user, game);
+
+        return new ModelAndView("redirect:/dashboard/games/wishlist");
+    }
+
+    @GetMapping("wishlist")
+    @PreAuthorize("hasAuthority('USER')")
+    public ModelAndView getWishlist(@AuthenticationPrincipal AuthenticationDetails userDetails) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("wishlist");
+
+        User user = userService.getById(userDetails.getId());
+
+        List<Game> games = user.getWishlistGames();
+
+        List<Category> categories = getCategoriesByGames(games);
+        List<Company> companies = getCompaniesByGames(games);
+
+        modelAndView.addObject("games", games);
+        modelAndView.addObject("categories", categories);
+        modelAndView.addObject("companies", companies);
+        modelAndView.addObject("page", "wishlist");
+        modelAndView.addObject("title", "Wish List");
+
+        return modelAndView;
+    }
+
+    @PostMapping("filter_wishlist")
+    public ModelAndView getWishlistedGamesByFilter(
+            @RequestBody GameFilterRequest gameFilterRequest,
+            @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        ModelAndView modelAndView = new ModelAndView("/fragments/wishlist-fragment :: games");
+
+        User user = userService.getById(userDetails.getId());
+
+        List<Game> games = user.getWishlistGames();
+
+        List<Game> filteredGames = gameService.getFilteredGames(
+                gameFilterRequest.getCategories(),
+                gameFilterRequest.getCompanies()
+        );
+
+        List<Game> availableGames = filteredGames.stream()
+                .filter(games::contains)
+                .toList();
+
+        modelAndView.addObject("games", availableGames);
+        return modelAndView;
+    }
 }
