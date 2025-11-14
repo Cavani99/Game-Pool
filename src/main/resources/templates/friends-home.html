@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${title} ?: 'Home Page'"></title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/user-common.css">
+    <link rel="stylesheet" type="text/css" href="/css/friends.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/friends.js"></script>
+</head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<body th:replace="fragments/layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information" style="padding: 0 !important;">
+        <div class="friends-container">
+            <div class="friends-list">
+                <div class="friend" th:unless="${friends.isEmpty()}" th:each="user: ${friends}">
+                    <div class="friend-info">
+                        <div class="friend-img">
+                            <img th:src="${user.avatar}" alt="Profile Picture"
+                                 class="profile-avatar">
+                        </div>
+                        <div class="friend-name">
+                            <p th:text="${user.username}"></p>
+                        </div>
+                    </div>
+                    <div class="friend-actions">
+                        <a href="/dashboard/change_password" class="profile-actions-button">
+                            <p>See Profile</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="no-friends" th:if="${friends.isEmpty()}">
+                    <h1>You have no friends currently!</h1>
+                </div>
+            </div>
+            <div class="friends-add">
+                <div class="search-container">
+                    <h2>Search: </h2>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input class="form-control" id="search" type="search">
+                </div>
+                <div class="result-search">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

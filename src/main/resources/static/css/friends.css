@@ -1,0 +1,148 @@
+.friends-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.friends-list {
+    flex: 1;
+    width: 50%;
+    background: beige;
+    border-right: 4px dashed #031b95;
+}
+
+.friends-add {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    align-items: center;
+    background: brown;
+}
+
+.no-friends{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.search-container{
+    background: #a9a9a9;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.search-container input{
+    margin-right: 15px;
+    width: 300px;
+}
+
+.result-search{
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.search-fragment{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.user-item{
+   display: flex;
+    border: 1px solid #00000063;
+    border-radius: 10px;
+    margin: 20px;
+    width: 60%;
+}
+
+.user-image{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.user-username{
+    display: flex;
+    width: 15%;
+    align-items: center;
+    justify-content: center;
+    background: lightblue;
+    flex: 1;
+}
+
+.user-actions{
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    align-items: center;
+    justify-content: space-evenly;
+    flex: 1;
+}
+
+.actions-button {
+     align-self: center;
+     text-align: center;
+     width: 120px;
+     height: 30px;
+     align-items: center;
+     justify-content: center;
+     display: flex;
+     font-size: 14px;
+     font-family: 'Poppins', sans-serif;
+     border-radius: 5px;
+     border: none;
+     cursor: pointer;
+     text-decoration: none;
+}
+
+.actions-button:hover {
+  background: linear-gradient(90deg,rgba(0, 0, 46, 1) 33%, rgba(0, 212, 255, 1) 95%);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  font-weight: 300;
+  transition: background 0.9s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.details-btn{
+  background-color: rgb(10 156 241);
+}
+
+.details-btn:hover{
+   background: linear-gradient(90deg, rgb(41 195 219) 37%, rgb(20 72 97) 95%);
+}
+
+.send-btn{
+   background-color: rgb(12 185 25);
+}
+
+.send-btn:hover{
+   background: linear-gradient(90deg, rgb(24 171 15) 22%, rgb(6 71 11) 95%);
+}

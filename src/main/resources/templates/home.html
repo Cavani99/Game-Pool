@@ -27,12 +27,11 @@
                     <h1 class="profile-name" th:text="${user.username}"></h1>
                     <div class="details-section-container">
                         <strong>Email: </strong>
-                        <p th:text="${user.email}">abv@bg</p>
+                        <p th:text="${user.email}"></p>
                     </div>
                     <div class="details-section-container">
                         <strong>Joined: </strong>
-                        <p th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}">
-                            09 Dec 2024 21:39</p>
+                        <p th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></p>
                     </div>
                 </div>
                 <div class="profile-actions">
