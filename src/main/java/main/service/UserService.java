@@ -133,4 +133,26 @@ public class UserService implements UserDetailsService {
 
         return user.getBalance().compareTo(amount) >= 0;
     }
+
+    public void addFriend(UUID id, UUID userId) {
+        User user = getById(id);
+        User friendUser = getById(userId);
+
+        List<User> friends = user.getFriends();
+        friends.add(friendUser);
+        user.setFriends(friends);
+
+        userRepository.save(user);
+    }
+
+    public void removeFriend(UUID id, UUID friendId) {
+        User user = getById(id);
+        User friendUser = getById(friendId);
+
+        List<User> friends = user.getFriends();
+        friends.remove(friendUser);
+        user.setFriends(friends);
+
+        userRepository.save(user);
+    }
 }

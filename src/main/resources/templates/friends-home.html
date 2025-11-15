@@ -24,20 +24,27 @@
     <div class="single-section-box home-profile-information" style="padding: 0 !important;">
         <div class="friends-container">
             <div class="friends-list">
-                <div class="friend" th:unless="${friends.isEmpty()}" th:each="user: ${friends}">
-                    <div class="friend-info">
+                <div class="friend-result-list" th:unless="${friends.isEmpty()}">
+                    <div class="friend" th:each="user: ${friends}">
+
                         <div class="friend-img">
-                            <img th:src="${user.avatar}" alt="Profile Picture"
-                                 class="profile-avatar">
+                            <img th:src="${user.avatar}" alt="Profile Picture">
                         </div>
+
                         <div class="friend-name">
                             <p th:text="${user.username}"></p>
                         </div>
-                    </div>
-                    <div class="friend-actions">
-                        <a href="/dashboard/change_password" class="profile-actions-button">
-                            <p>See Profile</p>
-                        </a>
+
+                        <div class="friend-actions">
+                            <a th:href="@{/dashboard/friends/details/{id} (id=${user.id})}"
+                               class="friend-btn details-btn">
+                                See Profile
+                            </a>
+                            <a th:href="@{/dashboard/friends/remove/{id} (id=${user.id})}" class="friend-btn remove-btn">
+                                Remove Friend
+                            </a>
+                        </div>
+
                     </div>
                 </div>
                 <div class="no-friends" th:if="${friends.isEmpty()}">
@@ -50,7 +57,11 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input class="form-control" id="search" type="search">
                 </div>
-                <div class="result-search">
+                <div class="result-container">
+                    <div class="event-message"></div>
+                    <div class="result-search">
+
+                    </div>
                 </div>
             </div>
         </div>

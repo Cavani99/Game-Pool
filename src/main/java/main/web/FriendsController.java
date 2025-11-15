@@ -6,14 +6,12 @@ import main.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/dashboard/friends")
@@ -60,5 +58,24 @@ public class FriendsController {
 
         modelAndView.addObject("users", filteredUsers);
         return modelAndView;
+    }
+
+    @PostMapping("send_request/{id}")
+    @ResponseBody
+    public Map<String, String> sendFriendRequest(@PathVariable("id") UUID userId,
+                                                 @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        User user = userService.getById(userDetails.getId());
+        userService.addFriend(user.getId(), userId);
+
+        return Map.of("message", "Friend invitation sent successfully!");
+    }
+
+    @GetMapping("remove/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ModelAndView removeFriend(@PathVariable("id") UUID friendId, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        User user = userService.getById(userDetails.getId());
+        userService.removeFriend(user.getId(), friendId);
+
+        return new ModelAndView("redirect:/dashboard/friends");
     }
 }
