@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${title} ?: 'Home Page'">Home Page</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/user-common.css">
+    <link rel="stylesheet" type="text/css" href="/css/user.css">
+    <link rel="stylesheet" type="text/css" href="/css/game_list.css">
+</head>
+<body th:replace="fragments/layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information" style="padding: 0 !important;">
+        <div class="profile-section">
+            <div class="profile-header">
+                <img th:src="${user.avatar}" alt="Profile Picture"
+                     class="profile-avatar">
+            </div>
+            <div class="profile-info">
+                <div class="profile-game-list">
+                    <div class="user-game-item" th:unless="${games.isEmpty()}" th:each="game : ${games}">
+                        <div class="game-image">
+                            <img th:src="${game.image}" alt="${game.title}">
+                        </div>
+                        <div class="game-info">
+                            <span class="game-title" th:text="${game.title}"></span>
+                        </div>
+                    </div>
+                    <div class="user-no-games" th:if="${games.isEmpty()}">
+                        <h1>User does not own any games!</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

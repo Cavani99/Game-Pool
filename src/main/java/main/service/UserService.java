@@ -165,7 +165,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean hasFundsForGame(User user, Game game) {
-        double price = game.getPromoPrice() > 0 ? game.getPromoPrice() : game.getPrice();
+        double price = game.getPromoPrice() > 0 && game.getDiscount().isDiscountActive() ? game.getPromoPrice() : game.getPrice();
 
         return user.getBalance().compareTo(BigDecimal.valueOf(price)) >= 0;
     }

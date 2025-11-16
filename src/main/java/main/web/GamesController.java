@@ -191,10 +191,16 @@ public class GamesController {
 
         List<Game> games = user.getWishlistGames();
 
-        List<Category> categories = getCategoriesByGames(games);
-        List<Company> companies = getCompaniesByGames(games);
+        List<Game> boughtGames = user.getGames();
 
-        modelAndView.addObject("games", games);
+        List<Game> availableGames = games.stream()
+                .filter(game -> !boughtGames.contains(game))
+                .toList();
+
+        List<Category> categories = getCategoriesByGames(availableGames);
+        List<Company> companies = getCompaniesByGames(availableGames);
+
+        modelAndView.addObject("games", availableGames);
         modelAndView.addObject("categories", categories);
         modelAndView.addObject("companies", companies);
         modelAndView.addObject("page", "wishlist");
@@ -213,6 +219,8 @@ public class GamesController {
 
         List<Game> games = user.getWishlistGames();
 
+        List<Game> boughtGames = user.getGames();
+
         List<Game> filteredGames = gameService.getFilteredGames(
                 gameFilterRequest.getCategories(),
                 gameFilterRequest.getCompanies()
@@ -220,9 +228,28 @@ public class GamesController {
 
         List<Game> availableGames = filteredGames.stream()
                 .filter(games::contains)
+                .filter(game -> !boughtGames.contains(game))
                 .toList();
 
         modelAndView.addObject("games", availableGames);
+        return modelAndView;
+    }
+
+    @GetMapping("user_games/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ModelAndView getUserGames(@PathVariable("id") UUID userId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("user_games");
+
+        User user = userService.getById(userId);
+
+        List<Game> boughtGames = user.getGames();
+
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("games", boughtGames);
+        modelAndView.addObject("page", "home");
+        modelAndView.addObject("title", "Home");
+
         return modelAndView;
     }
 }
