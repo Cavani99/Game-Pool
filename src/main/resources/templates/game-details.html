@@ -24,6 +24,7 @@
 <body th:replace="fragments/layout :: layout(~{::content})">
 <div th:fragment="content">
     <div class="game-section">
+        <div class="event-message"></div>
         <div id="game-title" th:text="${game.title}"></div>
         <div id="game-image">
             <img th:src="${game.image}" alt="${game.title}">
@@ -58,7 +59,7 @@
                        th:text="${game.getPromoPrice()} + ' €'">
                     </p>
                 </div>
-                <button id="buy-btn">Buy</button>
+                <button id="buy-btn" th:data-game-id="${game.id}">Buy</button>
             </div>
         </div>
     </div>

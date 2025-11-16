@@ -75,6 +75,10 @@ public class Game {
     }
 
     public Double getPromoPrice() {
+        if (this.discount == null) {
+            return 0.0;
+        }
+
         int amount = this.discount.getAmount();
 
         if (this.discount.getType().equals(DiscountType.FIXED) && amount >= this.price) {

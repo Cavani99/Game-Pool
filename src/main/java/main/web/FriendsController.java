@@ -38,6 +38,21 @@ public class FriendsController {
         return modelAndView;
     }
 
+    @GetMapping("details/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ModelAndView getUserDetails(@PathVariable("id") UUID id) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
+
+        User user = userService.getById(id);
+
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("page", "friends");
+        modelAndView.addObject("title", "Friends");
+
+        return modelAndView;
+    }
+
     @PostMapping("search_users")
     public ModelAndView searchUsers(@AuthenticationPrincipal AuthenticationDetails userDetails,
                                     @RequestBody Map<String, String> searchRequest) {

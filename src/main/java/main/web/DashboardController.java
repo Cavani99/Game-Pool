@@ -43,6 +43,7 @@ public class DashboardController {
         User user = userService.getById(userDetails.getId());
 
         modelAndView.addObject("user", user);
+        modelAndView.addObject("logged", true);
         modelAndView.addObject("page", "home");
         modelAndView.addObject("title", "Home");
 

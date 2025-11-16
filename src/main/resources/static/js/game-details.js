@@ -30,4 +30,38 @@ $(document).ready(function () {
         });
     });
 
+    $('#buy-btn').on('click', function(e) {
+        e.preventDefault();
+
+        const gameId = $(this).data('game-id');
+
+        $.ajax({
+            url: '/dashboard/games/buy',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ id: gameId }),
+            beforeSend: function(xhr) {
+               xhr.setRequestHeader(header, token);
+            },
+            success: function (response) {
+                if(response.status == 'success') {
+                    window.location.href = '/dashboard/games';
+                } else {
+                    let msgBox = $('.event-message');
+
+                    $('html, body').animate({ scrollTop: 0 }, 400);
+                    msgBox.css('display', 'block');
+                    msgBox.stop(true, true)
+                        .text(response.message)
+                        .fadeIn(300)
+                        .delay(3000)
+                        .fadeOut(400);
+                }
+            },
+            error: function(xhr) {
+                 console.log("There was a problem buying the game", xhr);
+            }
+        });
+    });
+
 });

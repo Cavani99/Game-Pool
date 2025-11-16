@@ -149,6 +149,27 @@ public class GamesController {
         return response;
     }
 
+    @PostMapping("buy")
+    @ResponseBody
+    public Map<String, Object> buyGame(@RequestBody Map<String, String> request, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        UUID gameId = UUID.fromString(request.get("id"));
+        Game game = gameService.findById(gameId);
+        User user = userService.getById(userDetails.getId());
+
+        Map<String, Object> response = new HashMap<>();
+        if (!userService.hasFundsForGame(user, game)) {
+            response.put("status", "error");
+            response.put("message", "You do not have enough funds to buy this game!");
+
+            return response;
+        }
+
+        userService.buyGame(user, game);
+        response.put("status", "success");
+
+        return response;
+    }
+
     @GetMapping("remove_wishlist/{id}")
     @ResponseBody
     public ModelAndView wishlistGame(@PathVariable("id") UUID gameId, @AuthenticationPrincipal AuthenticationDetails userDetails) {

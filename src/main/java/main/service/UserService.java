@@ -62,6 +62,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist!"));
 
         user.setBanned(!user.isBanned());
+        user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
     }
@@ -92,6 +93,7 @@ public class UserService implements UserDetailsService {
             wishListedGames.add(game);
         }
         user.setWishlistGames(wishListedGames);
+        user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
     }
@@ -104,15 +106,16 @@ public class UserService implements UserDetailsService {
 
         if (password.equals(passwordRepeat)) {
             user.setPassword(passwordEncoder.encode(password));
+            user.setUpdatedOn(LocalDateTime.now());
+            userRepository.save(user);
         }
-
-        userRepository.save(user);
     }
 
     public void addFunds(UUID id, AddFundsRequest addFundsRequest) {
         User user = getById(id);
 
         user.setBalance(user.getBalance().add(addFundsRequest.getAmount()));
+        user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
     }
@@ -123,6 +126,9 @@ public class UserService implements UserDetailsService {
 
         user.setBalance(user.getBalance().subtract(sendFundsRequest.getAmount()));
         friend.setBalance(friend.getBalance().add(sendFundsRequest.getAmount()));
+
+        user.setUpdatedOn(LocalDateTime.now());
+        friend.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
         userRepository.save(friend);
@@ -141,6 +147,7 @@ public class UserService implements UserDetailsService {
         List<User> friends = user.getFriends();
         friends.add(friendUser);
         user.setFriends(friends);
+        user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
     }
@@ -152,6 +159,25 @@ public class UserService implements UserDetailsService {
         List<User> friends = user.getFriends();
         friends.remove(friendUser);
         user.setFriends(friends);
+        user.setUpdatedOn(LocalDateTime.now());
+
+        userRepository.save(user);
+    }
+
+    public boolean hasFundsForGame(User user, Game game) {
+        double price = game.getPromoPrice() > 0 ? game.getPromoPrice() : game.getPrice();
+
+        return user.getBalance().compareTo(BigDecimal.valueOf(price)) >= 0;
+    }
+
+    public void buyGame(User user, Game game) {
+        List<Game> games = user.getGames();
+        games.add(game);
+
+        double gamePrice = game.getPromoPrice() > 0 ? game.getPromoPrice() : game.getPrice();
+        user.setBalance(user.getBalance().subtract(BigDecimal.valueOf(gamePrice)));
+        user.setGames(games);
+        user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
     }

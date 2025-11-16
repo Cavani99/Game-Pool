@@ -19,6 +19,10 @@ div.game-section{
     padding: 4%;
 }
 
+#game-image img{
+    width: 90%;
+}
+
 #game-cat{
     margin-top: 1%;
     margin-left: 14%;
@@ -121,4 +125,17 @@ div.game-section{
 
 .wishlist-btn:not(.hidden) i {
     transform: scale(1.1);
+}
+
+.event-message{
+    background: green;
+    padding: 10px;
+    width: 70%;
+    height: 21px;
+    margin-left: 15%;
+    margin-top: 15px;
+    border-radius: 4px;
+    color: white;
+    font-size: 15px;
+    display: none;
 }
