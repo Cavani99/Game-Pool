@@ -1,6 +1,8 @@
 package main.web;
 
 import jakarta.validation.Valid;
+import main.model.User;
+import main.service.NotificationService;
 import main.service.UserService;
 import main.web.dto.LoginRequest;
 import main.web.dto.RegisterRequest;
@@ -21,9 +23,11 @@ import java.util.UUID;
 public class IndexController {
 
     private final UserService userService;
+    private final NotificationService notificationService;
 
-    public IndexController(UserService userService) {
+    public IndexController(UserService userService, NotificationService notificationService) {
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -66,7 +70,8 @@ public class IndexController {
             avatarPath = "/uploads/avatars/" + filename;
         }
 
-        userService.create(registerRequest, avatarPath);
+        User createdUser = userService.create(registerRequest, avatarPath);
+        notificationService.saveUser(createdUser.getId());
 
         return new ModelAndView("redirect:/login");
     }

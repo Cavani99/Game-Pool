@@ -247,7 +247,7 @@ public class GamesController {
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("games", boughtGames);
-        modelAndView.addObject("page", "home");
+        modelAndView.addObject("page", "games");
         modelAndView.addObject("title", "Home");
 
         return modelAndView;

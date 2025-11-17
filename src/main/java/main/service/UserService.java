@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
         return new AuthenticationDetails(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.getBalance(), user.isBanned());
     }
 
-    public void create(RegisterRequest registerRequest, String avatarPath) {
+    public User create(RegisterRequest registerRequest, String avatarPath) {
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
         user.setCreatedOn(LocalDateTime.now());
         user.setUpdatedOn(LocalDateTime.now());
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public User getById(UUID id) {
