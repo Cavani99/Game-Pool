@@ -2,6 +2,7 @@ package main.web;
 
 import main.model.User;
 import main.security.AuthenticationDetails;
+import main.service.NotificationService;
 import main.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,8 +20,11 @@ public class FriendsController {
 
     private final UserService userService;
 
-    public FriendsController(UserService userService) {
+    private final NotificationService notificationService;
+
+    public FriendsController(UserService userService, NotificationService notificationService) {
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -80,9 +84,17 @@ public class FriendsController {
     public Map<String, String> sendFriendRequest(@PathVariable("id") UUID userId,
                                                  @AuthenticationPrincipal AuthenticationDetails userDetails) {
         User user = userService.getById(userDetails.getId());
-        userService.addFriend(user.getId(), userId);
+        notificationService.createFriendInvite(user, userId);
 
         return Map.of("message", "Friend invitation sent successfully!");
+    }
+
+    @GetMapping("accept_request/{id}")
+    public ModelAndView acceptFriendRequest(@PathVariable("id") UUID userId, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        User user = userService.getById(userDetails.getId());
+        userService.addFriend(user.getId(), userId);
+
+        return new ModelAndView("redirect:/dashboard/friends");
     }
 
     @GetMapping("remove/{id}")
