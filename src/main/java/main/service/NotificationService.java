@@ -6,6 +6,7 @@ import main.model.User;
 import main.utils.NotificationClient;
 import main.utils.client_dtos.CreateNotificationRequest;
 import main.utils.client_dtos.CreateUserRequest;
+import main.utils.client_dtos.NotificationObject;
 import main.utils.client_dtos.NotificationResponse;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,11 @@ import java.util.UUID;
 public class NotificationService {
 
     private final NotificationClient notificationClient;
+    private final UserService userService;
 
-    public NotificationService(NotificationClient notificationClient) {
+    public NotificationService(NotificationClient notificationClient, UserService userService) {
         this.notificationClient = notificationClient;
+        this.userService = userService;
     }
 
     public void saveUser(UUID userId) {
@@ -49,8 +52,19 @@ public class NotificationService {
         }
     }
 
-    public List<NotificationResponse> getNotificationsByUser(UUID userId) {
-        return notificationClient.getNotifications(userId);
+    public List<NotificationObject> getNotificationsByUser(UUID userId) {
+        List<NotificationResponse> notifications = notificationClient.getNotifications(userId);
+
+        return notifications.stream()
+                .map(notification -> {
+                    if (notification.getSender() != null) {
+                        User sender = userService.getById(notification.getSender());
+                        return new NotificationObject(notification, sender.getUsername());
+                    } else {
+                        return new NotificationObject(notification, null);
+                    }
+                })
+                .toList();
     }
 
     public NotificationResponse getNotificationById(UUID id) {
