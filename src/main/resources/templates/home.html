@@ -53,7 +53,7 @@
                 </div>
             </div>
             <i th:if="${#ctx.containsVariable('logged')}" class="notification-icon fa-solid fa-bell">
-                <span class="messages-count">0</span>
+                <span class="messages-count" th:text="${notifications_count}"></span>
             </i>
         </div>
     </div>

@@ -3,6 +3,7 @@ package main.web;
 import jakarta.validation.Valid;
 import main.model.User;
 import main.security.AuthenticationDetails;
+import main.service.NotificationService;
 import main.service.UserService;
 import main.web.dto.ChangePasswordRequest;
 import main.web.dto.EditProfileRequest;
@@ -29,9 +30,11 @@ import java.util.UUID;
 public class DashboardController {
 
     private final UserService userService;
+    private final NotificationService notificationService;
 
-    public DashboardController(UserService userService) {
+    public DashboardController(UserService userService, NotificationService notificationService) {
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -44,6 +47,7 @@ public class DashboardController {
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("logged", true);
+        modelAndView.addObject("notifications_count", notificationService.getNotificationsByUser(user.getId()).size());
         modelAndView.addObject("page", "home");
         modelAndView.addObject("title", "Home");
 

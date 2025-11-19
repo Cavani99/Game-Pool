@@ -22,5 +22,8 @@ public interface NotificationClient {
     void saveNotification(@RequestBody CreateNotificationRequest createNotificationRequest);
 
     @GetMapping("/notifications/{id}")
-    List<NotificationResponse> saveNotification(@PathVariable UUID id);
+    List<NotificationResponse> getNotifications(@PathVariable("id") UUID userId);
+
+    @GetMapping("/notification/{id}")
+    NotificationResponse getNotification(@PathVariable("id") UUID id);
 }

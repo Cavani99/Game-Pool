@@ -6,6 +6,7 @@ import main.model.User;
 import main.utils.NotificationClient;
 import main.utils.client_dtos.CreateNotificationRequest;
 import main.utils.client_dtos.CreateUserRequest;
+import main.utils.client_dtos.NotificationResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +47,14 @@ public class NotificationService {
             request.setReceiverId(user.getId());
             notificationClient.saveNotification(request);
         }
+    }
+
+    public List<NotificationResponse> getNotificationsByUser(UUID userId) {
+        return notificationClient.getNotifications(userId);
+    }
+
+    public NotificationResponse getNotificationById(UUID id) {
+        return notificationClient.getNotification(id);
     }
 
     public void saveNotification(CreateNotificationRequest createNotificationRequest) {
