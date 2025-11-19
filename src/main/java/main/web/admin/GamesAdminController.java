@@ -2,12 +2,10 @@ package main.web.admin;
 
 import jakarta.validation.Valid;
 import main.model.*;
-import main.service.CategoryService;
-import main.service.CompanyService;
-import main.service.DiscountService;
-import main.service.GameService;
+import main.service.*;
 import main.web.dto.CreateDiscountRequest;
 import main.web.dto.CreateGameRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -28,16 +26,22 @@ import java.util.UUID;
 @RequestMapping("/admin/games")
 public class GamesAdminController {
 
+    private final UserService userService;
     private final GameService gameService;
     private final DiscountService discountService;
     private final CategoryService categoryService;
     private final CompanyService companyService;
+    private final NotificationService notificationService;
 
-    public GamesAdminController(GameService gameService, DiscountService discountService, CategoryService categoryService, CompanyService companyService) {
+    @Autowired
+    public GamesAdminController(UserService userService, GameService gameService, DiscountService discountService, CategoryService categoryService,
+                                CompanyService companyService, NotificationService notificationService) {
+        this.userService = userService;
         this.gameService = gameService;
         this.discountService = discountService;
         this.categoryService = categoryService;
         this.companyService = companyService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -259,6 +263,9 @@ public class GamesAdminController {
 
         discount = discountService.persist(discount, createDiscountRequest);
         game = gameService.addDiscount(id, discount);
+
+        List<User> users = userService.findAllWishlistedUsersByGameId(game.getId());
+        notificationService.createGameDiscountNotifications(game, users);
 
         redirectAttributes.addFlashAttribute("message", "Discount for " + game.getTitle() + " saved successfully!");
 

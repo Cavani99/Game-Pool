@@ -1,5 +1,6 @@
 package main.service;
 
+import main.model.Game;
 import main.model.NotificationType;
 import main.model.User;
 import main.utils.NotificationClient;
@@ -7,6 +8,7 @@ import main.utils.client_dtos.CreateNotificationRequest;
 import main.utils.client_dtos.CreateUserRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,6 +34,18 @@ public class NotificationService {
         request.setSenderId(user.getId());
         request.setReceiverId(invitedUserId);
         notificationClient.saveNotification(request);
+    }
+
+    public void createGameDiscountNotifications(Game game, List<User> users) {
+        for (User user : users) {
+            CreateNotificationRequest request = new CreateNotificationRequest();
+            request.setTitle("Wishlisted Game got discounted!");
+            request.setMessage("Game " + game.getTitle() + " got a discount!");
+            request.setType(NotificationType.INFORMATION);
+            request.setLink("localhost:8080/dashboard/games/details/" + game.getId());
+            request.setReceiverId(user.getId());
+            notificationClient.saveNotification(request);
+        }
     }
 
     public void saveNotification(CreateNotificationRequest createNotificationRequest) {

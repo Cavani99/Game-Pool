@@ -181,4 +181,8 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
     }
+
+    public List<User> findAllWishlistedUsersByGameId(UUID gameId) {
+        return userRepository.findAllByWishlistGames_Id(gameId);
+    }
 }
