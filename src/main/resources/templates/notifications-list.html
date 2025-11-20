@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${title} ?: 'Home Page'">Home Page</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/user-common.css">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/home.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/notifications.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<body th:replace="fragments/layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="games-section">
+        <div class="list-box">
+            <div class="notification-item" th:each="notification : ${notifications}">
+                <div class="notification-header">
+                    <div class="notification-send-info">
+                        <span th:text="${#temporals.format(notification.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></span>
+                        <span th:if="${notification.senderUsername != null}"
+                              th:text="'Sent By: ' + ${notification.senderUsername}"></span>
+                    </div>
+                    <div class="notification-title">
+                        <span th:text="${notification.title}"></span>
+                    </div>
+                </div>
+                <div class="notification-desc">
+                    <span th:text="${notification.message}"></span>
+                </div>
+                <div class="notification-actions">
+                    <a class="see-btn" th:href="@{/dashboard/notifications/details/{id} (id=${notification.id})}">
+                        See
+                    </a>
+                    <a class="remove-btn" th:href="@{/dashboard/notifications/remove/{id} (id=${notification.id})}">
+                        Remove
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

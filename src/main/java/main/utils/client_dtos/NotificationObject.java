@@ -16,6 +16,8 @@ public class NotificationObject {
     private NotificationType type;
     private LocalDateTime createdOn;
     private String senderUsername;
+    private boolean completed;
+    private boolean seen;
 
     public NotificationObject(NotificationResponse notification, String senderUsername) {
         this.id = notification.getId();
@@ -25,5 +27,7 @@ public class NotificationObject {
         this.type = notification.getType();
         this.createdOn = notification.getCreatedOn();
         this.senderUsername = senderUsername;
+        this.completed = notification.isCompleted();
+        this.seen = notification.isSeen();
     }
 }

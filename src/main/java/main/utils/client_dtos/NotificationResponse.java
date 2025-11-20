@@ -19,4 +19,6 @@ public class NotificationResponse {
     private NotificationType type;
     private LocalDateTime createdOn;
     private UUID sender;
+    private boolean completed;
+    private boolean seen;
 }
