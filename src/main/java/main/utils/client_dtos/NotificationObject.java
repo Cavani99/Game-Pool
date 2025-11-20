@@ -13,6 +13,7 @@ public class NotificationObject {
     private String title;
     private String message;
     private String link;
+    private String linkTitle;
     private NotificationType type;
     private LocalDateTime createdOn;
     private String senderUsername;
@@ -24,6 +25,7 @@ public class NotificationObject {
         this.title = notification.getTitle();
         this.message = notification.getMessage();
         this.link = notification.getLink();
+        this.linkTitle = notification.getLinkTitle();
         this.type = notification.getType();
         this.createdOn = notification.getCreatedOn();
         this.senderUsername = senderUsername;

@@ -8,6 +8,8 @@ import main.utils.client_dtos.CreateNotificationRequest;
 import main.utils.client_dtos.CreateUserRequest;
 import main.utils.client_dtos.NotificationObject;
 import main.utils.client_dtos.NotificationResponse;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,6 +71,12 @@ public class NotificationService {
 
     public NotificationResponse getNotificationById(UUID id) {
         return notificationClient.getNotification(id);
+    }
+
+    public HttpStatusCode removeNotification(UUID id) {
+        ResponseEntity<Void> response = notificationClient.removeNotification(id);
+
+        return response.getStatusCode();
     }
 
     public void saveNotification(CreateNotificationRequest createNotificationRequest) {

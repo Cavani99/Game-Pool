@@ -4,10 +4,8 @@ import main.utils.client_dtos.CreateNotificationRequest;
 import main.utils.client_dtos.CreateUserRequest;
 import main.utils.client_dtos.NotificationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,4 +24,7 @@ public interface NotificationClient {
 
     @GetMapping("/notification/{id}")
     NotificationResponse getNotification(@PathVariable("id") UUID id);
+
+    @DeleteMapping("/notification/{id}")
+    ResponseEntity<Void> removeNotification(@PathVariable UUID id);
 }

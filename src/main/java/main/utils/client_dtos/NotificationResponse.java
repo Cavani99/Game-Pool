@@ -21,4 +21,5 @@ public class NotificationResponse {
     private UUID sender;
     private boolean completed;
     private boolean seen;
+    private String linkTitle;
 }
