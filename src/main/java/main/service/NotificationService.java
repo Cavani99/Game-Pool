@@ -37,6 +37,7 @@ public class NotificationService {
         request.setMessage("You got a friend invitation from " + user.getUsername() + "!");
         request.setType(NotificationType.REQUEST);
         request.setLink("localhost:8080/dashboard/friends/accept_request/" + user.getId());
+        request.setLinkTitle("Accept");
         request.setSenderId(user.getId());
         request.setReceiverId(invitedUserId);
         notificationClient.saveNotification(request);
@@ -49,6 +50,7 @@ public class NotificationService {
             request.setMessage("Game " + game.getTitle() + " got a discount!");
             request.setType(NotificationType.INFORMATION);
             request.setLink("localhost:8080/dashboard/games/details/" + game.getId());
+            request.setLinkTitle("See Game");
             request.setReceiverId(user.getId());
             notificationClient.saveNotification(request);
         }

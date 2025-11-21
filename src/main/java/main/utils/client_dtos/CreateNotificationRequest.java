@@ -23,6 +23,8 @@ public class CreateNotificationRequest {
     @URL(message = "Link must be in URL format!")
     private String link;
 
+    private String linkTitle;
+
     @NotNull
     private NotificationType type;
 

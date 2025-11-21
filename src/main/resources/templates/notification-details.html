@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" style="height: 100%">
+<head>
+    <title th:text="${title} ?: 'Home Page'">Home Page</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/user-common.css">
+    <link rel="stylesheet" type="text/css" href="/css/from-wallet/home.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/notifications.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<body th:replace="fragments/layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="notification-section">
+        <div id="notification-title" th:text="${notification.title}"></div>
+        <div id="notification-desc" th:utext="${notification.message}"></div>
+
+        <div id="buttons-container">
+            <a class="sender-profile-btn" th:if="${notification.title == 'Friend Invitation!'}"
+               th:href="@{/dashboard/friends/details/{id} (id=${notification.sender})}">
+                See Profile
+            </a>
+            <a class="action-btn" th:href="'http://' + ${notification.link}" th:text="${notification.linkTitle}">
+                Ok
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -92,9 +92,23 @@ public class FriendsController {
     @GetMapping("accept_request/{id}")
     public ModelAndView acceptFriendRequest(@PathVariable("id") UUID userId, @AuthenticationPrincipal AuthenticationDetails userDetails) {
         User user = userService.getById(userDetails.getId());
-        userService.addFriend(user.getId(), userId);
+
+        if (userService.userNotFriend(user.getId(), userId)) {
+            userService.addFriend(user.getId(), userId);
+        }
 
         return new ModelAndView("redirect:/dashboard/friends");
+    }
+
+    @GetMapping("accept_request/{id}/{notification_id}")
+    public ModelAndView acceptFriendRequest(@PathVariable("id") UUID userId, @PathVariable("notification_id") UUID notificationId,
+                                            @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        User user = userService.getById(userDetails.getId());
+        if (userService.userNotFriend(user.getId(), userId)) {
+            userService.addFriend(user.getId(), userId);
+        }
+
+        return new ModelAndView("redirect:/dashboard/notifications/remove/" + notificationId);
     }
 
     @GetMapping("remove/{id}")

@@ -140,6 +140,14 @@ public class UserService implements UserDetailsService {
         return user.getBalance().compareTo(amount) >= 0;
     }
 
+    public boolean userNotFriend(UUID id, UUID userId) {
+        User user = getById(id);
+
+        return user.getFriends()
+                .stream()
+                .noneMatch(f -> f.getId().equals(userId));
+    }
+
     public void addFriend(UUID id, UUID userId) {
         User user = getById(id);
         User friendUser = getById(userId);
