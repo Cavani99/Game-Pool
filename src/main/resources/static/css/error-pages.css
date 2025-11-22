@@ -1,0 +1,24 @@
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+    background: linear-gradient(358deg, rgb(1 16 24) 36%, rgb(20 72 116) 97%) no-repeat;
+    font-style: normal;
+    letter-spacing: 0.5px;
+}
+
+.error-section{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-box{
+    background: white;
+    padding: 7%;
+    border-radius: 10%;
+    border: 2px solid #00020a;
+}

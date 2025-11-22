@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="'Error'"></title>
+
+    <link rel="stylesheet" type="text/css" href="/css/error-pages.css">
+</head>
+<body th:replace="fragments/exceptions-errors-layout :: layout(~{::content})">
+<h1 th:fragment="content">There was something wrong with the website!</h1>
+</body>
+</html>
