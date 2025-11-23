@@ -96,6 +96,10 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    public double getActualPrice(Game game) {
+        return game.getPromoPrice() > 0 ? game.getPromoPrice() : game.getPrice();
+    }
+
     public void removeDiscount(Game game) {
         game.setDiscount(null);
 

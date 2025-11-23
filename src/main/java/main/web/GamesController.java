@@ -5,10 +5,7 @@ import main.model.Company;
 import main.model.Game;
 import main.model.User;
 import main.security.AuthenticationDetails;
-import main.service.CategoryService;
-import main.service.CompanyService;
-import main.service.GameService;
-import main.service.UserService;
+import main.service.*;
 import main.web.dto.GameFilterRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,12 +27,15 @@ public class GamesController {
     private final CompanyService companyService;
     private final CategoryService categoryService;
 
+    private final TransactionService transactionService;
+
     public GamesController(UserService userService, GameService gameService,
-                           CompanyService companyService, CategoryService categoryService) {
+                           CompanyService companyService, CategoryService categoryService, TransactionService transactionService) {
         this.userService = userService;
         this.gameService = gameService;
         this.companyService = companyService;
         this.categoryService = categoryService;
+        this.transactionService = transactionService;
     }
 
     @GetMapping
@@ -165,6 +165,7 @@ public class GamesController {
         }
 
         userService.buyGame(user, game);
+        transactionService.createBuyGameTransaction(userDetails.getId(), game);
         response.put("status", "success");
 
         return response;

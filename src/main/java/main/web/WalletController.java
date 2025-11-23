@@ -3,6 +3,7 @@ package main.web;
 import jakarta.validation.Valid;
 import main.model.User;
 import main.security.AuthenticationDetails;
+import main.service.TransactionService;
 import main.service.UserService;
 import main.web.dto.AddFundsRequest;
 import main.web.dto.SendFundsRequest;
@@ -23,9 +24,11 @@ import java.math.BigDecimal;
 public class WalletController {
 
     private final UserService userService;
+    private final TransactionService transactionService;
 
-    public WalletController(UserService userService) {
+    public WalletController(UserService userService, TransactionService transactionService) {
         this.userService = userService;
+        this.transactionService = transactionService;
     }
 
     @GetMapping
@@ -76,6 +79,7 @@ public class WalletController {
         }
 
         userService.addFunds(userDetails.getId(), addFundsRequest);
+        transactionService.createSelfTransaction(userDetails.getId(), addFundsRequest);
 
         return new ModelAndView("redirect:/dashboard/wallet");
     }
@@ -120,6 +124,7 @@ public class WalletController {
         }
 
         userService.sendFunds(userDetails.getId(), sendFundsRequest);
+        transactionService.createSendFundsTransaction(userDetails.getId(), sendFundsRequest);
 
         return new ModelAndView("redirect:/dashboard/wallet");
     }

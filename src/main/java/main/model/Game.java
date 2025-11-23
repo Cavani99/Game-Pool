@@ -75,7 +75,7 @@ public class Game {
     }
 
     public Double getPromoPrice() {
-        if (this.discount == null) {
+        if (this.discount == null || !this.discount.isDiscountActive()) {
             return 0.0;
         }
 

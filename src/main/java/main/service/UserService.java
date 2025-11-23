@@ -21,10 +21,12 @@ import java.util.UUID;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final GameService gameService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, GameService gameService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.gameService = gameService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -173,7 +175,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean hasFundsForGame(User user, Game game) {
-        double price = game.getPromoPrice() > 0 && game.getDiscount().isDiscountActive() ? game.getPromoPrice() : game.getPrice();
+        double price = gameService.getActualPrice(game);
 
         return user.getBalance().compareTo(BigDecimal.valueOf(price)) >= 0;
     }
@@ -182,7 +184,7 @@ public class UserService implements UserDetailsService {
         List<Game> games = user.getGames();
         games.add(game);
 
-        double gamePrice = game.getPromoPrice() > 0 ? game.getPromoPrice() : game.getPrice();
+        double gamePrice = gameService.getActualPrice(game);
         user.setBalance(user.getBalance().subtract(BigDecimal.valueOf(gamePrice)));
         user.setGames(games);
         user.setUpdatedOn(LocalDateTime.now());
