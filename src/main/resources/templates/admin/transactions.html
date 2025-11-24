@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title} ?: 'Admin Panel'">Admin Panel</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/side-bar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin-common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body th:replace="fragments/admin-layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information">
+        <div class="btn-header">
+        </div>
+        <div th:if="${transactions.isEmpty()}">
+            <h3>There are no transactions saved!</h3>
+        </div>
+        <div class="table-container" th:unless="${transactions.isEmpty()}">
+            <table class="table">
+                <thead>
+                <tr class="thead-dark">
+                    <th class="text-center">
+                        Date
+                    </th>
+                    <th class="text-center">
+                        Amount
+                    </th>
+                    <th class="text-center">
+                        Description
+                    </th>
+                    <th class="text-center">
+                        Sender
+                    </th>
+                    <th class="text-center">
+                        Receiver
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="transaction, stat : ${transactions}"
+                    th:classappend="${stat.index % 2 != 0} ? 'table-active'">
+                    <td class="center-td"
+                        th:text="${#temporals.format(transaction.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}">
+                    </td>
+                    <td class="center-td" th:text="${transaction.amount} + ' €'">
+                    </td>
+                    <td class="center-td" th:text="${transaction.description}">
+                    </td>
+                    <td class="center-td" th:if="${transaction.sender != null}"
+                        th:text="${transaction.sender.username}">
+                    </td>
+                    <td class="center-td" th:unless="${transaction.sender != null}">
+                        None
+                    </td>
+                    <td class="center-td" th:if="${transaction.receiver != null}"
+                        th:text="${transaction.receiver.username}">
+                    </td>
+                    <td class="center-td" th:unless="${transaction.receiver != null}">
+                        None
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

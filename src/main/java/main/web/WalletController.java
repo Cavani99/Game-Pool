@@ -1,6 +1,7 @@
 package main.web;
 
 import jakarta.validation.Valid;
+import main.model.Transaction;
 import main.model.User;
 import main.security.AuthenticationDetails;
 import main.service.TransactionService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
 @RequestMapping("dashboard/wallet")
@@ -38,8 +40,10 @@ public class WalletController {
         modelAndView.setViewName("wallet");
 
         User user = userService.getById(userDetails.getId());
+        List<Transaction> transactions = transactionService.getByUser(user);
 
         modelAndView.addObject("user", user);
+        modelAndView.addObject("transactions", transactions);
         modelAndView.addObject("page", "wallet");
         modelAndView.addObject("title", "Wallet");
 

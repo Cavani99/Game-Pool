@@ -7,12 +7,28 @@
 
 .info-side{
     flex: 1;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     border-right: 1px solid black;
 }
 
 .transaction-side{
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.transaction-element{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 12px;
+    border-top: 2px dashed gray;
+}
+
+.transaction-element div{
     flex: 1;
 }
 

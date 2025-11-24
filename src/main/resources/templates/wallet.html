@@ -13,6 +13,8 @@
     <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
     <link rel="stylesheet" type="text/css" href="/css/user-common.css">
     <link rel="stylesheet" type="text/css" href="/css/wallet.css">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body th:replace="fragments/layout :: layout(~{::content})">
 <div th:fragment="content">
@@ -35,10 +37,19 @@
             </div>
             <div class="transaction-side">
                 <h3>Transactions: </h3>
+                <div class="transaction-element" th:each="transaction : ${transactions}">
+                    <div class="transaction-icon" th:if="${transaction.receiver == user}">
+                        <i class="fa-sharp fa-solid fa-arrow-turn-up" style="color: #0a713b;" title="Received"></i>
+                    </div>
+                    <div class="transaction-icon" th:unless="${transaction.receiver == user}">
+                        <i class="fa-solid fa-arrow-turn-down" style="color: #8a001c;" title="Sent"></i>
+                    </div>
+                    <div th:text="${transaction.amount} + ' €'"></div>
+                    <div th:text="${transaction.description}"></div>
+                    <div th:text="${#temporals.format(transaction.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></div>
+                </div>
             </div>
         </div>
-
-
     </div>
 </div>
 </body>
