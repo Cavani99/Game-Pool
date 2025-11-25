@@ -1,10 +1,13 @@
 package main.web;
 
+import main.model.Game;
 import main.model.User;
 import main.security.AuthenticationDetails;
+import main.service.GameService;
 import main.service.NotificationService;
 import main.service.UserService;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -20,10 +24,12 @@ import java.util.UUID;
 public class NotificationsController {
 
     private final UserService userService;
+    private final GameService gameService;
     private final NotificationService notificationService;
 
-    public NotificationsController(UserService userService, NotificationService notificationService) {
+    public NotificationsController(UserService userService, GameService gameService, NotificationService notificationService) {
         this.userService = userService;
+        this.gameService = gameService;
         this.notificationService = notificationService;
     }
 
@@ -63,5 +69,17 @@ public class NotificationsController {
         //log status later
 
         return new ModelAndView("redirect:/dashboard/notifications");
+    }
+
+    @Scheduled(cron = "0 0 * * * ?")
+    public void sentDiscountNotifications() {
+        List<Game> games = gameService.findAll();
+
+        notificationService.createGameDiscountNotifications(games);
+    }
+
+    @Scheduled(fixedRate = 60 * 60 * 1000)
+    public void removeExpiredGameDiscountsNotifications() {
+        notificationService.removeExpiredGameDiscountNotifications();
     }
 }

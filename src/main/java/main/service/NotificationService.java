@@ -21,9 +21,12 @@ public class NotificationService {
     private final NotificationClient notificationClient;
     private final UserService userService;
 
-    public NotificationService(NotificationClient notificationClient, UserService userService) {
+    private final GameService gameService;
+
+    public NotificationService(NotificationClient notificationClient, UserService userService, GameService gameService) {
         this.notificationClient = notificationClient;
         this.userService = userService;
+        this.gameService = gameService;
     }
 
     public void saveUser(UUID userId) {
@@ -43,7 +46,16 @@ public class NotificationService {
         notificationClient.saveNotification(request);
     }
 
-    public void createGameDiscountNotifications(Game game, List<User> users) {
+    public void createGameDiscountNotifications(List<Game> games) {
+        for (Game game : games) {
+            if (game.getPromoPrice() > 0) {
+                List<User> users = userService.findAllWishlistedUsersByGameId(game.getId());
+                createGameDiscountNotifications(game, users);
+            }
+        }
+    }
+
+    private void createGameDiscountNotifications(Game game, List<User> users) {
         for (User user : users) {
             CreateNotificationRequest request = new CreateNotificationRequest();
             request.setTitle("Wishlisted Game got discounted!");
@@ -81,7 +93,16 @@ public class NotificationService {
         return response.getStatusCode();
     }
 
-    public void saveNotification(CreateNotificationRequest createNotificationRequest) {
-        notificationClient.saveNotification(createNotificationRequest);
+    public void removeExpiredGameDiscountNotifications() {
+        List<NotificationResponse> notifications = notificationClient.getGameDiscountNotifications("Wishlisted Game got discounted!");
+
+        for (NotificationResponse notificationResponse : notifications) {
+            UUID gameId = UUID.fromString(notificationResponse.getLink().substring(notificationResponse.getLink().lastIndexOf("/") + 1));
+
+            Game game = gameService.findById(gameId);
+            if (game.getPromoPrice() <= 0) {
+                notificationClient.removeNotification(notificationResponse.getId());
+            }
+        }
     }
 }

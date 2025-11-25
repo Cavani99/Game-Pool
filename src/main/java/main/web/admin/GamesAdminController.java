@@ -26,22 +26,18 @@ import java.util.UUID;
 @RequestMapping("/admin/games")
 public class GamesAdminController {
 
-    private final UserService userService;
     private final GameService gameService;
     private final DiscountService discountService;
     private final CategoryService categoryService;
     private final CompanyService companyService;
-    private final NotificationService notificationService;
 
     @Autowired
-    public GamesAdminController(UserService userService, GameService gameService, DiscountService discountService, CategoryService categoryService,
-                                CompanyService companyService, NotificationService notificationService) {
-        this.userService = userService;
+    public GamesAdminController(GameService gameService, DiscountService discountService, CategoryService categoryService,
+                                CompanyService companyService) {
         this.gameService = gameService;
         this.discountService = discountService;
         this.categoryService = categoryService;
         this.companyService = companyService;
-        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -263,9 +259,6 @@ public class GamesAdminController {
 
         discount = discountService.persist(discount, createDiscountRequest);
         game = gameService.addDiscount(id, discount);
-
-        List<User> users = userService.findAllWishlistedUsersByGameId(game.getId());
-        notificationService.createGameDiscountNotifications(game, users);
 
         redirectAttributes.addFlashAttribute("message", "Discount for " + game.getTitle() + " saved successfully!");
 

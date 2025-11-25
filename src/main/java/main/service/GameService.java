@@ -7,6 +7,8 @@ import main.model.Game;
 import main.repository.DiscountRepository;
 import main.repository.GameRepository;
 import main.web.dto.CreateGameRequest;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,10 +26,12 @@ public class GameService {
         this.discountRepository = discountRepository;
     }
 
+    @Cacheable("games")
     public List<Game> findAll() {
         return gameRepository.findAllByOrderByCreatedOnDesc();
     }
 
+    @CacheEvict(value = "games", allEntries = true)
     public boolean create(CreateGameRequest createGameRequest, Category category, Company company, String imagePath) {
         Game game = new Game();
         Discount discount = new Discount();
@@ -60,6 +64,7 @@ public class GameService {
         return gameRepository.findById(id).orElseThrow(() -> new RuntimeException("Game does not exist!"));
     }
 
+    @CacheEvict(value = "games", allEntries = true)
     public void edit(UUID id, CreateGameRequest createGameRequest, Category category, Company company, String imagePath) {
         Game game = findById(id);
 
@@ -98,11 +103,5 @@ public class GameService {
 
     public double getActualPrice(Game game) {
         return game.getPromoPrice() > 0 ? game.getPromoPrice() : game.getPrice();
-    }
-
-    public void removeDiscount(Game game) {
-        game.setDiscount(null);
-
-        gameRepository.save(game);
     }
 }

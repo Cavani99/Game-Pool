@@ -22,6 +22,9 @@ public interface NotificationClient {
     @GetMapping("/notifications/{id}")
     List<NotificationResponse> getNotifications(@PathVariable("id") UUID userId);
 
+    @GetMapping("/notifications/title/{title}")
+    List<NotificationResponse> getGameDiscountNotifications(@PathVariable("title") String title);
+
     @GetMapping("/notification/{id}")
     NotificationResponse getNotification(@PathVariable("id") UUID id);
 
