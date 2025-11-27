@@ -4,6 +4,8 @@ import main.model.User;
 import main.security.AuthenticationDetails;
 import main.service.NotificationService;
 import main.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -21,10 +23,12 @@ public class FriendsController {
     private final UserService userService;
 
     private final NotificationService notificationService;
+    private final Logger logger;
 
     public FriendsController(UserService userService, NotificationService notificationService) {
         this.userService = userService;
         this.notificationService = notificationService;
+        this.logger = LoggerFactory.getLogger(FriendsController.class);
     }
 
     @GetMapping
@@ -86,6 +90,9 @@ public class FriendsController {
         User user = userService.getById(userDetails.getId());
         notificationService.createFriendInvite(user, userId);
 
+        User friend = userService.getById(userId);
+        logger.info("Friend invitation sent to {}", friend.getUsername());
+
         return Map.of("message", "Friend invitation sent successfully!");
     }
 
@@ -95,6 +102,9 @@ public class FriendsController {
 
         if (userService.userNotFriend(user.getId(), userId)) {
             userService.addFriend(user.getId(), userId);
+
+            User friend = userService.getById(userId);
+            logger.info("User {} is now friends with {}", friend.getUsername(), user.getUsername());
         }
 
         return new ModelAndView("redirect:/dashboard/friends");
@@ -106,6 +116,9 @@ public class FriendsController {
         User user = userService.getById(userDetails.getId());
         if (userService.userNotFriend(user.getId(), userId)) {
             userService.addFriend(user.getId(), userId);
+
+            User friend = userService.getById(userId);
+            logger.info("User {} is now friends with {}", friend.getUsername(), user.getUsername());
         }
 
         return new ModelAndView("redirect:/dashboard/notifications/remove/" + notificationId);
@@ -116,6 +129,9 @@ public class FriendsController {
     public ModelAndView removeFriend(@PathVariable("id") UUID friendId, @AuthenticationPrincipal AuthenticationDetails userDetails) {
         User user = userService.getById(userDetails.getId());
         userService.removeFriend(user.getId(), friendId);
+
+        User friend = userService.getById(friendId);
+        logger.info("User {} removed as friend", friend.getUsername());
 
         return new ModelAndView("redirect:/dashboard/friends");
     }

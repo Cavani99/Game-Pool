@@ -7,6 +7,8 @@ import main.model.User;
 import main.security.AuthenticationDetails;
 import main.service.*;
 import main.web.dto.GameFilterRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,7 @@ public class GamesController {
     private final CategoryService categoryService;
 
     private final TransactionService transactionService;
+    private final Logger logger;
 
     public GamesController(UserService userService, GameService gameService,
                            CompanyService companyService, CategoryService categoryService, TransactionService transactionService) {
@@ -36,6 +39,7 @@ public class GamesController {
         this.companyService = companyService;
         this.categoryService = categoryService;
         this.transactionService = transactionService;
+        this.logger = LoggerFactory.getLogger(GamesController.class);
     }
 
     @GetMapping
@@ -145,6 +149,7 @@ public class GamesController {
         boolean isWishlisted = user.gameIsWishlisted(game.getId());
         Map<String, Object> response = new HashMap<>();
         response.put("wishlisted", isWishlisted);
+        logger.info("Game {} is wishlisted", game.getTitle());
 
         return response;
     }
@@ -161,12 +166,15 @@ public class GamesController {
             response.put("status", "error");
             response.put("message", "You do not have enough funds to buy this game!");
 
+            logger.error("User {} tried to buy {}, but does not have enough funds", user.getUsername(), game.getTitle());
+
             return response;
         }
 
         userService.buyGame(user, game);
         transactionService.createBuyGameTransaction(userDetails.getId(), game);
         response.put("status", "success");
+        logger.info("Game {} successfully bought", game.getTitle());
 
         return response;
     }
@@ -178,6 +186,7 @@ public class GamesController {
 
         User user = userService.getById(userDetails.getId());
         userService.wishlistGame(user, game);
+        logger.info("Game {} removed from wishlist", game.getTitle());
 
         return new ModelAndView("redirect:/dashboard/games/wishlist");
     }

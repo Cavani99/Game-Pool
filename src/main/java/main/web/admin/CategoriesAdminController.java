@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import main.model.Category;
 import main.service.CategoryService;
 import main.web.dto.CreateCategoryRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,9 +20,11 @@ import java.util.UUID;
 @RequestMapping("/admin/categories")
 public class CategoriesAdminController {
     private final CategoryService categoryService;
+    private final Logger logger;
 
     public CategoriesAdminController(CategoryService categoryService) {
         this.categoryService = categoryService;
+        this.logger = LoggerFactory.getLogger(CategoriesAdminController.class);
     }
 
 
@@ -48,6 +52,8 @@ public class CategoriesAdminController {
         modelAndView.addObject("page", "categories");
         modelAndView.addObject("title", "Categories");
 
+        logger.info("Form for creating category is opened");
+
         return modelAndView;
     }
 
@@ -60,12 +66,16 @@ public class CategoriesAdminController {
             mav.addObject("category", createCategoryRequest);
             mav.addObject("page", "categories");
             mav.addObject("title", "Categories");
+
+            logger.error("Errors in creating category: {}", bindingResult.getAllErrors());
+
             return mav;
         }
 
         if (categoryService.create(createCategoryRequest)) {
 
             redirectAttributes.addFlashAttribute("message", "Category " + createCategoryRequest.getName() + " created successfully!");
+            logger.info("Category {} created!", createCategoryRequest.getName());
 
             return new ModelAndView("redirect:/admin/categories");
         } else {
@@ -74,6 +84,9 @@ public class CategoriesAdminController {
             mav.addObject("category", createCategoryRequest);
             mav.addObject("page", "categories");
             mav.addObject("title", "Categories");
+
+            logger.error("Errors in creating category: {}", bindingResult.getAllErrors());
+
             return mav;
         }
     }
@@ -91,6 +104,8 @@ public class CategoriesAdminController {
         modelAndView.addObject("page", "categories");
         modelAndView.addObject("title", "Categories");
 
+        logger.info("Edit Category {}", category.getName());
+
         return modelAndView;
     }
 
@@ -103,12 +118,16 @@ public class CategoriesAdminController {
             mav.addObject("category", createCategoryRequest);
             mav.addObject("page", "categories");
             mav.addObject("title", "Categories");
+
+            logger.error("Errors in editing category: {}", bindingResult.getAllErrors());
+
             return mav;
         }
 
         categoryService.edit(id, createCategoryRequest);
 
         redirectAttributes.addFlashAttribute("message", "Category " + createCategoryRequest.getName() + " saved successfully!");
+        logger.info("Category {} edited!", createCategoryRequest.getName());
 
         return new ModelAndView("redirect:/admin/categories");
     }
@@ -119,6 +138,7 @@ public class CategoriesAdminController {
         categoryService.deleteById(id);
 
         redirectAttributes.addFlashAttribute("message", "Category deleted!");
+        logger.info("Category with id {} deleted!", id);
 
         return new ModelAndView("redirect:/admin/categories");
     }

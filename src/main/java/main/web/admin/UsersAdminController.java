@@ -2,6 +2,8 @@ package main.web.admin;
 
 import main.model.User;
 import main.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +19,11 @@ import java.util.UUID;
 public class UsersAdminController {
 
     private final UserService userService;
+    private final Logger logger;
 
     public UsersAdminController(UserService userService) {
         this.userService = userService;
+        this.logger = LoggerFactory.getLogger(UsersAdminController.class);
     }
 
     @GetMapping
@@ -54,7 +58,7 @@ public class UsersAdminController {
     @GetMapping("/ban/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ModelAndView changeBanValue(@PathVariable("id") UUID id) {
-        userService.changeBanStatus(id);
+        userService.changeBanStatus(id, logger);
 
         return new ModelAndView("redirect:/admin/users");
     }

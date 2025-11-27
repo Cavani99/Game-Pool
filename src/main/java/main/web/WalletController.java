@@ -8,6 +8,8 @@ import main.service.TransactionService;
 import main.service.UserService;
 import main.web.dto.AddFundsRequest;
 import main.web.dto.SendFundsRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -27,10 +29,12 @@ public class WalletController {
 
     private final UserService userService;
     private final TransactionService transactionService;
+    private final Logger logger;
 
     public WalletController(UserService userService, TransactionService transactionService) {
         this.userService = userService;
         this.transactionService = transactionService;
+        this.logger = LoggerFactory.getLogger(WalletController.class);
     }
 
     @GetMapping
@@ -62,6 +66,7 @@ public class WalletController {
         modelAndView.addObject("add_funds", new AddFundsRequest());
         modelAndView.addObject("page", "wallet");
         modelAndView.addObject("title", "Wallet");
+        logger.info("Form for adding funds to user {} opened", user.getUsername());
 
         return modelAndView;
     }
@@ -79,11 +84,15 @@ public class WalletController {
             mav.addObject("add_funds", addFundsRequest);
             mav.addObject("page", "wallet");
             mav.addObject("title", "Wallet");
+
+            logger.error("Errors in adding funds to {}: {}", user.getUsername(), bindingResult.getAllErrors());
+
             return mav;
         }
 
         userService.addFunds(userDetails.getId(), addFundsRequest);
         transactionService.createSelfTransaction(userDetails.getId(), addFundsRequest);
+        logger.info("{} € of funds added to user {}", addFundsRequest.getAmount(), user.getUsername());
 
         return new ModelAndView("redirect:/dashboard/wallet");
     }
@@ -101,6 +110,8 @@ public class WalletController {
         modelAndView.addObject("send_request", new SendFundsRequest());
         modelAndView.addObject("page", "wallet");
         modelAndView.addObject("title", "Wallet");
+
+        logger.info("Form for sending funds to a friend opened from user {}", user.getUsername());
 
         return modelAndView;
     }
@@ -124,11 +135,17 @@ public class WalletController {
             mav.addObject("send_request", sendFundsRequest);
             mav.addObject("page", "wallet");
             mav.addObject("title", "Wallet");
+
+            logger.error("Errors in sending funds from user {}: {}", user.getUsername(), bindingResult.getAllErrors());
+
             return mav;
         }
 
         userService.sendFunds(userDetails.getId(), sendFundsRequest);
         transactionService.createSendFundsTransaction(userDetails.getId(), sendFundsRequest);
+
+        User friend = userService.getById(sendFundsRequest.getFriend());
+        logger.info("{} € of funds sent to friend {} from user {}", sendFundsRequest.getAmount(), friend.getUsername(), user.getUsername());
 
         return new ModelAndView("redirect:/dashboard/wallet");
     }

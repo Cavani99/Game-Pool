@@ -5,6 +5,8 @@ import main.model.*;
 import main.service.*;
 import main.web.dto.CreateDiscountRequest;
 import main.web.dto.CreateGameRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -30,6 +32,7 @@ public class GamesAdminController {
     private final DiscountService discountService;
     private final CategoryService categoryService;
     private final CompanyService companyService;
+    private final Logger logger;
 
     @Autowired
     public GamesAdminController(GameService gameService, DiscountService discountService, CategoryService categoryService,
@@ -38,6 +41,7 @@ public class GamesAdminController {
         this.discountService = discountService;
         this.categoryService = categoryService;
         this.companyService = companyService;
+        this.logger = LoggerFactory.getLogger(GamesAdminController.class);
     }
 
     @GetMapping
@@ -69,6 +73,7 @@ public class GamesAdminController {
 
         modelAndView.addObject("categories", categories);
         modelAndView.addObject("companies", companies);
+        logger.info("Form for creating game is opened");
 
         return modelAndView;
     }
@@ -91,6 +96,9 @@ public class GamesAdminController {
             mav.addObject("title", "Games");
             mav.addObject("categories", categories);
             mav.addObject("companies", companies);
+
+            logger.error("Errors in creating game: {}", bindingResult.getAllErrors());
+
             return mav;
         }
 
@@ -119,6 +127,7 @@ public class GamesAdminController {
         if (gameService.create(createGameRequest, category, company, imagePath)) {
 
             redirectAttributes.addFlashAttribute("message", "Game " + createGameRequest.getTitle() + " created successfully!");
+            logger.info("Game {} created!", createGameRequest.getTitle());
 
             return new ModelAndView("redirect:/admin/games");
         } else {
@@ -129,6 +138,9 @@ public class GamesAdminController {
             mav.addObject("title", "Games");
             mav.addObject("categories", categories);
             mav.addObject("companies", companies);
+
+            logger.error("Errors in creating game: {}", bindingResult.getAllErrors());
+
             return mav;
         }
     }
@@ -152,6 +164,8 @@ public class GamesAdminController {
         modelAndView.addObject("categories", categories);
         modelAndView.addObject("companies", companies);
 
+        logger.info("Edit Game {}", game.getTitle());
+
         return modelAndView;
     }
 
@@ -173,6 +187,9 @@ public class GamesAdminController {
             mav.addObject("title", "Games");
             mav.addObject("categories", categories);
             mav.addObject("companies", companies);
+
+            logger.error("Errors in editing game: {}", bindingResult.getAllErrors());
+
             return mav;
         }
 
@@ -200,6 +217,7 @@ public class GamesAdminController {
         gameService.edit(id, createGameRequest, category, company, imagePath);
 
         redirectAttributes.addFlashAttribute("message", "Game " + createGameRequest.getTitle() + " saved successfully!");
+        logger.info("Game {} edited!", createGameRequest.getTitle());
 
         return new ModelAndView("redirect:/admin/games");
     }
@@ -210,6 +228,7 @@ public class GamesAdminController {
         gameService.deleteById(id);
 
         redirectAttributes.addFlashAttribute("message", "Game deleted!");
+        logger.info("Game with id {} deleted!", id);
 
         return new ModelAndView("redirect:/admin/games");
     }
@@ -235,6 +254,7 @@ public class GamesAdminController {
         modelAndView.addObject("game_id", id);
         modelAndView.addObject("page", "games");
         modelAndView.addObject("title", "Games");
+        logger.info("Adding discount to Game {}!", game.getTitle());
 
         return modelAndView;
     }
@@ -244,6 +264,7 @@ public class GamesAdminController {
     public ModelAndView addDiscount(@PathVariable("id") UUID id, @Valid @ModelAttribute("discount") CreateDiscountRequest createDiscountRequest,
                                     BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
+        Game game = gameService.findById(id);
         setManualValidations(bindingResult, createDiscountRequest);
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView("admin/discount_form");
@@ -251,16 +272,18 @@ public class GamesAdminController {
             mav.addObject("game_id", id);
             mav.addObject("page", "games");
             mav.addObject("title", "Games");
+
+            logger.error("Errors in adding discount to {}: {}", game.getTitle(), bindingResult.getAllErrors());
+
             return mav;
         }
-
-        Game game = gameService.findById(id);
         Discount discount = game.getDiscount();
 
         discount = discountService.persist(discount, createDiscountRequest);
         game = gameService.addDiscount(id, discount);
 
         redirectAttributes.addFlashAttribute("message", "Discount for " + game.getTitle() + " saved successfully!");
+        logger.info("Discount added to {}!", game.getTitle());
 
         return new ModelAndView("redirect:/admin/games");
     }
@@ -287,6 +310,7 @@ public class GamesAdminController {
         discountService.unsetDiscount(discount);
 
         redirectAttributes.addFlashAttribute("message", "Discount for " + game.getTitle() + " removed!");
+        logger.info("Discount removed from {}!", game.getTitle());
 
         return new ModelAndView("redirect:/admin/games");
     }

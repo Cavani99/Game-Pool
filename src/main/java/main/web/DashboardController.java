@@ -7,6 +7,8 @@ import main.service.NotificationService;
 import main.service.UserService;
 import main.web.dto.ChangePasswordRequest;
 import main.web.dto.EditProfileRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -31,10 +33,12 @@ public class DashboardController {
 
     private final UserService userService;
     private final NotificationService notificationService;
+    private final Logger logger;
 
     public DashboardController(UserService userService, NotificationService notificationService) {
         this.userService = userService;
         this.notificationService = notificationService;
+        this.logger = LoggerFactory.getLogger(DashboardController.class);
     }
 
     @GetMapping
@@ -67,6 +71,7 @@ public class DashboardController {
         modelAndView.addObject("user", editProfileRequest);
         modelAndView.addObject("page", "home");
         modelAndView.addObject("title", "Home");
+        logger.info("User {} is editing their profile", userDetails.getUsername());
 
         return modelAndView;
     }
@@ -83,6 +88,7 @@ public class DashboardController {
         }
 
         if (bindingResult.hasErrors()) {
+            logger.error("User {} had errors editing profile: {}", user.getUsername(), bindingResult.getAllErrors());
             editProfileRequest.setAvatarPath(user.getAvatar());
 
             ModelAndView mav = new ModelAndView("profile_edit");
@@ -111,6 +117,7 @@ public class DashboardController {
         }
 
         userService.edit(user.getId(), editProfileRequest, avatarPath);
+        logger.info("User {} edited his profile", user.getUsername());
 
         return new ModelAndView("redirect:/dashboard");
     }
@@ -145,10 +152,14 @@ public class DashboardController {
             mav.addObject("avatar", user.getAvatar());
             mav.addObject("page", "home");
             mav.addObject("title", "Home");
+
+            logger.error("User {} had errors when trying to change his password: {}", user.getUsername(), bindingResult.getAllErrors());
+
             return mav;
         }
 
         userService.changePassword(user.getId(), changePasswordRequest);
+        logger.info("User {} has changed his password", user.getUsername());
 
         return new ModelAndView("redirect:/dashboard");
     }

@@ -6,6 +6,8 @@ import main.service.NotificationService;
 import main.service.UserService;
 import main.web.dto.LoginRequest;
 import main.web.dto.RegisterRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +26,12 @@ public class IndexController {
 
     private final UserService userService;
     private final NotificationService notificationService;
+    private final Logger logger;
 
     public IndexController(UserService userService, NotificationService notificationService) {
         this.userService = userService;
         this.notificationService = notificationService;
+        this.logger = LoggerFactory.getLogger(IndexController.class);
     }
 
     @GetMapping
@@ -49,6 +53,9 @@ public class IndexController {
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView("register");
             mav.addObject("user", registerRequest);
+
+            logger.error("User registration errors: {}", bindingResult.getAllErrors());
+
             return mav;
         }
 
@@ -72,6 +79,7 @@ public class IndexController {
 
         User createdUser = userService.create(registerRequest, avatarPath);
         notificationService.saveUser(createdUser.getId());
+        logger.info("User {} created as {}!", createdUser.getUsername(), createdUser.getRole());
 
         return new ModelAndView("redirect:/login");
     }

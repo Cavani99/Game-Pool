@@ -6,6 +6,7 @@ import main.model.UserRole;
 import main.repository.UserRepository;
 import main.security.AuthenticationDetails;
 import main.web.dto.*;
+import org.slf4j.Logger;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -60,13 +61,14 @@ public class UserService implements UserDetailsService {
         return userRepository.findAllByRole(UserRole.USER);
     }
 
-    public void changeBanStatus(UUID id) {
+    public void changeBanStatus(UUID id, Logger logger) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist!"));
 
         user.setBanned(!user.isBanned());
         user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
+        logger.info("User {} is banned!", user.getUsername());
     }
 
     public void edit(UUID id, EditProfileRequest editProfileRequest, String avatarPath) {

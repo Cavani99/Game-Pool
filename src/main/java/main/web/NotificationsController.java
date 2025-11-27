@@ -6,6 +6,8 @@ import main.security.AuthenticationDetails;
 import main.service.GameService;
 import main.service.NotificationService;
 import main.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,11 +28,14 @@ public class NotificationsController {
     private final UserService userService;
     private final GameService gameService;
     private final NotificationService notificationService;
+    private final Logger logger;
+
 
     public NotificationsController(UserService userService, GameService gameService, NotificationService notificationService) {
         this.userService = userService;
         this.gameService = gameService;
         this.notificationService = notificationService;
+        this.logger = LoggerFactory.getLogger(NotificationsController.class);
     }
 
     @GetMapping
@@ -65,6 +70,7 @@ public class NotificationsController {
     @PreAuthorize("hasAuthority('USER')")
     public ModelAndView removeNotification(@PathVariable("id") UUID id) {
         HttpStatusCode status = notificationService.removeNotification(id);
+        logger.info("Notification with id {} deleted", id);
 
         //log status later
 

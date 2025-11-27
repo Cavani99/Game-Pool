@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import main.model.Company;
 import main.service.CompanyService;
 import main.web.dto.CreateCompanyRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,9 +20,11 @@ import java.util.UUID;
 @RequestMapping("/admin/companies")
 public class CompaniesAdminController {
     private final CompanyService companyService;
+    private final Logger logger;
 
     public CompaniesAdminController(CompanyService companyService) {
         this.companyService = companyService;
+        this.logger = LoggerFactory.getLogger(CompaniesAdminController.class);
     }
 
     @GetMapping
@@ -46,6 +50,7 @@ public class CompaniesAdminController {
         modelAndView.addObject("company", new CreateCompanyRequest());
         modelAndView.addObject("page", "companies");
         modelAndView.addObject("title", "Companies");
+        logger.info("Form for creating company is opened");
 
         return modelAndView;
     }
@@ -59,12 +64,16 @@ public class CompaniesAdminController {
             mav.addObject("company", createCompanyRequest);
             mav.addObject("page", "companies");
             mav.addObject("title", "Companies");
+
+            logger.error("Errors in creating company: {}", bindingResult.getAllErrors());
+
             return mav;
         }
 
         if (companyService.create(createCompanyRequest)) {
 
             redirectAttributes.addFlashAttribute("message", "Company " + createCompanyRequest.getName() + " created successfully!");
+            logger.info("Company {} created!", createCompanyRequest.getName());
 
             return new ModelAndView("redirect:/admin/companies");
         } else {
@@ -73,6 +82,9 @@ public class CompaniesAdminController {
             mav.addObject("company", createCompanyRequest);
             mav.addObject("page", "companies");
             mav.addObject("title", "Companies");
+
+            logger.error("Errors in creating company: {}", bindingResult.getAllErrors());
+
             return mav;
         }
     }
@@ -90,6 +102,8 @@ public class CompaniesAdminController {
         modelAndView.addObject("page", "companies");
         modelAndView.addObject("title", "Companies");
 
+        logger.info("Edit Company {}", company.getName());
+
         return modelAndView;
     }
 
@@ -102,12 +116,16 @@ public class CompaniesAdminController {
             mav.addObject("company", createCompanyRequest);
             mav.addObject("page", "companies");
             mav.addObject("title", "Companies");
+
+            logger.error("Errors in editing company: {}", bindingResult.getAllErrors());
+
             return mav;
         }
 
         companyService.edit(id, createCompanyRequest);
 
         redirectAttributes.addFlashAttribute("message", "Company " + createCompanyRequest.getName() + " saved successfully!");
+        logger.info("Company {} edited!", createCompanyRequest.getName());
 
         return new ModelAndView("redirect:/admin/companies");
     }
@@ -118,6 +136,7 @@ public class CompaniesAdminController {
         companyService.deleteById(id);
 
         redirectAttributes.addFlashAttribute("message", "Company deleted!");
+        logger.info("Company with id {} deleted!", id);
 
         return new ModelAndView("redirect:/admin/companies");
     }
