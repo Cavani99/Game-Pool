@@ -29,8 +29,8 @@ public class NotificationService {
         this.gameService = gameService;
     }
 
-    public void saveUser(UUID userId) {
-        CreateUserRequest createUserRequest = new CreateUserRequest(userId);
+    public void saveUser(UUID userId, String username) {
+        CreateUserRequest createUserRequest = new CreateUserRequest(userId, username);
         notificationClient.saveUser(createUserRequest);
     }
 

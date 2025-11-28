@@ -78,7 +78,7 @@ public class IndexController {
         }
 
         User createdUser = userService.create(registerRequest, avatarPath);
-        notificationService.saveUser(createdUser.getId());
+        notificationService.saveUser(createdUser.getId(), createdUser.getUsername());
         logger.info("User {} created as {}!", createdUser.getUsername(), createdUser.getRole());
 
         return new ModelAndView("redirect:/login");

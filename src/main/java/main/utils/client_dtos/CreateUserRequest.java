@@ -14,4 +14,6 @@ public class CreateUserRequest {
 
     @NotNull
     private UUID id;
+
+    private String username;
 }
