@@ -77,6 +77,7 @@ public class GameServiceUnitTests {
         boolean result = gameService.create(gameRequest, category, company, "/uploads/games/img.jpg");
 
         assertTrue(result);
+        verify(discountRepository).save(any(Discount.class));
         verify(gameRepository).save(any(Game.class));
     }
 
