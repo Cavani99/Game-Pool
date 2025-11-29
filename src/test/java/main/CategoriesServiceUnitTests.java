@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +29,28 @@ public class CategoriesServiceUnitTests {
 
     @InjectMocks
     private CategoryService categoryService;
+
+    @Test
+    public void categoriesFindAllIsSortedRight() {
+        Category category1 = new Category();
+        category1.setId(UUID.randomUUID());
+        category1.setCreatedOn(LocalDateTime.now());
+
+        Category category2 = new Category();
+        category2.setId(UUID.randomUUID());
+        category2.setCreatedOn(LocalDateTime.now().plusHours(5));
+
+        when(categoryRepository.findAllByOrderByCreatedOnDesc())
+                .thenReturn(List.of(category2, category1));
+
+        List<Category> result = categoryService.findAll();
+
+        assertEquals(2, result.size());
+        assertTrue(result.get(0).getCreatedOn()
+                .isAfter(result.get(1).getCreatedOn()));
+
+        verify(categoryRepository).findAllByOrderByCreatedOnDesc();
+    }
 
     @Test
     public void whenCategoryNamesIsNew_thenReturnTrueOnCreate() {
@@ -89,7 +112,6 @@ public class CategoriesServiceUnitTests {
         category.setId(categoryId);
         category.setName("Cat");
 
-        categoryRepository.save(category);
         when(categoryRepository.findById(categoryId))
                 .thenReturn(Optional.of(category));
 

@@ -10,6 +10,7 @@ import project.repository.CompanyRepository;
 import project.service.CompanyService;
 import project.web.dto.CreateCompanyRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +29,28 @@ public class CompanyServiceUnitTests {
 
     @InjectMocks
     private CompanyService companyService;
+
+    @Test
+    public void companyFindAllIsSortedRight() {
+        Company company1 = new Company();
+        company1.setId(UUID.randomUUID());
+        company1.setCreatedOn(LocalDateTime.now());
+
+        Company company2 = new Company();
+        company2.setId(UUID.randomUUID());
+        company2.setCreatedOn(LocalDateTime.now().plusHours(5));
+
+        when(companyRepository.findAllByOrderByCreatedOnDesc())
+                .thenReturn(List.of(company2, company1));
+
+        List<Company> result = companyService.findAll();
+
+        assertEquals(2, result.size());
+        assertTrue(result.get(0).getCreatedOn()
+                .isAfter(result.get(1).getCreatedOn()));
+
+        verify(companyRepository).findAllByOrderByCreatedOnDesc();
+    }
 
     @Test
     public void whenCompanyNamesIsNew_thenReturnTrueOnCreate() {
@@ -88,7 +111,6 @@ public class CompanyServiceUnitTests {
         company.setId(companyId);
         company.setName("Company1");
 
-        companyRepository.save(company);
         when(companyRepository.findById(companyId))
                 .thenReturn(Optional.of(company));
 
