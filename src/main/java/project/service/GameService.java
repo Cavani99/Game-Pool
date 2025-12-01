@@ -1,9 +1,6 @@
 package project.service;
 
-import project.model.Category;
-import project.model.Company;
-import project.model.Discount;
-import project.model.Game;
+import project.model.*;
 import project.repository.DiscountRepository;
 import project.repository.GameRepository;
 import project.web.dto.CreateGameRequest;
@@ -36,6 +33,7 @@ public class GameService {
         Game game = new Game();
         Discount discount = new Discount();
         discount.setAmount(0);
+        discount.setType(DiscountType.FIXED);
         discount.setCreatedOn(LocalDateTime.now());
 
         discountRepository.save(discount);
