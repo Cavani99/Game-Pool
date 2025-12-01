@@ -119,7 +119,7 @@ public class GamesAdminController {
 
             String filename = UUID.randomUUID() + "_" + latinName;
             Path filePath = Paths.get(uploadDir + filename);
-            Files.write(filePath, image.getBytes());
+            Files.write(filePath,image.getBytes());
 
             imagePath = "/uploads/games/" + filename;
         }
