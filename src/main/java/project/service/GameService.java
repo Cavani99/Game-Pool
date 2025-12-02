@@ -1,5 +1,6 @@
 package project.service;
 
+import project.exception.UnknownElementException;
 import project.model.*;
 import project.repository.DiscountRepository;
 import project.repository.GameRepository;
@@ -59,7 +60,7 @@ public class GameService {
     }
 
     public Game findById(UUID id) {
-        return gameRepository.findById(id).orElseThrow(() -> new RuntimeException("Game does not exist!"));
+        return gameRepository.findById(id).orElseThrow(() -> new UnknownElementException("Game does not exist!"));
     }
 
     @CacheEvict(value = "games", allEntries = true)

@@ -26,12 +26,8 @@ public class HomeController {
 
         if (user.getRole().equals(UserRole.ADMIN)) {
             return new ModelAndView("redirect:/admin");
-        }
-
-        if (user.getRole().equals(UserRole.USER)) {
+        } else {
             return new ModelAndView("redirect:/dashboard");
         }
-
-        return new ModelAndView("redirect:/login?error");
     }
 }

@@ -1,5 +1,6 @@
 package project.service;
 
+import project.exception.UnknownElementException;
 import project.model.Game;
 import project.model.User;
 import project.model.UserRole;
@@ -33,7 +34,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User does not exist!"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UnknownElementException("User does not exist!"));
 
         return new AuthenticationDetails(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.getBalance(), user.isBanned());
     }
@@ -54,7 +55,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User getById(UUID id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist!"));
+        return userRepository.findById(id).orElseThrow(() -> new UnknownElementException("User does not exist!"));
     }
 
     public List<User> findAllUsers() {
@@ -62,7 +63,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void changeBanStatus(UUID id, Logger logger) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist!"));
+        User user = userRepository.findById(id).orElseThrow(() -> new UnknownElementException("User does not exist!"));
 
         user.setBanned(!user.isBanned());
         user.setUpdatedOn(LocalDateTime.now());

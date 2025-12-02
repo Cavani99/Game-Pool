@@ -17,20 +17,21 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.authorizeHttpRequests(matchers -> matchers
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .requestMatchers("/", "/register").permitAll()
-                .requestMatchers("/login", "/error", "/css/**", "/js/**").permitAll()
-                .anyRequest().authenticated()
-        ).formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/home")
-                .failureUrl("/login?error")
-                .permitAll()
-        ).logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                .logoutSuccessUrl("/")
-        );
+        httpSecurity
+                .authorizeHttpRequests(matchers -> matchers
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers("/", "/register").permitAll()
+                        .requestMatchers("/login", "/error", "/.well-known/**", "/css/**", "/js/**").permitAll()
+                        .anyRequest().authenticated()
+                ).formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home")
+                        .failureUrl("/login?error")
+                        .permitAll()
+                ).logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                        .logoutSuccessUrl("/")
+                );
 
         return httpSecurity.build();
     }

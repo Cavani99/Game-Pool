@@ -1,5 +1,6 @@
 package project.service;
 
+import project.exception.UnknownElementException;
 import project.model.Discount;
 import project.model.DiscountType;
 import project.repository.DiscountRepository;
@@ -17,7 +18,7 @@ public class DiscountService {
     public Discount persist(Discount formerDiscount, CreateDiscountRequest createDiscountRequest) {
         Discount discount;
         if (formerDiscount.getId() != null) {
-            discount = discountRepository.findById(formerDiscount.getId()).orElseThrow(() -> new RuntimeException("Discount does not exist!"));
+            discount = discountRepository.findById(formerDiscount.getId()).orElseThrow(() -> new UnknownElementException("Discount does not exist!"));
         } else {
             discount = new Discount();
         }

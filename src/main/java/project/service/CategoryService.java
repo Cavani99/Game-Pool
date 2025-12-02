@@ -1,5 +1,6 @@
 package project.service;
 
+import project.exception.UnknownElementException;
 import project.model.Category;
 import project.repository.CategoryRepository;
 import project.web.dto.CreateCategoryRequest;
@@ -49,7 +50,7 @@ public class CategoryService {
     }
 
     public Category findById(UUID id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category does not exist!"));
+        return categoryRepository.findById(id).orElseThrow(() -> new UnknownElementException("Category does not exist!"));
     }
 
     public void deleteById(UUID id) {

@@ -1,5 +1,6 @@
 package project.service;
 
+import project.exception.UnknownElementException;
 import project.model.Company;
 import project.repository.CompanyRepository;
 import project.web.dto.CreateCompanyRequest;
@@ -50,7 +51,7 @@ public class CompanyService {
     }
 
     public Company findById(UUID id) {
-        return companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Company does not exist!"));
+        return companyRepository.findById(id).orElseThrow(() -> new UnknownElementException("Company does not exist!"));
     }
 
     public void deleteById(UUID id) {

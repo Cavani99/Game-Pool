@@ -57,19 +57,5 @@ class HomeControllerUnitTests {
         assertEquals("redirect:/dashboard", mav.getViewName());
     }
 
-    @Test
-    void testQuestionableRoleRedirect() {
-        AuthenticationDetails details = new AuthenticationDetails(UUID.randomUUID(), "test",
-                "12", UserRole.MISSING, BigDecimal.valueOf(10.00), false);
-        User user = new User();
-        user.setId(details.getId());
-        user.setRole(UserRole.MISSING);
-
-        when(userService.getById(details.getId())).thenReturn(user);
-
-        ModelAndView mav = controller.getHome(details);
-
-        assertEquals("redirect:/login?error", mav.getViewName());
-    }
 }
 

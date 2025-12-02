@@ -6,6 +6,9 @@
     <link rel="stylesheet" type="text/css" href="/css/error-pages.css">
 </head>
 <body th:replace="fragments/exceptions-errors-layout :: layout(~{::content})">
-<h1 th:fragment="content">There was something wrong with the website!</h1>
+<h1 th:fragment="content"
+    th:text="${message != null ? message : 'There was something wrong with the website!'}"
+    style="white-space: pre-line;">
+</h1>
 </body>
 </html>

@@ -17,6 +17,16 @@ public class GlobalExceptionHandler {
         return new ModelAndView("/exceptions-views/not-found");
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = UnknownElementException.class)
+    public ModelAndView handleUnknownElementExceptions(UnknownElementException ex) {
+        ModelAndView mav = new ModelAndView("/exceptions-views/default-error");
+
+        mav.addObject("message", "There was an error with the request:\n" + ex.getMessage());
+
+        return mav;
+    }
+
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler(value = FeignException.class)
     public ModelAndView handleAPIConnectionError() {
@@ -25,7 +35,11 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = Exception.class)
-    public ModelAndView handleOtherExceptions() {
-        return new ModelAndView("/exceptions-views/default-error");
+    public ModelAndView handleOtherExceptions(Exception ex) {
+        ModelAndView mav = new ModelAndView("/exceptions-views/default-error");
+
+        mav.addObject("message", "There was an error with the request:\n" + ex.getMessage());
+
+        return mav;
     }
 }
