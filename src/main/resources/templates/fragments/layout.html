@@ -16,7 +16,6 @@
                 </div>
 
                 <ul class="nav-links">
-                    <!-- Main nav link -->
                     <li>
                         <a th:href="@{/dashboard}" th:classappend="${page} == 'home' ? 'active'">
                             <span>Profile</span>
@@ -29,9 +28,8 @@
                         </a>
                     </li>
 
-                    <!-- func-block group -->
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">Quick Links ▾</a>
+                        <a href="#" class="dropdown-toggle">Personal Links ▾</a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a th:href="@{/dashboard/friends}" th:classappend="${page} == 'friends' ? 'active'">Friends</a>
@@ -52,10 +50,6 @@
                         <a href="#" class="dropdown-toggle">Utility ▾</a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a th:href="@{/dashboard/subscriptions}"
-                                   th:classappend="${page} == 'subscriptions' ? 'active'">Subscriptions</a>
-                            </li>
-                            <li>
                                 <a th:href="@{/dashboard/notifications}"
                                    th:classappend="${page} == 'notifications' ? 'active'">Notifications</a>
                             </li>
@@ -73,7 +67,7 @@
     <div class="main-section">
         <div class="home-section" th:insert="${content}"></div>
 
-        <div class="footer"><p>© 2025 Smart Wallet. All rights reserved.</p></div>
+        <div class="footer"><p>© 2025 Game Pool. Don`t annoy the admins.</p></div>
     </div>
 </main>
 </body>

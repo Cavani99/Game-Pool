@@ -5,7 +5,6 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/common.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/side-bar.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/admin-common.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
@@ -16,20 +15,20 @@
         <div class="profile-header">
             <img th:if="${user.avatar}" th:src="@{${user.avatar}}" alt="Profile Picture"
                  class="profile-avatar">
-            <h2 class="profile-name" th:text="${user.username}"></h2>
+            <h2 class="profile-label" th:text="${user.username}"></h2>
         </div>
         <div class="profile-info">
             <div class="details-section-container">
-                <strong>Username: </strong>
-                <p th:text="${user.username}"></p>
+                <strong class="profile-label">Username: </strong>
+                <p class="profile-label" th:text="${user.username}"></p>
             </div>
             <div class="details-section-container">
-                <strong>Email: </strong>
-                <p th:text="${user.email}"></p>
+                <strong class="profile-label">Email: </strong>
+                <p class="profile-label" th:text="${user.email}"></p>
             </div>
             <div class="details-section-container">
-                <strong>Joined: </strong>
-                <p th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></p>
+                <strong class="profile-label">Joined: </strong>
+                <p class="profile-label" th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></p>
             </div>
         </div>
         <a th:href="@{/admin/profile}" class="profile-actions-button">

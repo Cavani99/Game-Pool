@@ -5,7 +5,6 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/common.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/side-bar.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/admin-common.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
@@ -24,11 +23,11 @@
                      th:src="@{${user.avatarPath}}"
                      alt="Profile Picture"
                      class="profile-avatar">
-                <h2 class="profile-name">Edit Profile</h2>
+                <h2 class="profile-label">Edit Profile</h2>
             </div>
 
             <div class="details-section-container">
-                <strong>Avatar:</strong>
+                <strong class="profile-label">Avatar:</strong>
                 <input class="form-control"
                        id="avatar"
                        th:field="*{avatar}"
@@ -41,7 +40,7 @@
             </div>
 
             <div class="details-section-container">
-                <strong>Username:</strong>
+                <strong class="profile-label">Username:</strong>
                 <input th:field="*{username}"
                        class="form-control input"
                        id="username"

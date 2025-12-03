@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="auth-page">
-<!-- Water animation background -->
 <div class="ocean" aria-hidden="true">
     <div class="wave w1"></div>
     <div class="wave w2"></div>
@@ -30,7 +29,6 @@
     <h1 class="auth-title">Game Pool — Register</h1>
 
     <form class="auth-form" th:action="@{/register}" th:method="POST" th:object="${user}" enctype="multipart/form-data">
-        <!-- Username -->
         <div class="form-group">
             <label for="reg-username"><span>Username</span></label>
             <span class="badge badge-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
@@ -78,7 +76,6 @@
             </select>
         </div>
 
-        <!-- Submit -->
         <button type="submit" class="btn btn-primary full">Create Account</button>
 
         <p class="switch-line">Already have an account? <a href="/login">Log In</a></p>
