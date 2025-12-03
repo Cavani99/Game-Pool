@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title} ?: 'Admin Panel'">Admin Panel</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/side-bar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin-common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+</head>
+<body th:replace="fragments/admin-layout :: layout(~{::content})">
+<div th:fragment="content">
+    <div class="single-section-box home-profile-information">
+        <form class="auth-form profile-info"
+              th:action="@{/admin/profile}"
+              th:method="POST"
+              th:object="${user}"
+              enctype="multipart/form-data">
+
+            <div class="profile-header" id="imagePreview">
+                <img th:if="${user.avatarPath}"
+                     th:src="@{${user.avatarPath}}"
+                     alt="Profile Picture"
+                     class="profile-avatar">
+                <h2 class="profile-name">Edit Profile</h2>
+            </div>
+
+            <div class="details-section-container">
+                <strong>Avatar:</strong>
+                <input class="form-control"
+                       id="avatar"
+                       th:field="*{avatar}"
+                       type="file"
+                       accept="image/*"
+                       onchange="previewImage(event)"
+                       style="width: 300px;">
+                <span class="badge badge-error" th:if="${#fields.hasErrors('avatar')}"
+                      th:errors="*{avatar}"></span>
+            </div>
+
+            <div class="details-section-container">
+                <strong>Username:</strong>
+                <input th:field="*{username}"
+                       class="form-control input"
+                       id="username"
+                       type="text"
+                       placeholder="Enter Username"
+                       style="width: 300px;">
+                <span class="badge badge-error" th:if="${#fields.hasErrors('username')}"
+                      th:errors="*{username}"></span>
+            </div>
+
+            <div class="profile-actions">
+                <button type="submit" class="profile-actions-button" style="height: 40px;">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    function previewImage(event) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+        const maxSize = 10 * 1024 * 1024; // 10 MB
+        const previewContainer = document.getElementById('imagePreview');
+
+        previewContainer.innerHTML = '';
+
+        if (!file) return;
+
+        if (file.size > maxSize) {
+            alert(`File too large! Please choose an image under ${maxSize / (1024 * 1024)} MB.`);
+            fileInput.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Image preview';
+            img.classList.add('profile-avatar');
+
+            previewContainer.appendChild(img);
+        };
+
+        reader.readAsDataURL(file);
+    }
+</script>
+</html>

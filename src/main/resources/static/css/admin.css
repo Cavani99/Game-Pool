@@ -11,7 +11,10 @@
     color: white;
 }
 
-
+.profile-avatar{
+    width: 20vw;
+    height: 50vh;
+}
 
 .profile-form{
     width: 160px;

@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/common.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/side-bar.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/admin-common.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/from-wallet/home.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
 </head>
 <body th:replace="fragments/admin-layout :: layout(~{::content})">
@@ -17,31 +16,23 @@
         <div class="profile-header">
             <img th:if="${user.avatar}" th:src="@{${user.avatar}}" alt="Profile Picture"
                  class="profile-avatar">
-            <h2 class="profile-name" th:text="${user.username}">
-                Mandarin0016</h2>
-            <div class="details-section">
-                <div class="details-section-container">
-                    <strong>User id: </strong>
-                    <p th:text="${user.id}">55b23a12-71a1-4ccd-918d-08b2b09409b0</p>
-                </div>
-            </div>
+            <h2 class="profile-name" th:text="${user.username}"></h2>
         </div>
         <div class="profile-info">
             <div class="details-section-container">
                 <strong>Username: </strong>
-                <p th:text="${user.username}">ivan123</p>
+                <p th:text="${user.username}"></p>
             </div>
             <div class="details-section-container">
                 <strong>Email: </strong>
-                <p th:text="${user.email}">abv@bg</p>
+                <p th:text="${user.email}"></p>
             </div>
             <div class="details-section-container">
                 <strong>Joined: </strong>
-                <p th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}">
-                    09 Dec 2024 21:39</p>
+                <p th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></p>
             </div>
         </div>
-        <a href="/users/profile" class="profile-actions-button">
+        <a th:href="@{/admin/profile}" class="profile-actions-button">
             <p>Edit Profile</p>
             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                  width="24" height="24" fill="none" viewBox="0 0 24 24">
