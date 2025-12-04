@@ -214,7 +214,7 @@ friend invitations.**
 
 - **Database:** MySQL
 - **ORM:** Spring Data JPA
-- **Primary Keys:** UUID за всички entities
+- **Primary Keys:** UUID
 - **Integration Tests** H2Database
 - **Entity Relationships:**
     - Game ↔ Category (Many-to-One)
@@ -272,10 +272,7 @@ Files are saved for 35 days.**
 
 **Thymeleaf used for dynamic rendering, and sometimes AJAX for filters and searching**
 
-##  Error Handling
-
-Приложението включва глобална обработка на грешки:
-
+##  Error Handlin
 - **GlobalExceptionHandler** - redirects to error view, when there is error thrown. Handles:
   - NoResourceFoundException - for invalid urls
   - UnknownElementException - custom exception - when a row in the database is not found
