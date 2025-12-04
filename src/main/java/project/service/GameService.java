@@ -78,6 +78,7 @@ public class GameService {
         gameRepository.save(game);
     }
 
+    @CacheEvict(value = "games", allEntries = true)
     public void deleteById(UUID id) {
         gameRepository.deleteById(id);
     }

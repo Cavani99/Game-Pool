@@ -70,9 +70,7 @@ public class NotificationsController {
     @PreAuthorize("hasAuthority('USER')")
     public ModelAndView removeNotification(@PathVariable("id") UUID id) {
         HttpStatusCode status = notificationService.removeNotification(id);
-        logger.info("Notification with id {} deleted", id);
-
-        //log status later
+        logger.info("Notification with id {} deleted with Status {}", id, status);
 
         return new ModelAndView("redirect:/dashboard/notifications");
     }
