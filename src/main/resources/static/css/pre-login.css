@@ -272,3 +272,9 @@
 .form-group {
     display: block !important;
 }
+
+.badge-error {
+    color: red;
+    font-family: cursive;
+    font-size: medium;
+}

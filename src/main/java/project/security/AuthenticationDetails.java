@@ -19,7 +19,7 @@ import java.util.UUID;
 public class AuthenticationDetails implements UserDetails {
 
     private UUID id;
-    private String username;
+    private String email;
     private String password;
     private UserRole role;
     private BigDecimal balance;
@@ -39,7 +39,7 @@ public class AuthenticationDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.email;
     }
 
     @Override

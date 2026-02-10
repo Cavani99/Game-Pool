@@ -51,30 +51,30 @@ public class UserServiceUnitTests {
 
     @Test
     void whenUsernameExist_thenAuthenticationDetailsIsCreated() {
-        String username = "Ivan";
+        String email = "ivan@abv.bg";
 
         User user = new User();
-        user.setUsername(username);
+        user.setEmail(email);
         user.setPassword(String.valueOf(1221));
 
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
-        UserDetails result = userService.loadUserByUsername(username);
+        UserDetails result = userService.loadUserByUsername(email);
 
-        assertEquals(user.getUsername(), result.getUsername());
+        assertEquals(user.getEmail(), result.getUsername());
         assertEquals(user.getPassword(), result.getPassword());
     }
 
     @Test
     void whenUsernameDoesNotExist_thenThrowRuntimeException() {
-        String missingUsername = "Marin";
+        String missingEmail = "marin@abv.bg";
 
-        when(userRepository.findByUsername(missingUsername))
+        when(userRepository.findByEmail(missingEmail))
                 .thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(
                 RuntimeException.class,
-                () -> userService.loadUserByUsername(missingUsername)
+                () -> userService.loadUserByUsername(missingEmail)
         );
 
         assertEquals("User does not exist!", exception.getMessage());

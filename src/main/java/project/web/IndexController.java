@@ -91,7 +91,7 @@ public class IndexController {
         modelAndView.addObject("user", new LoginRequest());
 
         if (errorMessage != null) {
-            modelAndView.addObject("error", "Invalid username or password!");
+            modelAndView.addObject("error", "Invalid email or password!");
         }
 
         return modelAndView;
