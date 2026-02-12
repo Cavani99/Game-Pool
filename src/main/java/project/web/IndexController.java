@@ -1,7 +1,9 @@
 package project.web;
 
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import project.model.User;
+import project.security.AuthenticationDetails;
 import project.service.NotificationService;
 import project.service.UserService;
 import project.web.dto.LoginRequest;
@@ -40,7 +42,11 @@ public class IndexController {
     }
 
     @GetMapping("/register")
-    public ModelAndView getRegister() {
+    public ModelAndView getRegister(@AuthenticationPrincipal AuthenticationDetails userDetails) {
+        if (userDetails != null) {
+            return new ModelAndView("redirect:/dashboard");
+        }
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("register");
         modelAndView.addObject("user", new RegisterRequest());
@@ -85,7 +91,11 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLogin(@RequestParam(name = "error", required = false) String errorMessage) {
+    public ModelAndView getLogin(@RequestParam(name = "error", required = false) String errorMessage, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+        if (userDetails != null) {
+            return new ModelAndView("redirect:/dashboard");
+        }
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         modelAndView.addObject("user", new LoginRequest());

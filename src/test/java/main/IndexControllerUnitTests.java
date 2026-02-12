@@ -34,7 +34,7 @@ class IndexControllerUnitTests {
 
     @Test
     void testGetRegister() {
-        ModelAndView mav = controller.getRegister();
+        ModelAndView mav = controller.getRegister(null);
         assertEquals("register", mav.getViewName());
         assertInstanceOf(RegisterRequest.class, mav.getModel().get("user"));
     }
@@ -145,7 +145,7 @@ class IndexControllerUnitTests {
 
     @Test
     void testLogin() {
-        ModelAndView mav = controller.getLogin(null);
+        ModelAndView mav = controller.getLogin(null, null);
 
         assertEquals("login", mav.getViewName());
         assertNull(mav.getModel().get("error"));
@@ -153,10 +153,10 @@ class IndexControllerUnitTests {
 
     @Test
     void testLoginErrorMessage() {
-        ModelAndView mav = controller.getLogin("error");
+        ModelAndView mav = controller.getLogin("error", null);
 
         assertEquals("login", mav.getViewName());
-        assertEquals("Invalid username or password!", mav.getModel().get("error"));
+        assertEquals("Invalid email or password!", mav.getModel().get("error"));
 
     }
 
