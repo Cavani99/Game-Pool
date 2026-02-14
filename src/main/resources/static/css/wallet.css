@@ -104,3 +104,7 @@
 .send-btn:hover{
    background: linear-gradient(90deg, rgb(69 5 5) 40%, rgb(239 70 70) 95%);
 }
+
+#paypal-button-container{
+    margin-top: 15px;
+}

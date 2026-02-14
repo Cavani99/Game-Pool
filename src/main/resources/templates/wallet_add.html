@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="/css/user-common.css">
     <link rel="stylesheet" type="text/css" href="/css/wallet.css">
     <link rel="stylesheet" type="text/css" href="/css/form-styles.css">
+    <script src="/js/paypal.js"></script>
 </head>
 <body th:replace="fragments/layout :: layout(~{::content})">
 <div th:fragment="content">
@@ -35,12 +36,8 @@
                                        type="text" placeholder="Enter Amount">
                             </div>
                         </div>
-                        <div class="submit-box">
-                            <div class="text-center mt-3">
-                                <button type="submit" class="wallet-add-button" style="height: 40px;">Submit
-                                </button>
-                            </div>
-                        </div>
+                        <div id="paypal-button-container"></div>
+                        <p id="result-message"></p>
                     </form>
                 </div>
             </div>

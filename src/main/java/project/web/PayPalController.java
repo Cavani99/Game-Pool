@@ -1,0 +1,140 @@
+package project.web;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paypal.sdk.PaypalServerSdkClient;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+
+import com.paypal.sdk.controllers.OrdersController;
+import com.paypal.sdk.exceptions.ApiException;
+import com.paypal.sdk.http.response.ApiResponse;
+import com.paypal.sdk.models.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import project.config.PayPalConfig;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/paypal")
+@RequiredArgsConstructor
+public class PayPalController {
+
+    private final ObjectMapper objectMapper;
+    private final PaypalServerSdkClient client;
+    private final PayPalConfig paypalConfig;
+
+    @GetMapping("/api/config")
+    @ResponseBody
+    public Map<String, String> paypalConfig() {
+        return Map.of("clientId", paypalConfig.getId());
+    }
+
+    @PostMapping("/api/orders")
+    public ResponseEntity<Order> createOrder(@RequestBody Map<String, Object> request) {
+        try {
+            double amount = Double.parseDouble(objectMapper.writeValueAsString(request.get("amount")));
+            Order response = createOrder(amount);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private Order createOrder(Double amount) throws IOException, ApiException {
+        CreateOrderInput createOrderInput = new CreateOrderInput.Builder(
+                null,
+                new OrderRequest.Builder(
+                        CheckoutPaymentIntent.fromString("CAPTURE"),
+                        Arrays.asList(
+                                new PurchaseUnitRequest.Builder(
+                                        new AmountWithBreakdown.Builder(
+                                                "EUR",
+                                                String.valueOf(amount)
+                                        )
+                                                .breakdown(
+                                                        new AmountBreakdown.Builder()
+                                                                .itemTotal(
+                                                                        new Money(
+                                                                                "EUR",
+                                                                                String.valueOf(amount)
+                                                                        )
+                                                                ).build()
+                                                )
+                                                .build()
+                                )
+                                        .items(
+                                                // lookup item details in `cart` from database
+                                                Collections.singletonList(
+                                                        new Item.Builder(
+                                                                "Wallet",
+                                                                new Money.Builder("EUR", String.valueOf(amount)).build(),
+                                                                "1"
+                                                        )
+                                                                .description("Wallet money")
+                                                                .sku("001")
+                                                                .category(ItemCategory.DIGITAL_GOODS)
+                                                                .build()
+                                                )
+                                        )
+                                        /*
+                                        .shipping(new ShippingDetails.Builder()
+                                                .emailAddress("buyer_shipping_email@example.com")
+                                                .phoneNumber(new PhoneNumberWithCountryCode.Builder(
+                                                        "1",
+                                                        "4081111111"
+                                                ).build())
+                                                .build())*/
+                                        .build()
+                        )
+                )
+                        .paymentSource(
+                                new PaymentSource.Builder()
+                                        .paypal(
+                                                new PaypalWallet.Builder()
+                                                        .experienceContext(
+                                                                new PaypalWalletExperienceContext.Builder()
+                                                                        .userAction(PaypalExperienceUserAction.PAY_NOW)
+                                                                        .shippingPreference(PaypalWalletContextShippingPreference.NO_SHIPPING)
+                                                                        .paymentMethodPreference(PayeePaymentMethodPreference.IMMEDIATE_PAYMENT_REQUIRED)
+                                                                        .build()
+                                                        )
+                                                        .build()
+                                        )
+                                        .build()
+                        )
+
+                        .build()
+        ).build();
+        OrdersController ordersController = client.getOrdersController();
+        ApiResponse<Order> apiResponse = ordersController.createOrder(createOrderInput);
+        return apiResponse.getResult();
+    }
+
+    @PostMapping("/api/orders/{orderID}/capture")
+    public ResponseEntity<Order> captureOrder(@PathVariable String orderID) {
+        try {
+            Order response = captureOrders(orderID);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private Order captureOrders(String orderID) throws IOException, ApiException {
+        CaptureOrderInput ordersCaptureInput = new CaptureOrderInput.Builder(
+                orderID,
+                null)
+                .build();
+        OrdersController ordersController = client.getOrdersController();
+        ApiResponse<Order> apiResponse = ordersController.captureOrder(ordersCaptureInput);
+        return apiResponse.getResult();
+    }
+}
