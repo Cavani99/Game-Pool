@@ -13,8 +13,11 @@
     <link rel="stylesheet" type="text/css" href="/css/user-common.css">
     <link rel="stylesheet" type="text/css" href="/css/wallet.css">
     <link rel="stylesheet" type="text/css" href="/css/form-styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="/js/paypal.js"></script>
 </head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <body th:replace="fragments/layout :: layout(~{::content})">
 <div th:fragment="content">
     <div class="single-section-box home-profile-information" style="padding: 0 !important;">

@@ -36,14 +36,16 @@ public class PayPalController {
     }
 
     @PostMapping("/api/orders")
-    public ResponseEntity<Order> createOrder(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Map<String, String>> createOrder(@RequestBody Map<String, Object> request) {
         try {
-            double amount = Double.parseDouble(objectMapper.writeValueAsString(request.get("amount")));
-            Order response = createOrder(amount);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            double amount = Double.parseDouble(request.get("amount").toString());
+
+            Order order = createOrder(amount);
+
+            return ResponseEntity.ok(Map.of("id", order.getId()));
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

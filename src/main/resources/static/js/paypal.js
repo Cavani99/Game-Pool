@@ -2,6 +2,8 @@
   fetch('/paypal/api/config')
     .then(res => res.json())
     .then(config => {
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
 
       const script = document.createElement('script');
       script.src = `https://www.paypal.com/sdk/js?client-id=${config.clientId}&currency=EUR`;
@@ -17,15 +19,18 @@
           },
          message: {
               amount: 100,
-          },
+         },
          async createOrder() {
               try {
-                  const priceAmount = $('#amount').val().trim();
+                  const token = document.querySelector("meta[name='_csrf']").content;
+                  const header = document.querySelector("meta[name='_csrf_header']").content;
 
+                  const priceAmount = $('#amount').val().trim();
                   const response = await fetch("/paypal/api/orders", {
                       method: "POST",
                       headers: {
                           "Content-Type": "application/json",
+                          [header]: token
                       },
                       // use the "body" param to optionally pass additional order information
                       // like product ids and quantities
@@ -46,18 +51,24 @@
 
                   throw new Error(errorMessage);
               } catch (error) {
-                  console.error(error);
-                  // resultMessage(`Could not initiate PayPal Checkout...<br><br>${error}`);
+                console.error(error);
+                resultMessage(
+                  `Sorry, your transaction could not be processed...<br><br>${error}`
+                );
               }
           },
          async onApprove(data, actions) {
               try {
+                  const token = document.querySelector("meta[name='_csrf']").content;
+                  const header = document.querySelector("meta[name='_csrf_header']").content;
+
                   const response = await fetch(
                       `/paypal/api/orders/${data.orderID}/capture`,
                       {
                           method: "POST",
                           headers: {
                               "Content-Type": "application/json",
+                              [header]: token
                           },
                       }
                   );
@@ -109,11 +120,19 @@
 
          onError: (err) => {
               // redirect to your specific error page
-              window.location.assign("/your-error-page-here");
+              //window.location.assign("/your-error-page-here");
+            console.error(err);
+            resultMessage(
+                `Sorry, your transaction could not be processed...<br><br>${err}`
+            );
           },
          onCancel: (data) => {
               // Show a cancel page or return to cart
-              window.location.assign("/your-error-page-here");
+              //window.location.assign("/your-error-page-here");
+              console.log('PayPal transaction cancelled');
+              resultMessage(
+                  `PayPal transaction cancelled`
+              );
           },
 
 
