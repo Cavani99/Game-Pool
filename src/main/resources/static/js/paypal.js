@@ -74,16 +74,10 @@
                   );
 
                   const orderData = await response.json();
-                  // Three cases to handle:
-                  //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-                  //   (2) Other non-recoverable errors -> Show a failure message
-                  //   (3) Successful transaction -> Show confirmation or thank you message
-
                   const errorDetail = orderData?.details?.[0];
 
                   if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
                       // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-                      // recoverable state, per
                       // https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
                       return actions.restart();
                   } else if (errorDetail) {
@@ -95,20 +89,29 @@
                       throw new Error(JSON.stringify(orderData));
                   } else {
                       // (3) Successful transaction -> Show confirmation or thank you message
-                      // Or go to another URL:  actions.redirect('thank_you.html');
-                      const transaction =
-                          orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
-                          orderData?.purchase_units?.[0]?.payments
-                              ?.authorizations?.[0];
-                      resultMessage(
-                          `Transaction ${transaction.status}: ${transaction.id}<br>
-                <br>See console for all available details`
-                      );
-                      console.log(
-                          "Capture result",
-                          orderData,
-                          JSON.stringify(orderData, null, 2)
-                      );
+                      const amount = orderData.purchase_units[0].payments.captures[0].amount.value;
+
+                      fetch("/dashboard/wallet/add_ajax", {
+                          method: "POST",
+                          headers: {
+                              "Content-Type": "application/json",
+                              "X-CSRF-TOKEN": document.querySelector('meta[name="_csrf"]').content
+                          },
+                          body: JSON.stringify({
+                              amount: amount
+                          })
+                      })
+                      .then(res => {
+                          if (!res.ok) throw new Error("Failed to add funds");
+                          return res.text();
+                      })
+                      .then(() => {
+                          window.location.href = "/dashboard/wallet";
+                      })
+                      .catch(err => {
+                          console.error(err);
+                          resultMessage("Payment captured but wallet update failed.");
+                      });
                   }
               } catch (error) {
                   console.error(error);

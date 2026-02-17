@@ -1,6 +1,8 @@
 package project.web;
 
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import project.model.Transaction;
 import project.model.User;
 import project.security.AuthenticationDetails;
@@ -14,10 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
@@ -95,6 +93,18 @@ public class WalletController {
         logger.info("{} € of funds added to user {}", addFundsRequest.getAmount(), user.getUsername());
 
         return new ModelAndView("redirect:/dashboard/wallet");
+    }
+
+    @PostMapping("add_ajax")
+    @PreAuthorize("hasAuthority('USER')")
+    @ResponseBody
+    public ResponseEntity<?> addWalletFundsAjax(
+            @AuthenticationPrincipal AuthenticationDetails userDetails,
+            @RequestBody AddFundsRequest addFundsRequest) {
+        userService.addFunds(userDetails.getId(), addFundsRequest);
+        transactionService.createSelfTransaction(userDetails.getId(), addFundsRequest);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("send")

@@ -1,6 +1,5 @@
 package project.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paypal.sdk.PaypalServerSdkClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PayPalController {
 
-    private final ObjectMapper objectMapper;
     private final PaypalServerSdkClient client;
     private final PayPalConfig paypalConfig;
 
