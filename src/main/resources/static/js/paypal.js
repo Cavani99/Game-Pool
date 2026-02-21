@@ -146,9 +146,17 @@
       document.head.appendChild(script);
 });
 
-
-// Example function to show a result to the user. Your site's UI library can be used instead.
 function resultMessage(message) {
-    const container = document.querySelector("#result-message");
-    container.innerHTML = message;
+    const element = $('#result-message');
+    const readTime = Math.max(2000, message.length * 40);
+
+    element.stop(true, true)
+      .removeClass('d-none')
+      .hide()
+      .html(message)
+      .fadeIn(400)
+      .delay(readTime)
+      .fadeOut(400, function () {
+          $(this).addClass('d-none');
+      });
 }

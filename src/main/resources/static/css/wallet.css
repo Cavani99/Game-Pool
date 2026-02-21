@@ -108,3 +108,13 @@
 #paypal-button-container{
     margin-top: 15px;
 }
+
+#result-message{
+    background-color: #e5131396;
+    padding: 2%;
+}
+
+.d-none {
+    display: none !important;
+}
+
