@@ -45,18 +45,21 @@
                       return orderData.id;
                   }
                   const errorDetail = orderData?.details?.[0];
-                  const errorMessage = errorDetail
-                      ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-                      : JSON.stringify(orderData);
+                  const errorMessage = orderData.error || (
+                      errorDetail
+                          ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                          : "Unexpected payment error"
+                  );
 
-                  throw new Error(errorMessage);
+                   throw new Error(errorMessage);
               } catch (error) {
-                console.error(error);
                 resultMessage(
                   `Sorry, your transaction could not be processed...<br><br>${error}`
                 );
+
+                throw error
               }
-          },
+         },
          async onApprove(data, actions) {
               try {
                   const token = document.querySelector("meta[name='_csrf']").content;
@@ -114,7 +117,6 @@
                       });
                   }
               } catch (error) {
-                  console.error(error);
                   resultMessage(
                       `Sorry, your transaction could not be processed...<br><br>${error}`
                   );
@@ -132,7 +134,6 @@
          onCancel: (data) => {
               // Show a cancel page or return to cart
               //window.location.assign("/your-error-page-here");
-              console.log('PayPal transaction cancelled');
               resultMessage(
                   `PayPal transaction cancelled`
               );

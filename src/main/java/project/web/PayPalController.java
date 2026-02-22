@@ -35,15 +35,37 @@ public class PayPalController {
 
     @PostMapping("/api/orders")
     public ResponseEntity<Map<String, String>> createOrder(@RequestBody Map<String, Object> request) {
+        String message = "Please, write a valid payment amount!";
         try {
-            double amount = Double.parseDouble(request.get("amount").toString());
+            String transactionAmount = String.valueOf(request.get("amount"));
+
+            if (transactionAmount == null || transactionAmount.isBlank()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(Map.of("error", message));
+            }
+
+            double amount;
+            try {
+                amount = Double.parseDouble(transactionAmount);
+                if (amount <= 0) {
+                    return ResponseEntity
+                            .badRequest()
+                            .body(Map.of("error", message));
+                }
+            } catch (NumberFormatException e) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(Map.of("error", message));
+            }
 
             Order order = createOrder(amount);
 
             return ResponseEntity.ok(Map.of("id", order.getId()));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Server error. Please try again."));
         }
     }
 
