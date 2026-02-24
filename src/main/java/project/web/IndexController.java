@@ -66,8 +66,8 @@ public class IndexController {
         }
 
         MultipartFile avatarFile = registerRequest.getAvatar();
-        String avatarPath = null;
-        if (avatarFile != null && !avatarFile.isEmpty()) {
+        String avatarPath;
+        if (!avatarFile.isEmpty()) {
             String uploadDir = "uploads/avatars/";
             Files.createDirectories(Paths.get(uploadDir));
 
@@ -81,6 +81,12 @@ public class IndexController {
             Files.write(filePath, avatarFile.getBytes());
 
             avatarPath = "/uploads/avatars/" + filename;
+        } else {
+            ModelAndView mav = new ModelAndView("register");
+            mav.addObject("user", registerRequest);
+            mav.addObject("errorMessage", "You need to pick an image!");
+
+            return mav;
         }
 
         User createdUser = userService.create(registerRequest, avatarPath);

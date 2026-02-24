@@ -1,8 +1,8 @@
 package project.utils;
 
-import project.utils.client_dtos.CreateNotificationRequest;
-import project.utils.client_dtos.CreateUserRequest;
-import project.utils.client_dtos.NotificationResponse;
+import project.event.payloads.CreateNotificationRequest;
+import project.event.payloads.CreateUserRequest;
+import project.event.payloads.NotificationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 

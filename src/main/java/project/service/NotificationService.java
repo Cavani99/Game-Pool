@@ -1,13 +1,14 @@
 package project.service;
 
+import project.event.UserAddedEventPublisher;
 import project.model.Game;
 import project.model.NotificationType;
 import project.model.User;
 import project.utils.NotificationClient;
-import project.utils.client_dtos.CreateNotificationRequest;
-import project.utils.client_dtos.CreateUserRequest;
-import project.utils.client_dtos.NotificationObject;
-import project.utils.client_dtos.NotificationResponse;
+import project.event.payloads.CreateNotificationRequest;
+import project.event.payloads.CreateUserRequest;
+import project.event.payloads.NotificationObject;
+import project.event.payloads.NotificationResponse;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,18 @@ public class NotificationService {
     private final UserService userService;
 
     private final GameService gameService;
+    private final UserAddedEventPublisher userAddedEventPublisher;
 
-    public NotificationService(NotificationClient notificationClient, UserService userService, GameService gameService) {
+    public NotificationService(NotificationClient notificationClient, UserService userService, GameService gameService, UserAddedEventPublisher userAddedEventPublisher) {
         this.notificationClient = notificationClient;
         this.userService = userService;
         this.gameService = gameService;
+        this.userAddedEventPublisher = userAddedEventPublisher;
     }
 
     public void saveUser(UUID userId, String username) {
         CreateUserRequest createUserRequest = new CreateUserRequest(userId, username);
+        userAddedEventPublisher.send(createUserRequest);
         notificationClient.saveUser(createUserRequest);
     }
 

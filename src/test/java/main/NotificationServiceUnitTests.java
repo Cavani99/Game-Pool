@@ -13,10 +13,10 @@ import project.service.GameService;
 import project.service.NotificationService;
 import project.service.UserService;
 import project.utils.NotificationClient;
-import project.utils.client_dtos.CreateNotificationRequest;
-import project.utils.client_dtos.CreateUserRequest;
-import project.utils.client_dtos.NotificationObject;
-import project.utils.client_dtos.NotificationResponse;
+import project.event.payloads.CreateNotificationRequest;
+import project.event.payloads.CreateUserRequest;
+import project.event.payloads.NotificationObject;
+import project.event.payloads.NotificationResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;

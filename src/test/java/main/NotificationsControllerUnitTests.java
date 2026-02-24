@@ -14,7 +14,7 @@ import project.security.AuthenticationDetails;
 import project.service.GameService;
 import project.service.NotificationService;
 import project.service.UserService;
-import project.utils.client_dtos.NotificationResponse;
+import project.event.payloads.NotificationResponse;
 import project.web.NotificationsController;
 
 import java.math.BigDecimal;

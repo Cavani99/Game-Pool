@@ -1,4 +1,4 @@
-package project.utils.client_dtos;
+package project.event.payloads;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
