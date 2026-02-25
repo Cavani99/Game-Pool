@@ -1,5 +1,6 @@
 package project.service;
 
+import project.event.SaveNotificationEventPublisher;
 import project.event.UserAddedEventPublisher;
 import project.model.Game;
 import project.model.NotificationType;
@@ -25,11 +26,15 @@ public class NotificationService {
     private final GameService gameService;
     private final UserAddedEventPublisher userAddedEventPublisher;
 
-    public NotificationService(NotificationClient notificationClient, UserService userService, GameService gameService, UserAddedEventPublisher userAddedEventPublisher) {
+    private final SaveNotificationEventPublisher saveNotificationEventPublisher;
+
+    public NotificationService(NotificationClient notificationClient, UserService userService, GameService gameService,
+                               UserAddedEventPublisher userAddedEventPublisher, SaveNotificationEventPublisher saveNotificationEventPublisher) {
         this.notificationClient = notificationClient;
         this.userService = userService;
         this.gameService = gameService;
         this.userAddedEventPublisher = userAddedEventPublisher;
+        this.saveNotificationEventPublisher = saveNotificationEventPublisher;
     }
 
     public void saveUser(UUID userId, String username) {
@@ -47,6 +52,7 @@ public class NotificationService {
         request.setLinkTitle("Accept");
         request.setSenderId(user.getId());
         request.setReceiverId(invitedUserId);
+        saveNotificationEventPublisher.send(request);
         notificationClient.saveNotification(request);
     }
 
@@ -68,6 +74,7 @@ public class NotificationService {
             request.setLink("localhost:8080/dashboard/games/details/" + game.getId());
             request.setLinkTitle("See Game");
             request.setReceiverId(user.getId());
+            saveNotificationEventPublisher.send(request);
             notificationClient.saveNotification(request);
         }
     }
