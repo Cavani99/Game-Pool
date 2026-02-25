@@ -40,7 +40,6 @@ public class NotificationService {
     public void saveUser(UUID userId, String username) {
         CreateUserRequest createUserRequest = new CreateUserRequest(userId, username);
         userAddedEventPublisher.send(createUserRequest);
-        notificationClient.saveUser(createUserRequest);
     }
 
     public void createFriendInvite(User user, UUID invitedUserId) {
@@ -53,7 +52,6 @@ public class NotificationService {
         request.setSenderId(user.getId());
         request.setReceiverId(invitedUserId);
         saveNotificationEventPublisher.send(request);
-        notificationClient.saveNotification(request);
     }
 
     public void createGameDiscountNotifications(List<Game> games) {
@@ -75,7 +73,6 @@ public class NotificationService {
             request.setLinkTitle("See Game");
             request.setReceiverId(user.getId());
             saveNotificationEventPublisher.send(request);
-            notificationClient.saveNotification(request);
         }
     }
 
