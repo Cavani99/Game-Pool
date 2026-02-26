@@ -1,7 +1,7 @@
 package project.service;
 
-import project.event.SaveNotificationEventPublisher;
-import project.event.UserAddedEventPublisher;
+import project.event.interfaces.NotificationEventPublisher;
+import project.event.interfaces.UserEventPublisher;
 import project.model.Game;
 import project.model.NotificationType;
 import project.model.User;
@@ -24,22 +24,22 @@ public class NotificationService {
     private final UserService userService;
 
     private final GameService gameService;
-    private final UserAddedEventPublisher userAddedEventPublisher;
+    private final UserEventPublisher userEventPublisher;
+    private final NotificationEventPublisher notificationEventPublisher;
 
-    private final SaveNotificationEventPublisher saveNotificationEventPublisher;
 
     public NotificationService(NotificationClient notificationClient, UserService userService, GameService gameService,
-                               UserAddedEventPublisher userAddedEventPublisher, SaveNotificationEventPublisher saveNotificationEventPublisher) {
+                               UserEventPublisher userEventPublisher, NotificationEventPublisher notificationEventPublisher) {
         this.notificationClient = notificationClient;
         this.userService = userService;
         this.gameService = gameService;
-        this.userAddedEventPublisher = userAddedEventPublisher;
-        this.saveNotificationEventPublisher = saveNotificationEventPublisher;
+        this.userEventPublisher = userEventPublisher;
+        this.notificationEventPublisher = notificationEventPublisher;
     }
 
     public void saveUser(UUID userId, String username) {
         CreateUserRequest createUserRequest = new CreateUserRequest(userId, username);
-        userAddedEventPublisher.send(createUserRequest);
+        userEventPublisher.send(createUserRequest);
     }
 
     public void createFriendInvite(User user, UUID invitedUserId) {
@@ -51,7 +51,7 @@ public class NotificationService {
         request.setLinkTitle("Accept");
         request.setSenderId(user.getId());
         request.setReceiverId(invitedUserId);
-        saveNotificationEventPublisher.send(request);
+        notificationEventPublisher.send(request);
     }
 
     public void createGameDiscountNotifications(List<Game> games) {
@@ -72,7 +72,7 @@ public class NotificationService {
             request.setLink("localhost:8080/dashboard/games/details/" + game.getId());
             request.setLinkTitle("See Game");
             request.setReceiverId(user.getId());
-            saveNotificationEventPublisher.send(request);
+            notificationEventPublisher.send(request);
         }
     }
 

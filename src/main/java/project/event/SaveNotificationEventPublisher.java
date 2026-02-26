@@ -1,14 +1,17 @@
 package project.event;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import project.event.interfaces.NotificationEventPublisher;
 import project.event.payloads.CreateNotificationRequest;
 
 import static project.config.KafkaConfiguration.NOTIFICATION_SAVE_KAFKA_EVENT;
 
 @Component
-public class SaveNotificationEventPublisher {
+@ConditionalOnProperty(name = "kafka.enabled", havingValue = "true")
+public class SaveNotificationEventPublisher implements NotificationEventPublisher {
     private final KafkaTemplate<String, CreateNotificationRequest> notificationRequestKafkaTemplate;
 
     @Autowired
