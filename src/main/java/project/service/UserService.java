@@ -58,6 +58,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new UnknownElementException("User does not exist!"));
     }
 
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
     public List<User> findAllUsers() {
         return userRepository.findAllByRole(UserRole.USER);
     }

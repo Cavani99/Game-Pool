@@ -1,17 +1,17 @@
 package project.web.admin;
 
+import org.springframework.web.bind.annotation.*;
 import project.model.User;
 import project.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import project.utils.ImagesCleanupService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -19,10 +19,12 @@ import java.util.UUID;
 public class UsersAdminController {
 
     private final UserService userService;
+    private final ImagesCleanupService imagesCleanupService;
     private final Logger logger;
 
-    public UsersAdminController(UserService userService) {
+    public UsersAdminController(UserService userService, ImagesCleanupService imagesCleanupService) {
         this.userService = userService;
+        this.imagesCleanupService = imagesCleanupService;
         this.logger = LoggerFactory.getLogger(UsersAdminController.class);
     }
 
@@ -61,5 +63,14 @@ public class UsersAdminController {
         userService.changeBanStatus(id, logger);
 
         return new ModelAndView("redirect:/admin/users");
+    }
+
+    @PostMapping("/remove-avatars")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseBody
+    public Map<String, String> removeAvatars() {
+        imagesCleanupService.deleteUnusedAvatars(logger);
+
+        return Map.of("message", "Unused avatars deleted successfully!");
     }
 }
