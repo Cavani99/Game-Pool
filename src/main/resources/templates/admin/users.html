@@ -20,12 +20,19 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="/js/users-admin.js"></script>
 </head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <body th:replace="fragments/admin-layout :: layout(~{::content})">
 <div th:fragment="content">
     <div class="single-section-box home-profile-information">
         <div>
             <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
+            <div class="event-message">Unused avatars deleted successfully!</div>
+            <button class="btn btn-success delete-avatars" th:href="@{/admin/users/delete-avatars}">
+                Deleted all unused avatars
+            </button>
         </div>
         <div th:if="${users.isEmpty()}">
             <h3>There are no registered users!</h3>

@@ -65,7 +65,7 @@ public class UsersAdminController {
         return new ModelAndView("redirect:/admin/users");
     }
 
-    @PostMapping("/remove-avatars")
+    @PostMapping("/delete-avatars")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseBody
     public Map<String, String> removeAvatars() {

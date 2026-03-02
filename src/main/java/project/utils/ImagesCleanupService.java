@@ -1,14 +1,14 @@
 package project.utils;
 
 import org.springframework.stereotype.Service;
-import project.model.User;
 import project.service.UserService;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -25,10 +25,18 @@ public class ImagesCleanupService {
         this.userService = userService;
     }
 
+    private boolean isExternalUrl(String path) {
+        try {
+            URI uri = new URI(path);
+            return uri.getScheme() != null && uri.getScheme().startsWith("http");
+        } catch (URISyntaxException e) {
+            return false;
+        }
+    }
+
     public void deleteUnusedAvatars(Logger logger) {
-        Set<String> usedAvatars = userService.findAll().stream()
-                .map(User::getAvatar)
-                .filter(Objects::nonNull)
+        Set<String> usedAvatars = userService.findUsersWithAvatar().stream()
+                .filter(path -> !isExternalUrl(path))
                 .map(path -> Paths.get(path).getFileName().toString())
                 .collect(Collectors.toSet());
 
