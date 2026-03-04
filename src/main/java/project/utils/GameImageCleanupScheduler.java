@@ -6,18 +6,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AvatarCleanupScheduler {
+public class GameImageCleanupScheduler {
 
     private final ImagesCleanupService imagesCleanupService;
     private final Logger logger;
 
-    public AvatarCleanupScheduler(ImagesCleanupService imagesCleanupService) {
+    public GameImageCleanupScheduler(ImagesCleanupService imagesCleanupService) {
         this.imagesCleanupService = imagesCleanupService;
-        this.logger = LoggerFactory.getLogger(AvatarCleanupScheduler.class);
+        this.logger = LoggerFactory.getLogger(GameImageCleanupScheduler.class);
     }
 
-    @Scheduled(cron = "0 0 3 ? * SUN")
-    public void scheduledAvatarCleanup() {
-        imagesCleanupService.deleteUnusedUserAvatars(logger);
+    @Scheduled(cron = "0 0 4 ? * SUN")
+    public void scheduledGameImagesCleanup() {
+        imagesCleanupService.deleteUnusedGameImages(logger);
     }
 }

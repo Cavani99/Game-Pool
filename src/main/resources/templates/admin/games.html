@@ -20,12 +20,19 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="/js/games-admin.js"></script>
 </head>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <body th:replace="fragments/admin-layout :: layout(~{::content})">
 <div th:fragment="content">
     <div class="single-section-box home-profile-information">
         <div class="btn-header">
             <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
+            <div class="event-message" id="games-images-message">Unused game images deleted successfully!</div>
+            <button class="btn btn-success delete-images" th:href="@{/admin/games/delete-images}">
+                Deleted all unused game images
+            </button>
             <a th:href="@{/admin/games/add}">
                 <button class="btn btn-primary admin-btn">
                     Add Game

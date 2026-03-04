@@ -69,8 +69,8 @@ public class UsersAdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseBody
     public Map<String, String> removeAvatars() {
-        imagesCleanupService.deleteUnusedAvatars(logger);
+        imagesCleanupService.deleteUnusedUserAvatars(logger);
 
-        return Map.of("message", "Unused avatars deleted successfully!");
+        return Map.of("message", "Unused user avatars deleted successfully!");
     }
 }

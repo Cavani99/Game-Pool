@@ -29,7 +29,7 @@ $(document).ready(function () {
                      });
            },
            error: function(xhr) {
-               console.error("Error in deleting unused user avatars:", xhr);
+               console.error("Error in deleting unused game images:", xhr);
            }
        });
     });

@@ -17,12 +17,15 @@ public interface GameRepository extends JpaRepository<Game, UUID> {
     Optional<Game> findByTitle(String title);
 
     @Query("""
-        SELECT g FROM Game g
-        WHERE (:categories IS NULL OR g.category.id IN :categories)
-           OR (:companies IS NULL OR g.company.id IN :companies)
-    """)
+                SELECT g FROM Game g
+                WHERE (:categories IS NULL OR g.category.id IN :categories)
+                   OR (:companies IS NULL OR g.company.id IN :companies)
+            """)
     List<Game> findAllByCategoryIdOrCompanyIdList(
             @Param("categories") List<UUID> categories,
             @Param("companies") List<UUID> companies
     );
+
+    @Query("SELECT g.image FROM Game g WHERE g.image IS NOT NULL")
+    List<String> findAllImages();
 }

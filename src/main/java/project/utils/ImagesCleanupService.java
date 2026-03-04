@@ -1,6 +1,7 @@
 package project.utils;
 
 import org.springframework.stereotype.Service;
+import project.service.GameService;
 import project.service.UserService;
 
 import java.io.IOException;
@@ -20,9 +21,11 @@ import java.util.stream.Stream;
 public class ImagesCleanupService {
 
     private final UserService userService;
+    private final GameService gameService;
 
-    public ImagesCleanupService(UserService userService) {
+    public ImagesCleanupService(UserService userService, GameService gameService) {
         this.userService = userService;
+        this.gameService = gameService;
     }
 
     private boolean isExternalUrl(String path) {
@@ -34,7 +37,7 @@ public class ImagesCleanupService {
         }
     }
 
-    public void deleteUnusedAvatars(Logger logger) {
+    public void deleteUnusedUserAvatars(Logger logger) {
         Set<String> usedAvatars = userService.findUsersWithAvatar().stream()
                 .filter(path -> !isExternalUrl(path))
                 .map(path -> Paths.get(path).getFileName().toString())
@@ -52,6 +55,31 @@ public class ImagesCleanupService {
                             System.out.println("Deleted unused avatar: " + file);
                         } catch (IOException e) {
                             logger.error("Failed to delete avatar: " + file, e);
+                        }
+                    });
+        } catch (IOException e) {
+            logger.warn("No files in this directory!");
+        }
+    }
+
+    public void deleteUnusedGameImages(Logger logger) {
+        Set<String> usedImages = gameService.findGamesWithImage().stream()
+                .filter(path -> !isExternalUrl(path))
+                .map(path -> Paths.get(path).getFileName().toString())
+                .collect(Collectors.toSet());
+
+        Path avatarDir = Paths.get("uploads/games");
+
+        try (Stream<Path> files = Files.list(avatarDir)) {
+            files
+                    .filter(Files::isRegularFile)
+                    .filter(file -> !usedImages.contains(file.getFileName().toString()))
+                    .forEach(file -> {
+                        try {
+                            Files.delete(file);
+                            System.out.println("Deleted unused image: " + file);
+                        } catch (IOException e) {
+                            logger.error("Failed to delete image: " + file, e);
                         }
                     });
         } catch (IOException e) {

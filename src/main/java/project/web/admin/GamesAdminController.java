@@ -6,6 +6,7 @@ import project.service.CategoryService;
 import project.service.CompanyService;
 import project.service.DiscountService;
 import project.service.GameService;
+import project.utils.ImagesCleanupService;
 import project.web.dto.CreateDiscountRequest;
 import project.web.dto.CreateGameRequest;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -37,13 +39,16 @@ public class GamesAdminController {
     private final CompanyService companyService;
     private final Logger logger;
 
+    private final ImagesCleanupService imagesCleanupService;
+
     @Autowired
     public GamesAdminController(GameService gameService, DiscountService discountService, CategoryService categoryService,
-                                CompanyService companyService) {
+                                CompanyService companyService, ImagesCleanupService imagesCleanupService) {
         this.gameService = gameService;
         this.discountService = discountService;
         this.categoryService = categoryService;
         this.companyService = companyService;
+        this.imagesCleanupService = imagesCleanupService;
         this.logger = LoggerFactory.getLogger(GamesAdminController.class);
     }
 
@@ -119,7 +124,7 @@ public class GamesAdminController {
 
             String filename = UUID.randomUUID() + "_" + latinName;
             Path filePath = Paths.get(uploadDir + filename);
-            Files.write(filePath,image.getBytes());
+            Files.write(filePath, image.getBytes());
 
             imagePath = "/uploads/games/" + filename;
         }
@@ -316,5 +321,14 @@ public class GamesAdminController {
         logger.info("Discount removed from {}!", game.getTitle());
 
         return new ModelAndView("redirect:/admin/games");
+    }
+
+    @PostMapping("/delete-images")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseBody
+    public Map<String, String> removeImages() {
+        imagesCleanupService.deleteUnusedGameImages(logger);
+
+        return Map.of("message", "Unused game images deleted successfully!");
     }
 }

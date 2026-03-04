@@ -29,6 +29,10 @@ public class GameService {
         return gameRepository.findAllByOrderByCreatedOnDesc();
     }
 
+    public List<String> findGamesWithImage() {
+        return gameRepository.findAllImages();
+    }
+
     @CacheEvict(value = "games", allEntries = true)
     public boolean create(CreateGameRequest createGameRequest, Category category, Company company, String imagePath) {
         Game game = new Game();

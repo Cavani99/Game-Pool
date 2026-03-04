@@ -29,9 +29,9 @@
     <div class="single-section-box home-profile-information">
         <div>
             <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
-            <div class="event-message">Unused avatars deleted successfully!</div>
-            <button class="btn btn-success delete-avatars" th:href="@{/admin/users/delete-avatars}">
-                Deleted all unused avatars
+            <div class="event-message">Unused user avatars deleted successfully!</div>
+            <button class="btn btn-success delete-images" th:href="@{/admin/users/delete-avatars}">
+                Deleted all unused user avatars
             </button>
         </div>
         <div th:if="${users.isEmpty()}">
