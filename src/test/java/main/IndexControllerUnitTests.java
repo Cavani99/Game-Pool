@@ -81,19 +81,12 @@ class IndexControllerUnitTests {
 
         BindingResult bindingResult = new BeanPropertyBindingResult(req, "user");
 
-        User created = new User();
-        created.setId(UUID.randomUUID());
-        created.setUsername("john");
-        created.setRole(UserRole.USER);
-
-        when(userService.create(req, null)).thenReturn(created);
-
         ModelAndView mv = controller.register(req, bindingResult);
 
-        assertEquals("redirect:/login", mv.getViewName());
+        assertEquals("register", mv.getViewName());
+        assertEquals("You need to pick an image!", mv.getModel().get("errorMessage"));
 
-        verify(userService).create(req, null);
-        verify(notificationService).saveUser(created.getId(), "john");
+        verify(userService, never()).create(any(), any());
     }
 
     @Test
@@ -110,18 +103,12 @@ class IndexControllerUnitTests {
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);
 
-        User createdUser = new User();
-        createdUser.setId(UUID.randomUUID());
-        createdUser.setUsername("john");
-
-        when(userService.create(req, null)).thenReturn(createdUser);
-
         ModelAndView mv = controller.register(req, bindingResult);
 
-        assertEquals("redirect:/login", mv.getViewName());
+        assertEquals("register", mv.getViewName());
+        assertEquals("You need to pick an image!", mv.getModel().get("errorMessage"));
 
-        verify(userService).create(req, null);
-        verify(notificationService).saveUser(createdUser.getId(), "john");
+        verify(userService, never()).create(any(), any());
     }
 
 

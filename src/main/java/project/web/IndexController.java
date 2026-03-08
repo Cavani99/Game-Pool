@@ -67,7 +67,7 @@ public class IndexController {
 
         MultipartFile avatarFile = registerRequest.getAvatar();
         String avatarPath;
-        if (!avatarFile.isEmpty()) {
+        if (avatarFile != null && !avatarFile.isEmpty()) {
             String uploadDir = "uploads/avatars/";
             Files.createDirectories(Paths.get(uploadDir));
 

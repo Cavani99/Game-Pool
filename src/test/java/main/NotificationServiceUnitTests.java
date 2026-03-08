@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import project.event.interfaces.NotificationEventPublisher;
+import project.event.interfaces.UserEventPublisher;
 import project.model.*;
 import project.service.GameService;
 import project.service.NotificationService;
@@ -37,6 +39,12 @@ class NotificationServiceUnitTests {
     @Mock
     private GameService gameService;
 
+    @Mock
+    private UserEventPublisher userEventPublisher;
+
+    @Mock
+    private NotificationEventPublisher notificationEventPublisher;
+
     @InjectMocks
     private NotificationService notificationService;
 
@@ -48,7 +56,7 @@ class NotificationServiceUnitTests {
         notificationService.saveUser(userId, username);
 
         ArgumentCaptor<CreateUserRequest> captor = ArgumentCaptor.forClass(CreateUserRequest.class);
-        verify(notificationClient).saveUser(captor.capture());
+        verify(userEventPublisher).send(captor.capture());
 
         CreateUserRequest request = captor.getValue();
         assertEquals(userId, request.getId());
@@ -66,7 +74,7 @@ class NotificationServiceUnitTests {
         notificationService.createFriendInvite(user, friendId);
 
         ArgumentCaptor<CreateNotificationRequest> captor = ArgumentCaptor.forClass(CreateNotificationRequest.class);
-        verify(notificationClient).saveNotification(captor.capture());
+        verify(notificationEventPublisher).send(captor.capture());
 
         CreateNotificationRequest request = captor.getValue();
         assertEquals("Friend Invitation!", request.getTitle());
@@ -107,7 +115,7 @@ class NotificationServiceUnitTests {
         notificationService.createGameDiscountNotifications(List.of(game, game2));
 
         ArgumentCaptor<CreateNotificationRequest> captor = ArgumentCaptor.forClass(CreateNotificationRequest.class);
-        verify(notificationClient).saveNotification(captor.capture());
+        verify(notificationEventPublisher).send(captor.capture());
 
         CreateNotificationRequest request = captor.getValue();
         assertEquals("Wishlisted Game got discounted!", request.getTitle());
