@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import project.model.User;
 import project.security.AuthenticationDetails;
+import project.service.MessageService;
 import project.service.NotificationService;
 import project.service.UserService;
 import project.web.dto.LoginRequest;
@@ -21,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
+import java.util.Locale;
 import java.util.UUID;
 
 @Controller
@@ -30,9 +32,12 @@ public class IndexController {
     private final NotificationService notificationService;
     private final Logger logger;
 
-    public IndexController(UserService userService, NotificationService notificationService) {
+    private final MessageService messageService;
+
+    public IndexController(UserService userService, NotificationService notificationService, MessageService messageService) {
         this.userService = userService;
         this.notificationService = notificationService;
+        this.messageService = messageService;
         this.logger = LoggerFactory.getLogger(IndexController.class);
     }
 
@@ -97,7 +102,7 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLogin(@RequestParam(name = "error", required = false) String errorMessage, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public ModelAndView getLogin(@RequestParam(name = "error", required = false) String errorMessage, @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         if (userDetails != null) {
             return new ModelAndView("redirect:/dashboard");
         }
@@ -107,7 +112,8 @@ public class IndexController {
         modelAndView.addObject("user", new LoginRequest());
 
         if (errorMessage != null) {
-            modelAndView.addObject("error", "Invalid email or password!");
+            String message = messageService.getLocalizedMessage("login.error", locale);
+            modelAndView.addObject("error", message);
         }
 
         return modelAndView;

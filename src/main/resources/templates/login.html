@@ -22,7 +22,7 @@
         </div>
         <div>
             <h1 id="login-heading">Game Pool</h1>
-            <p class="lead">Dive in — sign in to play</p>
+            <p class="lead" th:text="#{login.greeting_login}"></p>
         </div>
     </div>
 
@@ -31,29 +31,27 @@
             <span th:text="${error}"></span>
         </div>
         <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email" th:text="#{login.email}"></label>
             <input th:field="*{email}" class="form-control input" id="email" name="email"
-                   type="text" placeholder="Enter your email" required>
+                   type="text" th:placeholder="#{login.enter_email}" required>
         </div>
 
         <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password" th:text="#{login.password}"></label>
             <div class="password-wrap">
                 <input th:field="*{password}" class="form-control input" id="password" name="password"
-                       type="password" placeholder="Enter your password" required>
+                       type="password" th:placeholder="#{login.enter_password}" required>
                 <i class="fa-solid fa-eye toggle-password" id="toggleIcon"
                    aria-label="Show password" onclick="togglePassword()"></i>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary full">Login</button>
+        <button type="submit" class="btn btn-primary full" th:text="#{login.login}"></button>
 
         <div class="footer-note">
-            <span>No account?
-                <a href="/register" style="color:var(--accent);text-decoration:underline;">
-                    Register Here!
-                </a>
-            </span>
+            <span th:text="#{login.no_account}"></span>
+            <a href="/register" style="color:var(--accent);text-decoration:underline;"
+               th:text="#{login.register_here}"></a>
         </div>
     </form>
 </main>

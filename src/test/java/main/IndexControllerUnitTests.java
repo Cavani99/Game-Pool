@@ -16,6 +16,7 @@ import project.service.UserService;
 import project.web.IndexController;
 import project.web.dto.RegisterRequest;
 
+import java.util.Locale;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -132,7 +133,7 @@ class IndexControllerUnitTests {
 
     @Test
     void testLogin() {
-        ModelAndView mav = controller.getLogin(null, null);
+        ModelAndView mav = controller.getLogin(null, null, Locale.getDefault());
 
         assertEquals("login", mav.getViewName());
         assertNull(mav.getModel().get("error"));
@@ -140,7 +141,7 @@ class IndexControllerUnitTests {
 
     @Test
     void testLoginErrorMessage() {
-        ModelAndView mav = controller.getLogin("error", null);
+        ModelAndView mav = controller.getLogin("error", null, Locale.getDefault());
 
         assertEquals("login", mav.getViewName());
         assertEquals("Invalid email or password!", mav.getModel().get("error"));
