@@ -17,6 +17,14 @@
 </div>
 
 <main class="card" role="main" aria-labelledby="login-heading">
+    <a class="auth-close" href="/" aria-label="Back to home"
+       style="color: var(--muted); position: absolute; right: 16px; top: 16px;">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+        </svg>
+    </a>
+
     <div class="brand">
         <div class="logo" aria-hidden> 🎮
         </div>
@@ -31,22 +39,22 @@
             <span th:text="${error}"></span>
         </div>
         <div class="form-group">
-            <label for="email" th:text="#{login.email}"></label>
+            <label for="email" th:text="#{email}"></label>
             <input th:field="*{email}" class="form-control input" id="email" name="email"
-                   type="text" th:placeholder="#{login.enter_email}" required>
+                   type="text" th:placeholder="#{enter_email}" required>
         </div>
 
         <div class="form-group">
-            <label for="password" th:text="#{login.password}"></label>
+            <label for="password" th:text="#{password}"></label>
             <div class="password-wrap">
                 <input th:field="*{password}" class="form-control input" id="password" name="password"
-                       type="password" th:placeholder="#{login.enter_password}" required>
+                       type="password" th:placeholder="#{enter_password}" required>
                 <i class="fa-solid fa-eye toggle-password" id="toggleIcon"
                    aria-label="Show password" onclick="togglePassword()"></i>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary full" th:text="#{login.login}"></button>
+        <button type="submit" class="btn btn-primary full" th:text="#{login}"></button>
 
         <div class="footer-note">
             <span th:text="#{login.no_account}"></span>

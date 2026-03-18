@@ -30,35 +30,35 @@
 
     <form class="auth-form" th:action="@{/register}" th:method="POST" th:object="${user}" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="reg-username"><span>Username</span></label>
+            <label for="reg-username"><span th:text="#{username}"></span></label>
             <span class="badge badge-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
-            <span class="badge badge-soft">Username must be between 4 and 25 characters</span>
+            <span class="badge badge-soft" th:text="#{register.username_rules}"></span>
             <input th:field="*{username}" class="form-control" id="reg-username" type="text"
-                   placeholder="Enter your username" required>
+                   th:placeholder="#{register.enter_username}" required>
         </div>
 
 
         <div class="form-group">
-            <label for="reg-username"><span>Email</span></label>
+            <label for="reg-username"><span th:text="#{email}"></span></label>
             <span class="badge badge-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-            <input th:field="*{email}" class="form-control" id="reg-email" type="text"
-                   placeholder="Enter your email" required>
+            <input th:field="*{email}" class="form-control" id="reg-email" type="text" th:placeholder="#{enter_email}"
+                   required>
         </div>
 
         <div class="form-group">
-            <label for="reg-password"><span>Password</span></label>
+            <label for="reg-password"><span th:text="#{password}"></span></label>
             <span class="badge badge-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
-            <span class="badge badge-soft">Password must have more than 4 characters</span>
+            <span class="badge badge-soft" th:text="#{register.password_rules}"></span>
             <div class="password-wrap">
                 <input th:field="*{password}" class="form-control" id="reg-password" type="password"
-                       placeholder="Enter your password" required>
+                       th:placeholder="#{enter_password}" required>
                 <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordReg()" id="toggleIconReg"
-                   aria-label="Show password"></i>
+                   th:aria-label="#{show_password}"></i>
             </div>
         </div>
 
         <div class="form-group">
-            <label for="avatar"><span>Avatar</span></label>
+            <label for="avatar"><span th:text="#{avatar}"></span></label>
             <span class="badge badge-error" th:if="${errorMessage}" th:text="${errorMessage}"></span>
             <input class="form-control" id="avatar" th:field="*{avatar}" type="file" accept="image/*"
                    onchange="previewAvatarFile(event)">
@@ -66,21 +66,29 @@
         </div>
 
         <div class="form-group">
-            <label for="role"><span>Role</span></label>
+            <label for="role"><span th:text="#{role}"></span></label>
             <span class="badge badge-error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
-            <span class="badge badge-soft">Create a user account or request admin access</span>
+            <span class="badge badge-soft" th:text="#{register.role_rules}"></span>
             <select th:field="*{role}" class="form-select" style="color: black;" id="role">
-                <option value="">Select your role</option>
+                <option value="" th:text="#{register.role_select}"></option>
                 <option th:each="role : ${T(project.model.UserRole).values()}" th:value="${role}"
                         th:text="${role.name()}"></option>
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary full">Create Account</button>
+        <button type="submit" class="btn btn-primary full" th:text="#{create}"></button>
 
-        <p class="switch-line">Already have an account? <a href="/login">Log In</a></p>
+        <p class="switch-line">
+            <span th:text="#{register.account_exists}"></span>
+            <a href="/login" th:text="#{register.login}"></a>
+        </p>
     </form>
 </main>
+<script th:inline="javascript">
+    const fileTooLargeMsg = /*[[#{file.too_large}]]*/;
+    const showPass = /*[[#{show_password}]]*/;
+    const hidePass = /*[[#{hide_password}]]*/;
+</script>
 <script>
     function togglePasswordReg() {
         const input = document.getElementById("reg-password");
@@ -88,11 +96,11 @@
         if (input.type === "password") {
             input.type = "text";
             icon.classList.replace("fa-eye", "fa-eye-slash");
-            icon.setAttribute('aria-label', 'Hide password');
+            icon.setAttribute('aria-label', hidePass);
         } else {
             input.type = "password";
             icon.classList.replace("fa-eye-slash", "fa-eye");
-            icon.setAttribute('aria-label', 'Show password');
+            icon.setAttribute('aria-label', showPass);
         }
     }
 
@@ -106,7 +114,7 @@
         if (!file) return;
 
         if (file.size > maxSize) {
-          alert(`File too large! Please choose an image under ${maxSize / (1024 * 1024)} MB.`);
+          alert(`${fileTooLargeMsg} ${maxSize / (1024 * 1024)} MB.`);
           fileInput.value = ''; // clears the selected file
           return;
         }

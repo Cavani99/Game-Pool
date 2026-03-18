@@ -65,7 +65,7 @@ class IndexControllerUnitTests {
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);
 
-        ModelAndView mv = controller.register(req, bindingResult);
+        ModelAndView mv = controller.register(req, bindingResult, Locale.getDefault());
 
         assertEquals("redirect:/login", mv.getViewName());
         verify(userService).create(eq(req), anyString());
@@ -82,7 +82,7 @@ class IndexControllerUnitTests {
 
         BindingResult bindingResult = new BeanPropertyBindingResult(req, "user");
 
-        ModelAndView mv = controller.register(req, bindingResult);
+        ModelAndView mv = controller.register(req, bindingResult, Locale.getDefault());
 
         assertEquals("register", mv.getViewName());
         assertEquals("You need to pick an image!", mv.getModel().get("errorMessage"));
@@ -104,7 +104,7 @@ class IndexControllerUnitTests {
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);
 
-        ModelAndView mv = controller.register(req, bindingResult);
+        ModelAndView mv = controller.register(req, bindingResult, Locale.getDefault());
 
         assertEquals("register", mv.getViewName());
         assertEquals("You need to pick an image!", mv.getModel().get("errorMessage"));
@@ -122,7 +122,7 @@ class IndexControllerUnitTests {
         BindingResult bindingResult = new BeanPropertyBindingResult(req, "user");
         bindingResult.rejectValue("username", "username.empty", "Username required");
 
-        ModelAndView mv = controller.register(req, bindingResult);
+        ModelAndView mv = controller.register(req, bindingResult, Locale.getDefault());
 
         assertEquals("register", mv.getViewName());
         assertEquals(req, mv.getModel().get("user"));
@@ -150,7 +150,8 @@ class IndexControllerUnitTests {
 
     @Test
     void testIndex() {
-        assertEquals("index", controller.index());
+        ModelAndView mav = controller.index();
+        assertEquals("index", mav.getViewName());
     }
 }
 

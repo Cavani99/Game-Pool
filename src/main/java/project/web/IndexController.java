@@ -42,8 +42,11 @@ public class IndexController {
     }
 
     @GetMapping
-    public String index() {
-        return "index";
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+
+        return modelAndView;
     }
 
     @GetMapping("/register")
@@ -60,12 +63,13 @@ public class IndexController {
     }
 
     @PostMapping("/register")
-    public ModelAndView register(@Valid @ModelAttribute("user") RegisterRequest registerRequest, BindingResult bindingResult) throws IOException {
+    public ModelAndView register(@Valid @ModelAttribute("user") RegisterRequest registerRequest, BindingResult bindingResult, Locale locale) throws IOException {
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView("register");
             mav.addObject("user", registerRequest);
 
-            logger.error("User registration errors: {}", bindingResult.getAllErrors());
+            String message = messageService.getLocalizedMessage("register.errors", locale);
+            logger.error(message, bindingResult.getAllErrors());
 
             return mav;
         }
@@ -87,16 +91,18 @@ public class IndexController {
 
             avatarPath = "/uploads/avatars/" + filename;
         } else {
+            String message = messageService.getLocalizedMessage("register.no_image", locale);
             ModelAndView mav = new ModelAndView("register");
             mav.addObject("user", registerRequest);
-            mav.addObject("errorMessage", "You need to pick an image!");
+            mav.addObject("errorMessage", message);
 
             return mav;
         }
 
         User createdUser = userService.create(registerRequest, avatarPath);
         notificationService.saveUser(createdUser.getId(), createdUser.getUsername());
-        logger.info("User {} created as {}!", createdUser.getUsername(), createdUser.getRole());
+        String message = messageService.getLocalizedMessage("register.user_created", locale);
+        logger.info(message, createdUser.getUsername(), createdUser.getRole());
 
         return new ModelAndView("redirect:/login");
     }
