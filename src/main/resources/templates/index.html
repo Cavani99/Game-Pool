@@ -15,6 +15,15 @@
         <h1>
             <span>Game Pool</span>
         </h1>
+
+        <select onchange="window.location.search='?lang='+this.value" class="form-select locale-switch" id="locale">
+            <option th:each="loc : ${locales}"
+                    th:value="${loc.language}"
+                    th:selected="${loc.language == currentLocale.language}"
+                    th:text="${loc.getDisplayLanguage(loc)}">
+            </option>
+        </select>
+
         <nav class="btns">
             <a href="/register" class="btn btn-primary" th:text="#{create}"></a>
             <a href="/login" class="btn btn-secondary" th:text="#{login}"></a>

@@ -278,3 +278,13 @@
     font-family: cursive;
     font-size: medium;
 }
+
+.locale-switch{
+  position:fixed;
+  top:20px;
+  right:20px;
+  z-index:3;
+  width:auto;
+  color: cornsilk;
+  background: #99afd5;
+}

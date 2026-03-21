@@ -16,6 +16,14 @@
     <div class="wave w3"></div>
 </div>
 
+<select onchange="window.location.search='?lang='+this.value" class="form-select locale-switch" id="locale">
+    <option th:each="loc : ${locales}"
+            th:value="${loc.language}"
+            th:selected="${loc.language == currentLocale.language}"
+            th:text="${loc.getDisplayLanguage(loc)}">
+    </option>
+</select>
+
 <main class="card" role="main" aria-labelledby="login-heading">
     <a class="auth-close" href="/" aria-label="Back to home"
        style="color: var(--muted); position: absolute; right: 16px; top: 16px;">

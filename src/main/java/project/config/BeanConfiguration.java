@@ -52,7 +52,7 @@ public class BeanConfiguration {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.UK);
+        localeResolver.setDefaultLocale(Locale.ENGLISH);
         return localeResolver;
     }
 }
