@@ -149,3 +149,16 @@ div.games-section{
      overflow: hidden;
      justify-content: flex-start;
 }
+
+.left-header{
+    display: flex;
+    flex-direction: row;
+}
+
+.locale-switch-front{
+    width: auto;
+    color: white;
+    background: #111;
+    border-color: black;
+    margin-left: 10px;
+}

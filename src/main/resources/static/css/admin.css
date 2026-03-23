@@ -58,3 +58,12 @@
     text-align: center !important;
     vertical-align: middle !important;
 }
+
+.locale-switch{
+    position: fixed;
+    right: 20px;
+    z-index: 3;
+    width: auto;
+    color: antiquewhite;
+    background: #0e134c;
+}

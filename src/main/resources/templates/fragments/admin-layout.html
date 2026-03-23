@@ -104,6 +104,14 @@
         </div>
     </div>
 
+    <select onchange="window.location.search='?lang='+this.value" class="form-select locale-switch" id="locale">
+        <option th:each="loc : ${locales}"
+                th:value="${loc.language}"
+                th:selected="${loc.language == currentLocale.language}"
+                th:text="${loc.getDisplayLanguage(loc)}">
+        </option>
+    </select>
+
     <div class="main-section">
         <div class="home-section" th:insert="${content}"></div>
 
