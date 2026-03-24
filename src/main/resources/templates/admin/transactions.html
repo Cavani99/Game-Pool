@@ -27,26 +27,21 @@
         <div class="btn-header">
         </div>
         <div th:if="${transactions.isEmpty()}">
-            <h3>There are no transactions saved!</h3>
+            <h3 th:text="#{no_transactions}"></h3>
         </div>
         <div class="table-container" th:unless="${transactions.isEmpty()}">
             <table class="table">
                 <thead>
                 <tr class="thead-dark">
-                    <th class="text-center">
-                        Date
+                    <th class="text-center" th:text="#{date}">
                     </th>
-                    <th class="text-center">
-                        Amount
+                    <th class="text-center" th:text="#{amount}">
                     </th>
-                    <th class="text-center">
-                        Description
+                    <th class="text-center" th:text="#{description}">
                     </th>
-                    <th class="text-center">
-                        Sender
+                    <th class="text-center" th:text="#{sender}">
                     </th>
-                    <th class="text-center">
-                        Receiver
+                    <th class="text-center" th:text="#{receiver}">
                     </th>
                 </tr>
                 </thead>
@@ -63,14 +58,12 @@
                     <td class="center-td" th:if="${transaction.sender != null}"
                         th:text="${transaction.sender.username}">
                     </td>
-                    <td class="center-td" th:unless="${transaction.sender != null}">
-                        None
+                    <td class="center-td" th:unless="${transaction.sender != null}" th:text="#{none}">
                     </td>
                     <td class="center-td" th:if="${transaction.receiver != null}"
                         th:text="${transaction.receiver.username}">
                     </td>
-                    <td class="center-td" th:unless="${transaction.receiver != null}">
-                        None
+                    <td class="center-td" th:unless="${transaction.receiver != null}" th:text="#{none}">
                     </td>
                 </tr>
                 </tbody>

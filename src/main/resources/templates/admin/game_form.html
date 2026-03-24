@@ -25,12 +25,12 @@
         <form class="auth-form"
               th:action="${game_id} != null ? @{/admin/games/edit/{id} (id=${game_id})} : @{/admin/games/add}"
               th:method="POST" th:object="${game}" enctype="multipart/form-data">
-            <h2 class="text-center mb-4">Add Game</h2>
+            <h2 class="text-center mb-4" th:text="#{add_game}"></h2>
 
             <span class="badge badge-error" th:if="${#fields.hasErrors('title')}"
                   th:errors="*{title}"></span>
             <div class="form-group text-center form-field">
-                <label for="title" class="control-label col-sm-2"><span>Name:</span></label>
+                <label for="title" class="control-label col-sm-2"><span th:text="#{name} + ':'"></span></label>
                 <input th:field="*{title}" class="form-control input" id="title" name="title"
                        type="text" placeholder="Enter Game title" style="width: 300px;">
             </div>
@@ -39,9 +39,9 @@
                   th:if="${#fields.hasErrors('categoryId')}"
                   th:errors="*{categoryId}"></span>
             <div class="form-group text-center form-field">
-                <label for="categoryId" class="control-label col-sm-2"><span>Category:</span></label>
-                <select th:field="*{categoryId}" class="form-select select2" id="categoryId" style="width: 300px;">
-                    <option value="">Select category</option>
+                <label for="categoryId" class="control-label col-sm-2"><span th:text="#{category} + ':'"></span></label>
+                <select th:field="*{categoryId}" class="form-select select2 selector" id="categoryId">
+                    <option value="" th:text="#{select_category}"></option>
                     <option th:each="category :  ${categories}" th:value="${category.id}"
                             th:text="${category.name}" data-color="red">
                     </option>
@@ -52,9 +52,9 @@
                   th:if="${#fields.hasErrors('companyId')}"
                   th:errors="*{companyId}"></span>
             <div class="form-group text-center form-field">
-                <label for="companyId" class="control-label col-sm-2"><span>Company:</span></label>
-                <select th:field="*{companyId}" class="form-select select2" id="companyId" style="width: 300px;">
-                    <option value="">Select company</option>
+                <label for="companyId" class="control-label col-sm-2"><span th:text="#{company} + ':'"></span></label>
+                <select th:field="*{companyId}" class="form-select select2 selector" id="companyId">
+                    <option value="" th:text="#{select_company}"></option>
                     <option th:each="company :  ${companies}" th:value="${company.id}"
                             th:text="${company.name}">
                     </option>
@@ -64,7 +64,7 @@
             <span class="badge badge-error" th:if="${#fields.hasErrors('price')}"
                   th:errors="*{price}"></span>
             <div class="form-group text-center form-field">
-                <label for="price" class="control-label col-sm-2"><span>Price:</span></label>
+                <label for="price" class="control-label col-sm-2"><span th:text="#{price} + ':'"></span></label>
                 <input th:field="*{price}" class="form-control input" id="price" name="price"
                        type="text" placeholder="Enter Price" style="width: 300px;">
             </div>
@@ -74,7 +74,7 @@
                   th:errors="*{image}"></span>
             <div class="form-group text-center form-field">
                 <label for="image" class="control-label col-sm-2">
-                    <span>Image:</span>
+                    <span th:text="#{image} + ':'"></span>
                 </label>
                 <input class="form-control" id="image" th:field="*{image}" type="file" accept="image/*"
                        onchange="previewImage(event)" style="width: 300px;">
@@ -90,28 +90,35 @@
                   th:if="${#fields.hasErrors('description')}"
                   th:errors="*{description}"></span>
             <div class="form-group text-center form-field">
-                <label for="description" class="control-label col-sm-2"><span>Description:</span></label>
-                <textarea th:field="*{description}" id="description" placeholder="Enter Game description" rows="5"
+                <label for="description" class="control-label col-sm-2"><span
+                        th:text="#{description} + ':'"></span></label>
+                <textarea th:field="*{description}" id="description" class="textarea"
+                          placeholder="Enter Game description" rows="5"
                           cols="50"></textarea>
             </div>
 
             <div class="text-center mt-3">
-                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                <button type="submit" class="btn btn-primary btn-lg" th:text="#{submit}"></button>
             </div>
         </form>
     </div>
 </div>
 </body>
+<script th:inline="javascript">
+    const fileTooLargeMsg = /*[[#{file.too_large}]]*/;
+    const selectCompanyMsg = /*[[#{select_company}]]*/;
+    const selectCategoryMsg = /*[[#{select_category}]]*/;
+</script>
 <script>
     $(document).ready(function() {
         $('#companyId').select2({
-           placeholder: 'Select a company',
+           placeholder: ${selectCompanyMsg},
            allowClear: true,
            width: 'resolve'
         });
 
          $('#categoryId').select2({
-           placeholder: 'Select a category',
+           placeholder: ${selectCategoryMsg},
            allowClear: true,
            width: 'resolve'
        });
@@ -127,7 +134,7 @@
         if (!file) return;
 
         if (file.size > maxSize) {
-          alert(`File too large! Please choose an image under ${maxSize / (1024 * 1024)} MB.`);
+          alert(`${fileTooLargeMsg} ${maxSize / (1024 * 1024)} MB.`);
           fileInput.value = '';
           return;
         }

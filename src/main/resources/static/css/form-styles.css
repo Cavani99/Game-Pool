@@ -54,9 +54,8 @@
 .form-group{
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    align-content: center;
-    justify-content: center;
 }
 
 .control-label{
@@ -140,4 +139,13 @@
     width: auto;
     color: antiquewhite;
     background: #0e134c;
+}
+
+.selector{
+    width: 300px;
+    margin-left: 2%;
+}
+
+.textarea{
+    margin-left: 5%;
 }

@@ -23,11 +23,11 @@
                      th:src="@{${user.avatarPath}}"
                      alt="Profile Picture"
                      class="profile-avatar">
-                <h2 class="profile-label">Edit Profile</h2>
+                <h2 class="profile-label" th:text="#{edit_profile}"></h2>
             </div>
 
             <div class="details-section-container">
-                <strong class="profile-label">Avatar:</strong>
+                <strong class="profile-label" th:text="#{avatar} + ':'"></strong>
                 <input class="form-control"
                        id="avatar"
                        th:field="*{avatar}"
@@ -40,7 +40,7 @@
             </div>
 
             <div class="details-section-container">
-                <strong class="profile-label">Username:</strong>
+                <strong class="profile-label" th:text="#{username} + ':'"></strong>
                 <input th:field="*{username}"
                        class="form-control input"
                        id="username"
@@ -52,14 +52,16 @@
             </div>
 
             <div class="profile-actions">
-                <button type="submit" class="profile-actions-button" style="height: 40px;">
-                    Save Changes
+                <button type="submit" class="profile-actions-button" style="height: 40px;" th:text="#{save_changes}">
                 </button>
             </div>
         </form>
     </div>
 </div>
 </body>
+<script th:inline="javascript">
+    const fileTooLargeMsg = /*[[#{file.too_large}]]*/;
+</script>
 <script>
     function previewImage(event) {
         const fileInput = event.target;
@@ -72,7 +74,7 @@
         if (!file) return;
 
         if (file.size > maxSize) {
-            alert(`File too large! Please choose an image under ${maxSize / (1024 * 1024)} MB.`);
+            alert(`${fileTooLargeMsg} ${maxSize / (1024 * 1024)} MB.`);
             fileInput.value = '';
             return;
         }

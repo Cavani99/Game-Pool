@@ -19,20 +19,20 @@
         </div>
         <div class="profile-info">
             <div class="details-section-container">
-                <strong class="profile-label">Username: </strong>
+                <strong class="profile-label" th:text="#{username} + ':'"></strong>
                 <p class="profile-label" th:text="${user.username}"></p>
             </div>
             <div class="details-section-container">
-                <strong class="profile-label">Email: </strong>
+                <strong class="profile-label" th:text="#{email} + ':'"></strong>
                 <p class="profile-label" th:text="${user.email}"></p>
             </div>
             <div class="details-section-container">
-                <strong class="profile-label">Joined: </strong>
+                <strong class="profile-label" th:text="#{joined} + ':'"></strong>
                 <p class="profile-label" th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></p>
             </div>
         </div>
         <a th:href="@{/admin/profile}" class="profile-actions-button">
-            <p>Edit Profile</p>
+            <p th:text="#{edit_profile}"></p>
             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                  width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

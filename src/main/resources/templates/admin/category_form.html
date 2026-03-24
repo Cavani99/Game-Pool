@@ -15,18 +15,18 @@
         <form class="auth-form"
               th:action="${category_id} != null ? @{/admin/categories/edit/{id} (id=${category_id})} : @{/admin/categories/add}"
               th:method="POST" th:object="${category}">
-            <h2 class="text-center mb-4">Add Category</h2>
+            <h2 class="text-center mb-4" th:text="#{add_category}"></h2>
 
             <span class="badge badge-error" th:if="${#fields.hasErrors('name')}"
                   th:errors="*{name}"></span>
             <div class="form-group text-center">
-                <label for="name" class="control-label col-sm-2"><span>Name:</span></label>
+                <label for="name" class="control-label col-sm-2"><span th:text="#{name} + ':'"></span></label>
                 <input th:field="*{name}" class="form-control input" id="name" name="name"
                        type="text" placeholder="Enter category name" style="width: 300px;">
             </div>
 
             <div class="text-center mt-3">
-                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                <button type="submit" class="btn btn-primary btn-lg" th:text="#{submit}"></button>
             </div>
         </form>
     </div>

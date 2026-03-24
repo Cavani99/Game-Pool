@@ -27,23 +27,20 @@
         <div class="btn-header">
             <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
             <a th:href="@{/admin/categories/add}">
-                <button class="btn btn-primary admin-btn">
-                    Add category
+                <button class="btn btn-primary admin-btn" th:text="#{add_category}">
                 </button>
             </a>
         </div>
         <div th:if="${categories.isEmpty()}">
-            <h3>There are no categories saved!</h3>
+            <h3 th:text="#{no_categories}"></h3>
         </div>
         <div class="table-container" th:unless="${categories.isEmpty()}">
             <table class="table">
                 <thead>
                 <tr class="thead-dark">
-                    <th class="text-center">
-                        Name
+                    <th class="text-center" th:text="#{name}">
                     </th>
-                    <th class="text-center">
-                        Actions
+                    <th class="text-center" th:text="#{actions}">
                     </th>
                 </tr>
                 </thead>
@@ -54,13 +51,11 @@
                     </td>
                     <td class="center-td">
                         <a th:href="@{/admin/categories/edit/{id} (id=${category.id})}">
-                            <button class="btn btn-warning">
-                                Edit category
+                            <button class="btn btn-warning" th:text="#{edit_category}">
                             </button>
                         </a>
                         <a th:href="@{/admin/categories/delete/{id} (id=${category.id})}">
-                            <button class="btn btn-danger">
-                                Delete category
+                            <button class="btn btn-danger" th:text="#{delete_category}">
                             </button>
                         </a>
                     </td>

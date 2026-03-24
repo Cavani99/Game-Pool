@@ -26,23 +26,20 @@
     <div class="btn-header">
         <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
         <a th:href="@{/admin/companies/add}">
-            <button class="btn btn-primary admin-btn">
-                Add company
+            <button class="btn btn-primary admin-btn" th:text="#{add_company}">
             </button>
         </a>
     </div>
     <div th:if="${companies.isEmpty()}">
-        <h3>There are no companies saved!</h3>
+        <h3 th:text="#{no_companies}"></h3>
     </div>
     <div class="table-container" th:unless="${companies.isEmpty()}">
         <table class="table">
             <thead>
             <tr class="thead-dark">
-                <th class="text-center">
-                    Name
+                <th class="text-center" th:text="#{name}">
                 </th>
-                <th class="text-center">
-                    Actions
+                <th class="text-center" th:text="#{actions}">
                 </th>
             </tr>
             </thead>
@@ -52,13 +49,11 @@
                 </td>
                 <td class="center-td">
                     <a th:href="@{/admin/companies/edit/{id} (id=${company.id})}">
-                        <button class="btn btn-warning">
-                            Edit company
+                        <button class="btn btn-warning" th:text="#{edit_company}">
                         </button>
                     </a>
                     <a th:href="@{/admin/companies/delete/{id} (id=${company.id})}">
-                        <button class="btn btn-danger">
-                            Delete company
+                        <button class="btn btn-danger" th:text="#{delete_company}">
                         </button>
                     </a>
                 </td>

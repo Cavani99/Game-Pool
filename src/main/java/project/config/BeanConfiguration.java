@@ -12,8 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
+import java.time.Duration;
 import java.util.Locale;
 
 @Configuration
@@ -48,11 +49,11 @@ public class BeanConfiguration {
                 .build();
     }
 
-
     @Bean
     public LocaleResolver localeResolver() {
-        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.ENGLISH);
-        return localeResolver;
+        CookieLocaleResolver resolver = new CookieLocaleResolver("lang");
+        resolver.setDefaultLocale(Locale.ENGLISH);
+        resolver.setCookieMaxAge(Duration.ofDays(30));
+        return resolver;
     }
 }

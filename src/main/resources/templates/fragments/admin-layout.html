@@ -12,12 +12,12 @@
             <nav>
                 <div class="side_navbar">
                     <div class="admin-header">
-                        <div class="admin-header-name">Admin Panel</div>
+                        <div class="admin-header-name" th:text="#{admin_panel}"></div>
                     </div>
                     <div class="func-block">
                         <a th:href="@{/admin}"
                            th:classappend="${page} == 'profile' ? 'active'">
-                            <p>Profile</p>
+                            <p th:text="#{profile}"></p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                  viewBox="0 0 24 24">
@@ -27,7 +27,7 @@
                         </a>
                         <a th:href="@{/admin/users}"
                            th:classappend="${page} == 'users' ? 'active'">
-                            <p>See Users</p>
+                            <p th:text="#{see_users}"></p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                  viewBox="0 0 24 24">
@@ -38,10 +38,10 @@
                         </a>
                     </div>
                     <div class="func-block">
-                        <span>Games Settings</span>
+                        <span th:text="#{games_settings}"></span>
                         <a th:href="@{/admin/companies}"
                            th:classappend="${page} == 'companies' ? 'active'">
-                            <p>Game Companies</p>
+                            <p th:text="#{companies}"></p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                  viewBox="0 0 24 24">
@@ -51,7 +51,7 @@
                         </a>
                         <a th:href="@{/admin/categories}"
                            th:classappend="${page} == 'categories' ? 'active'">
-                            <p>Game Categories</p>
+                            <p th:text="#{categories}"></p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                  viewBox="0 0 24 24">
@@ -65,7 +65,7 @@
                         </a>
                         <a th:href="@{/admin/games}"
                            th:classappend="${page} == 'games' ? 'active'">
-                            <p>Games</p>
+                            <p th:text="#{games}"></p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                  viewBox="0 0 24 24">
@@ -75,10 +75,10 @@
                         </a>
                     </div>
                     <div class="func-block">
-                        <span>Utility</span>
+                        <span th:text="#{utility}"></span>
                         <a th:href="@{/admin/transactions}"
                            th:classappend="${page} == 'transactions' ? 'active'">
-                            <p>Transactions</p>
+                            <p th:text="#{transactions}"></p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                  viewBox="0 0 24 24">
@@ -89,7 +89,7 @@
                     </div>
                     <div class="func-block">
                         <a class="logout" th:href="@{/logout}">
-                            <p>Logout</p>
+                            <p th:text="#{logout}"></p>
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                  viewBox="0 0 24 24">
@@ -115,7 +115,7 @@
     <div class="main-section">
         <div class="home-section" th:insert="${content}"></div>
 
-        <div class="footer"><p>© 2025 Game Pool. Zero rights.</p></div>
+        <div class="footer"><p th:text="#{footer_admin}"></p></div>
     </div>
 </main>
 </body>

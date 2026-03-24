@@ -29,43 +29,35 @@
     <div class="single-section-box home-profile-information">
         <div class="btn-header">
             <p class="text-center message-box" th:if="${message != null}" th:text="${message}"></p>
-            <div class="event-message" id="games-images-message">Unused game images deleted successfully!</div>
-            <button class="btn btn-success delete-images" th:href="@{/admin/games/delete-images}">
-                Deleted all unused game images
+            <div class="event-message" id="games-images-message" th:text="#{games_images_deleted}"></div>
+            <button class="btn btn-success delete-images" th:href="@{/admin/games/delete-images}"
+                    th:text="#{games_images_delete}">
             </button>
             <a th:href="@{/admin/games/add}">
-                <button class="btn btn-primary admin-btn">
-                    Add Game
+                <button class="btn btn-primary admin-btn" th:text="#{add_game}">
                 </button>
             </a>
         </div>
         <div th:if="${games.isEmpty()}">
-            <h3>There are no games saved!</h3>
+            <h3 th:text="#{no_games}"></h3>
         </div>
         <div class="table-container" th:unless="${games.isEmpty()}">
             <table class="table">
                 <thead>
                 <tr class="thead-dark">
-                    <th class="text-center">
-                        Image
+                    <th class="text-center" th:text="#{image}">
                     </th>
-                    <th class="text-center">
-                        Title
+                    <th class="text-center" th:text="#{title}">
                     </th>
-                    <th class="text-center">
-                        Category
+                    <th class="text-center" th:text="#{category}">
                     </th>
-                    <th class="text-center">
-                        Company
+                    <th class="text-center" th:text="#{company}">
                     </th>
-                    <th class="text-center">
-                        Price
+                    <th class="text-center" th:text="#{price}">
                     </th>
-                    <th class="text-center">
-                        Discounted
+                    <th class="text-center" th:text="#{discounted}">
                     </th>
-                    <th class="text-center">
-                        Actions
+                    <th class="text-center" th:text="#{actions}">
                     </th>
                 </tr>
                 </thead>
@@ -85,39 +77,34 @@
                     </td>
                     <td class="center-td">
                         <span th:if="${game.discount != null && game.discount.isDiscountActive() == true}"
-                              class="active-box">
-                            Yes
+                              class="active-box" th:text="#{yes}">
                         </span>
                         <span th:if="${game.discount == null || game.discount.isDiscountActive() == false}"
-                              class="inactive-box">
-                            No
+                              class="inactive-box" th:text="#{no}">
                         </span>
                     </td>
                     <td class="center-td">
                         <a th:href="@{/admin/games/edit/{id} (id=${game.id})}">
-                            <button class="btn btn-warning">
-                                Edit game
+                            <button class="btn btn-warning" th:text="#{edit_game}">
                             </button>
                         </a>
                         <a th:href="@{/admin/games/delete/{id} (id=${game.id})}">
-                            <button class="btn btn-danger">
-                                Delete game
+                            <button class="btn btn-danger" th:text="#{delete_game}">
                             </button>
                         </a>
                         <a th:href="@{/admin/games/discount/{id} (id=${game.id})}">
                             <button class="btn btn-success"
-                                    th:if="${game.discount != null && game.discount.isDiscountActive() == true}">
-                                Edit Discount
+                                    th:if="${game.discount != null && game.discount.isDiscountActive() == true}"
+                                    th:text="#{edit_discount}">
                             </button>
                             <button class="btn btn-success"
-                                    th:unless="${game.discount != null && game.discount.isDiscountActive() == true}">
-                                Add Discount
+                                    th:unless="${game.discount != null && game.discount.isDiscountActive() == true}"
+                                    th:text="#{add_discount}">
                             </button>
                         </a>
                         <a th:href="@{/admin/games/remove_discount/{id} (id=${game.id})}"
                            th:if="${game.discount != null && game.discount.isDiscountActive() == true}">
-                            <button class="btn btn-dark">
-                                Remove Discount
+                            <button class="btn btn-dark" th:text="#{remove_discount}">
                             </button>
                         </a>
                     </td>
