@@ -21,21 +21,21 @@
         <div class="wallet-section">
             <div class="info-side">
                 <div class="labels">
-                    <h1 id="title">Wallet</h1>
+                    <h1 id="title" th:text="#{wallet}"></h1>
                     <div class="balance" th:text="${'Current funds: ' + user.balance + ' €'}"></div>
                 </div>
                 <div class="operations-section">
-                    <h3>Operations: </h3>
+                    <h3 th:text="#{operations} + ': '"></h3>
                     <a href="/dashboard/wallet/add" class="wallet-actions-button add-btn">
-                        <p>Add Funds</p>
+                        <p th:text="#{add_funds}"></p>
                     </a>
                     <a href="/dashboard/wallet/send" class="wallet-actions-button send-btn">
-                        <p>Send Funds</p>
+                        <p th:text="#{send_funds}"></p>
                     </a>
                 </div>
             </div>
             <div class="transaction-side">
-                <h3>Transactions: </h3>
+                <h3 th:text="#{transactions} + ': '"></h3>
                 <div class="transaction-element" th:each="transaction : ${transactions}">
                     <div class="transaction-icon" th:if="${transaction.receiver == user}">
                         <i class="fa-sharp fa-solid fa-arrow-turn-up" style="color: #0a713b;" title="Received"></i>

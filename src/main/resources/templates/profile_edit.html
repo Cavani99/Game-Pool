@@ -29,9 +29,9 @@
                     <span class="badge badge-error" style="color: red;" th:if="${#fields.hasErrors('username')}"
                           th:errors="*{username}"></span>
                     <div class="details-section-container" style="margin-top: 30%;">
-                        <label for="username" class="control-label col-sm-2"><span>Username:</span></label>
+                        <label for="username" class="control-label col-sm-2"><span th:text="#{username} + ':'"></span></label>
                         <input th:field="*{username}" class="form-control input" id="username" name="username"
-                               type="text" placeholder="Enter Username" style="width: 300px;">
+                               type="text" th:placeholder="#{enter_username}" style="width: 300px;">
                     </div>
 
                     <span class="badge badge-error"
@@ -39,7 +39,7 @@
                           th:errors="*{avatar}"></span>
                     <div class="details-section-container">
                         <label for="avatar" class="control-label col-sm-2">
-                            <span>Avatar:</span>
+                            <span th:text="#{avatar} + ':'"></span>
                         </label>
                         <input class="form-control" id="avatar" th:field="*{avatar}" type="file" accept="image/*"
                                onchange="previewImage(event)" style="width: 300px;">
@@ -47,7 +47,7 @@
                 </div>
                 <div class="profile-actions">
                     <div class="text-center mt-3">
-                        <button type="submit" class="profile-actions-button" style="height: 40px;">Submit</button>
+                        <button type="submit" class="profile-actions-button" style="height: 40px;" th:text="#{submit}"></button>
                     </div>
                 </div>
             </div>
@@ -55,6 +55,9 @@
     </div>
 </div>
 </body>
+<script th:inline="javascript">
+    const fileTooLargeMsg = /*[[#{file.too_large}]]*/;
+</script>
 <script>
     function previewImage(event) {
         const fileInput = event.target;
@@ -67,7 +70,7 @@
         if (!file) return;
 
         if (file.size > maxSize) {
-            alert(`File too large! Please choose an image under ${maxSize / (1024 * 1024)} MB.`);
+            alert(`${fileTooLargeMsg} ${maxSize / (1024 * 1024)} MB.`);
             fileInput.value = '';
             return;
         }

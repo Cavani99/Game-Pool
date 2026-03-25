@@ -32,7 +32,7 @@
             <div class="form-group text-center form-field">
                 <label for="title" class="control-label col-sm-2"><span th:text="#{name} + ':'"></span></label>
                 <input th:field="*{title}" class="form-control input" id="title" name="title"
-                       type="text" placeholder="Enter Game title" style="width: 300px;">
+                       type="text" th:placeholder="#{enter_game_title}" style="width: 300px;">
             </div>
 
             <span class="badge badge-error"
@@ -66,7 +66,7 @@
             <div class="form-group text-center form-field">
                 <label for="price" class="control-label col-sm-2"><span th:text="#{price} + ':'"></span></label>
                 <input th:field="*{price}" class="form-control input" id="price" name="price"
-                       type="text" placeholder="Enter Price" style="width: 300px;">
+                       type="text" th:placeholder="#{enter_price}" style="width: 300px;">
             </div>
 
             <span class="badge badge-error"
@@ -93,7 +93,7 @@
                 <label for="description" class="control-label col-sm-2"><span
                         th:text="#{description} + ':'"></span></label>
                 <textarea th:field="*{description}" id="description" class="textarea"
-                          placeholder="Enter Game description" rows="5"
+                          th:placeholder="#{enter_game_description}" rows="5"
                           cols="50"></textarea>
             </div>
 

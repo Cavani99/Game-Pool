@@ -13,9 +13,13 @@
                 <div class="left-header">
                     <div class="admin-header">
                         <div class="admin-header-name">Game Pool</div>
-                        <div class="wallet-funds">Available Funds: <span th:text="${balance} + ' €'"></span></div>
+                        <div class="wallet-funds">
+                            <div th:text="#{available_funds} + ': '"></div>
+                            <span th:text="${balance} + ' €'"></span>
+                        </div>
                     </div>
-                    <select onchange="window.location.search='?lang='+this.value" class="form-select locale-switch-front"
+                    <select onchange="window.location.search='?lang='+this.value"
+                            class="form-select locale-switch-front"
                             id="locale">
                         <option th:each="loc : ${locales}"
                                 th:value="${loc.language}"
@@ -28,46 +32,47 @@
                 <ul class="nav-links">
                     <li>
                         <a th:href="@{/dashboard}" th:classappend="${page} == 'home' ? 'active'">
-                            <span>Profile</span>
+                            <span th:text="#{profile}"></span>
                         </a>
                     </li>
 
                     <li>
                         <a th:href="@{/dashboard/games}" th:classappend="${page} == 'games' ? 'active'">
-                            <span>Game List</span>
+                            <span th:text="#{game_list}"></span>
                         </a>
                     </li>
 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">Personal Links ▾</a>
+                        <a href="#" class="dropdown-toggle" th:text="#{personal_links} + ' ▾'"></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a th:href="@{/dashboard/friends}" th:classappend="${page} == 'friends' ? 'active'">Friends</a>
+                                <a th:href="@{/dashboard/friends}" th:classappend="${page} == 'friends' ? 'active'"
+                                   th:text="#{friends}"></a>
                             </li>
                             <li>
                                 <a th:href="@{/dashboard/games/wishlist}"
-                                   th:classappend="${page} == 'wishlist' ? 'active'">Wish
-                                    List</a>
+                                   th:classappend="${page} == 'wishlist' ? 'active'" th:text="#{wish_list}"></a>
                             </li>
                             <li>
                                 <a th:href="@{/dashboard/wallet}"
-                                   th:classappend="${page} == 'wallet' ? 'active'">Wallet</a>
+                                   th:classappend="${page} == 'wallet' ? 'active'" th:text="#{wallet}"></a>
                             </li>
                         </ul>
                     </li>
 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">Utility ▾</a>
+                        <a href="#" class="dropdown-toggle" th:text="#{utility} + ' ▾'"></a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a th:href="@{/dashboard/notifications}"
-                                   th:classappend="${page} == 'notifications' ? 'active'">Notifications</a>
+                                   th:classappend="${page} == 'notifications' ? 'active'"
+                                   th:text="#{notifications}"></a>
                             </li>
                         </ul>
                     </li>
 
                     <li>
-                        <a class="logout" href="/logout">Logout</a>
+                        <a class="logout" href="/logout" th:text="#{logout}"></a>
                     </li>
                 </ul>
             </nav>
@@ -77,7 +82,7 @@
     <div class="main-section">
         <div class="home-section" th:insert="${content}"></div>
 
-        <div class="footer"><p>© 2025 Game Pool. Don`t annoy the admins.</p></div>
+        <div class="footer"><p th:text="#{footer_user}"></p></div>
     </div>
 </main>
 </body>

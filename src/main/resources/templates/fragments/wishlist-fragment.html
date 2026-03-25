@@ -11,11 +11,9 @@
            th:text="${game.price} + ' €'"></p>
     </div>
     <div class="wishlist-actions">
-        <a class="remove-btn" th:href="@{/dashboard/games/remove_wishlist/{id} (id=${game.id})}">
-            Remove
+        <a class="remove-btn" th:href="@{/dashboard/games/remove_wishlist/{id} (id=${game.id})}" th:text="#{remove}">
         </a>
-        <a class="details-btn" th:href="@{/dashboard/games/details/{id} (id=${game.id})}">
-            See More...
+        <a class="details-btn" th:href="@{/dashboard/games/details/{id} (id=${game.id})}" th:text="#{see_more}">
         </a>
     </div>
 </div>

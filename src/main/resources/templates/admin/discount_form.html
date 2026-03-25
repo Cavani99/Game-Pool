@@ -29,7 +29,7 @@
             <div class="form-group text-center form-field extra-space">
                 <label for="amount" class="control-label col-sm-3"><span th:text="#{amount} + ':'"></span></label>
                 <input th:field="*{amount}" class="form-control input" id="amount" name="amount"
-                       type="text" placeholder="Enter Discount Amount" style="width: 300px;">
+                       type="text" th:placeholder="#{enter_discount}" style="width: 300px;">
             </div>
 
             <span class="badge badge-error"
@@ -39,7 +39,8 @@
                 <label for="type" class="control-label col-sm-3"><span th:text="#{discount_type} + ':'"></span></label>
                 <select th:field="*{type}" class="form-select" id="type" style="height: 35px; width: 300px;">
                     <option value="" th:text="#{pick_discount_type}"></option>
-                    <option th:each="discountType :  ${T(project.model.DiscountType).values()}" th:value="${discountType}"
+                    <option th:each="discountType :  ${T(project.model.DiscountType).values()}"
+                            th:value="${discountType}"
                             th:text="${discountType.getDisplayName()}">
                     </option>
                 </select>
@@ -48,9 +49,10 @@
             <span class="badge badge-error" th:if="${#fields.hasErrors('startDate')}"
                   th:errors="*{startDate}"></span>
             <div class="form-group text-center form-field extra-space">
-                <label for="startDate" class="control-label col-sm-3"><span th:text="#{start_date} + ':'"></span></label>
+                <label for="startDate" class="control-label col-sm-3"><span
+                        th:text="#{start_date} + ':'"></span></label>
                 <input th:field="*{startDate}" class="form-control input" id="startDate" name="startDate"
-                       type="datetime-local" placeholder="Enter Start Date" style="width: 300px;">
+                       type="datetime-local" th:placeholder="#{enter_start_date}" style="width: 300px;">
             </div>
 
             <span class="badge badge-error" th:if="${#fields.hasErrors('startDate')}"
@@ -58,7 +60,7 @@
             <div class="form-group text-center form-field extra-space">
                 <label for="endDate" class="control-label col-sm-3"><span th:text="#{end_date} + ':'"></span></label>
                 <input th:field="*{endDate}" class="form-control input" id="endDate" name="endDate"
-                       type="datetime-local" placeholder="Enter End Date" style="width: 300px;">
+                       type="datetime-local" th:placeholder="#{enter_end_date}" style="width: 300px;">
             </div>
 
             <div class="text-center mt-3">

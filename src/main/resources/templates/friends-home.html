@@ -36,30 +36,28 @@
 
                         <div class="friend-actions">
                             <a th:href="@{/dashboard/friends/details/{id} (id=${user.id})}"
-                               class="friend-btn details-btn">
-                                See Profile
+                               class="friend-btn details-btn" th:text="#{see_profile}">
                             </a>
-                            <a th:href="@{/dashboard/friends/remove/{id} (id=${user.id})}" class="friend-btn remove-btn">
-                                Remove Friend
+                            <a th:href="@{/dashboard/friends/remove/{id} (id=${user.id})}" class="friend-btn remove-btn"
+                               th:text="#{remove_friend}">
                             </a>
                         </div>
 
                     </div>
                 </div>
                 <div class="no-friends" th:if="${friends.isEmpty()}">
-                    <h1>You have no friends currently!</h1>
+                    <h1 th:text="#{no_friends}"></h1>
                 </div>
             </div>
             <div class="friends-add">
                 <div class="search-container">
-                    <h2>Search: </h2>
+                    <h2 th:text="#{search} + ': '"></h2>
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input class="form-control" id="search" type="search">
                 </div>
                 <div class="result-container">
                     <div class="event-message"></div>
                     <div class="result-search">
-
                     </div>
                 </div>
             </div>

@@ -45,7 +45,7 @@
                        class="form-control input"
                        id="username"
                        type="text"
-                       placeholder="Enter Username"
+                       th:placeholder="#{enter_username}"
                        style="width: 300px;">
                 <span class="badge badge-error" th:if="${#fields.hasErrors('username')}"
                       th:errors="*{username}"></span>

@@ -34,11 +34,9 @@
                     <span th:text="${notification.message}"></span>
                 </div>
                 <div class="notification-actions">
-                    <a class="see-btn" th:href="@{/dashboard/notifications/details/{id} (id=${notification.id})}">
-                        See
+                    <a class="see-btn" th:href="@{/dashboard/notifications/details/{id} (id=${notification.id})}" th:text="#{see}">
                     </a>
-                    <a class="remove-btn" th:href="@{/dashboard/notifications/remove/{id} (id=${notification.id})}">
-                        Remove
+                    <a class="remove-btn" th:href="@{/dashboard/notifications/remove/{id} (id=${notification.id})}" th:text="#{remove}">
                     </a>
                 </div>
             </div>

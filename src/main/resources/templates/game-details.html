@@ -57,7 +57,7 @@
                        th:text="${game.getPromoPrice()} + ' €'">
                     </p>
                 </div>
-                <button id="buy-btn" th:data-game-id="${game.id}">Buy</button>
+                <button id="buy-btn" th:data-game-id="${game.id}" th:text="#{buy}"></button>
             </div>
         </div>
     </div>

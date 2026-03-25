@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="user-no-games" th:if="${games.isEmpty()}">
-                        <h1>User does not own any games!</h1>
+                        <h1 th:text="#{user_no_games}"></h1>
                     </div>
                 </div>
             </div>

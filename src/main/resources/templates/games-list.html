@@ -21,15 +21,17 @@
 <div th:fragment="content">
     <div class="games-section">
         <div class="filter-box">
-            <label style="margin-top: 5%"><span id="label-filter">Filter</span></label>
-            <div class="filter-category">By Category:
+            <label style="margin-top: 5%"><span id="label-filter" th:text="#{filter}"></span></label>
+            <div class="filter-category">
+                <div th:text="#{filter_category}"></div>
                 <label class="filter-element" th:each="category : ${categories}">
                     <span th:text="${category.name}"></span>
                     <input type="checkbox" name="categories" th:value="${category.id}">
                     <span class="checkmark"></span>
                 </label>
             </div>
-            <div class="filter-category">By Company:
+            <div class="filter-category">
+                <div th:text="#{filter_company}"></div>
                 <label class="filter-element" th:each="company : ${companies}">
                     <span th:text="${company.name}"></span>
                     <input type="checkbox" name="companies" th:value="${company.id}">

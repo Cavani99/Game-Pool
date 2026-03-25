@@ -162,3 +162,7 @@ div.games-section{
     border-color: black;
     margin-left: 10px;
 }
+
+.wallet-funds{
+    display: flex;
+}

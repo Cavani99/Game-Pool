@@ -5,15 +5,13 @@
         </div>
         <div class="user-username" th:text="${user.username}"></div>
         <div class="user-actions">
-            <a class="actions-button details-btn" th:href="@{/dashboard/friends/details/{id} (id=${user.id})}">
-                See Details
+            <a class="actions-button details-btn" th:href="@{/dashboard/friends/details/{id} (id=${user.id})}" th:text="#{see_details}">
             </a>
-            <a class="actions-button send-btn" th:href="@{/dashboard/friends/send_request/{id} (id=${user.id})}">
-                Send Friend Request
+            <a class="actions-button send-btn" th:href="@{/dashboard/friends/send_request/{id} (id=${user.id})}" th:text="#{see_friend_request}">
             </a>
         </div>
     </div>
     <div class="no-friends" th:if="${users.isEmpty()}">
-        <h1>No users found!</h1>
+        <h1 th:text="#{no_users}"></h1>
     </div>
 </div>

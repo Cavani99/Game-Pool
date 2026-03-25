@@ -22,7 +22,7 @@
             <div class="form-group text-center">
                 <label for="name" class="control-label col-sm-2"><span th:text="#{name} + ':'"></span></label>
                 <input th:field="*{name}" class="form-control input" id="name" name="name"
-                       type="text" placeholder="Enter category name" style="width: 300px;">
+                       type="text" th:placeholder="#{enter_category_name}" style="width: 300px;">
             </div>
 
             <div class="text-center mt-3">

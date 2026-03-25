@@ -26,11 +26,10 @@
 
         <div id="buttons-container">
             <a class="sender-profile-btn" th:if="${notification.title == 'Friend Invitation!'}"
-               th:href="@{/dashboard/friends/details/{id} (id=${notification.sender})}">
-                See Profile
+               th:href="@{/dashboard/friends/details/{id} (id=${notification.sender})}" th:text="#{see_profile}">
             </a>
-            <a class="action-btn" th:href="'http://' + ${notification.link}" th:text="${notification.linkTitle}">
-                Ok
+            <a class="action-btn" th:href="'http://' + ${notification.link}" th:text="${notification.linkTitle}"
+               th:text="#{ok}">
             </a>
         </div>
     </div>

@@ -24,7 +24,7 @@
         <div class="wallet-section">
             <div class="info-side">
                 <div class="labels">
-                    <h1 id="title">Wallet</h1>
+                    <h1 id="title" th:text="#{wallet}"></h1>
                     <div class="balance" th:text="${'Current funds: ' + user.balance + ' €'}"></div>
                 </div>
                 <div class="operations-section">
@@ -33,10 +33,10 @@
                              <span class="badge badge-error" th:if="${#fields.hasErrors('amount')}"
                                    th:errors="*{amount}"></span>
                             <div class="input-section">
-                                <label for="amount" class="dashboard-label col-sm-2"><span>Amount:</span></label>
+                                <label for="amount" class="dashboard-label col-sm-2"><span th:text="#{amount} + ':'"></span></label>
                                 <input th:field="*{amount}" class="form-control input" id="amount"
                                        name="amount"
-                                       type="text" placeholder="Enter Amount">
+                                       type="text" th:placeholder="#{enter_amount}">
                             </div>
                         </div>
                         <div id="paypal-button-container"></div>
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="transaction-side">
-                <h3>Transactions: </h3>
+                <h3 th:text="#{transactions} + ': '"></h3>
             </div>
         </div>
     </div>

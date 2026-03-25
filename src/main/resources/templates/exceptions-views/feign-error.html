@@ -6,6 +6,6 @@
     <link rel="stylesheet" type="text/css" href="/css/error-pages.css">
 </head>
 <body th:replace="fragments/exceptions-errors-layout :: layout(~{::content})">
-<h1 th:fragment="content">Feign Client is currently not working!</h1>
+<h1 th:fragment="content" th:text="#{error.feign}"></h1>
 </body>
 </html>

@@ -25,29 +25,29 @@
                 <div class="info">
                     <h1 class="profile-name" th:text="${user.username}"></h1>
                     <div class="details-section-container">
-                        <strong>Email: </strong>
+                        <strong th:text="#{email} + ': '"></strong>
                         <p th:text="${user.email}"></p>
                     </div>
                     <div class="details-section-container">
-                        <strong>Joined: </strong>
+                        <strong th:text="#{joined} + ': '"></strong>
                         <p th:text="${#temporals.format(user.createdOn, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></p>
                     </div>
                 </div>
                 <div class="profile-actions">
                     <a th:if="${#ctx.containsVariable('logged')}" th:href="@{/dashboard/edit_profile}"
                        class="profile-actions-button">
-                        <p>Edit Profile</p>
+                        <p th:text="#{edit_profile}"></p>
                     </a>
                     <a th:if="${#ctx.containsVariable('logged')}" th:href="@{/dashboard/change_password}"
                        class="profile-actions-button">
-                        <p>Change Password</p>
+                        <p th:text="#{change_pass}"></p>
                     </a>
                     <a th:if="${#ctx.containsVariable('logged')}" th:href="@{/dashboard/wallet}"
                        class="profile-actions-button">
-                        <p>See Wallet</p>
+                        <p th:text="#{see_wallet}"></p>
                     </a>
                     <a th:href="@{/dashboard/games/user_games/{id} (id=${user.id})}" class="profile-actions-button">
-                        <p>See Owned Games</p>
+                        <p th:text="#{see_owned_games}"></p>
                     </a>
                 </div>
             </div>
