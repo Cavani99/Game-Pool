@@ -2,6 +2,7 @@ package project.web;
 
 import project.model.User;
 import project.security.AuthenticationDetails;
+import project.service.MessageService;
 import project.service.NotificationService;
 import project.service.UserService;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,9 +27,12 @@ public class FriendsController {
     private final NotificationService notificationService;
     private final Logger logger;
 
-    public FriendsController(UserService userService, NotificationService notificationService) {
+    private final MessageService messageService;
+
+    public FriendsController(UserService userService, NotificationService notificationService, MessageService messageService) {
         this.userService = userService;
         this.notificationService = notificationService;
+        this.messageService = messageService;
         this.logger = LoggerFactory.getLogger(FriendsController.class);
     }
 
@@ -86,25 +91,28 @@ public class FriendsController {
     @PostMapping("send_request/{id}")
     @ResponseBody
     public Map<String, String> sendFriendRequest(@PathVariable("id") UUID userId,
-                                                 @AuthenticationPrincipal AuthenticationDetails userDetails) {
+                                                 @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         User user = userService.getById(userDetails.getId());
         notificationService.createFriendInvite(user, userId);
 
         User friend = userService.getById(userId);
-        logger.info("Friend invitation sent to {}", friend.getUsername());
+        String message = messageService.getLocalizedMessage("friend_invite", locale);
+        logger.info(message, friend.getUsername());
 
-        return Map.of("message", "Friend invitation sent successfully!");
+        message = messageService.getLocalizedMessage("friend_invite_success", locale);
+        return Map.of("message", message);
     }
 
     @GetMapping("accept_request/{id}")
-    public ModelAndView acceptFriendRequest(@PathVariable("id") UUID userId, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public ModelAndView acceptFriendRequest(@PathVariable("id") UUID userId, @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         User user = userService.getById(userDetails.getId());
 
         if (userService.userNotFriend(user.getId(), userId)) {
             userService.addFriend(user.getId(), userId);
 
             User friend = userService.getById(userId);
-            logger.info("User {} is now friends with {}", friend.getUsername(), user.getUsername());
+            String message = messageService.getLocalizedMessage("friend_added", locale);
+            logger.info(message, friend.getUsername(), user.getUsername());
         }
 
         return new ModelAndView("redirect:/dashboard/friends");
@@ -112,13 +120,14 @@ public class FriendsController {
 
     @GetMapping("accept_request/{id}/{notification_id}")
     public ModelAndView acceptFriendRequest(@PathVariable("id") UUID userId, @PathVariable("notification_id") UUID notificationId,
-                                            @AuthenticationPrincipal AuthenticationDetails userDetails) {
+                                            @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         User user = userService.getById(userDetails.getId());
         if (userService.userNotFriend(user.getId(), userId)) {
             userService.addFriend(user.getId(), userId);
 
             User friend = userService.getById(userId);
-            logger.info("User {} is now friends with {}", friend.getUsername(), user.getUsername());
+            String message = messageService.getLocalizedMessage("friend_added", locale);
+            logger.info(message, friend.getUsername(), user.getUsername());
         }
 
         return new ModelAndView("redirect:/dashboard/notifications/remove/" + notificationId);
@@ -126,12 +135,13 @@ public class FriendsController {
 
     @GetMapping("remove/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ModelAndView removeFriend(@PathVariable("id") UUID friendId, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public ModelAndView removeFriend(@PathVariable("id") UUID friendId, @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         User user = userService.getById(userDetails.getId());
         userService.removeFriend(user.getId(), friendId);
 
         User friend = userService.getById(friendId);
-        logger.info("User {} removed as friend", friend.getUsername());
+        String message = messageService.getLocalizedMessage("friend_remove", locale);
+        logger.info(message, friend.getUsername());
 
         return new ModelAndView("redirect:/dashboard/friends");
     }

@@ -3,6 +3,7 @@ package project.web;
 import jakarta.validation.Valid;
 import project.model.User;
 import project.security.AuthenticationDetails;
+import project.service.MessageService;
 import project.service.NotificationService;
 import project.service.UserService;
 import project.web.dto.ChangePasswordRequest;
@@ -25,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
+import java.util.Locale;
 import java.util.UUID;
 
 @Controller
@@ -34,10 +36,12 @@ public class DashboardController {
     private final UserService userService;
     private final NotificationService notificationService;
     private final Logger logger;
+    private final MessageService messageService;
 
-    public DashboardController(UserService userService, NotificationService notificationService) {
+    public DashboardController(UserService userService, NotificationService notificationService, MessageService messageService) {
         this.userService = userService;
         this.notificationService = notificationService;
+        this.messageService = messageService;
         this.logger = LoggerFactory.getLogger(DashboardController.class);
     }
 
@@ -60,7 +64,7 @@ public class DashboardController {
 
     @GetMapping("/edit_profile")
     @PreAuthorize("hasAuthority('USER')")
-    public ModelAndView editProfile(@AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public ModelAndView editProfile(@AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("profile_edit");
 
@@ -71,7 +75,8 @@ public class DashboardController {
         modelAndView.addObject("user", editProfileRequest);
         modelAndView.addObject("page", "home");
         modelAndView.addObject("title", "Home");
-        logger.info("User {} is editing their profile", userDetails.getUsername());
+        String message = messageService.getLocalizedMessage("user.edit", locale);
+        logger.info(message, userDetails.getUsername());
 
         return modelAndView;
     }
@@ -79,16 +84,18 @@ public class DashboardController {
     @PostMapping("/edit_profile")
     @PreAuthorize("hasAuthority('USER')")
     public ModelAndView editProfile(@AuthenticationPrincipal AuthenticationDetails userDetails, @Valid @ModelAttribute("user") EditProfileRequest editProfileRequest,
-                                    BindingResult bindingResult) throws IOException {
+                                    BindingResult bindingResult, Locale locale) throws IOException {
 
         User user = userService.getById(userDetails.getId());
 
         if (userService.findByUsername(user.getId(), editProfileRequest.getUsername())) {
-            bindingResult.rejectValue("username", "username.empty", "Please, write unique username!");
+            String message = messageService.getLocalizedMessage("unique_username", locale);
+            bindingResult.rejectValue("username", "username.empty", message);
         }
 
         if (bindingResult.hasErrors()) {
-            logger.error("User {} had errors editing profile: {}", user.getUsername(), bindingResult.getAllErrors());
+            String message = messageService.getLocalizedMessage("user.edit_errors", locale);
+            logger.error(message, user.getUsername(), bindingResult.getAllErrors());
             editProfileRequest.setAvatarPath(user.getAvatar());
 
             ModelAndView mav = new ModelAndView("profile_edit");
@@ -117,7 +124,8 @@ public class DashboardController {
         }
 
         userService.edit(user.getId(), editProfileRequest, avatarPath);
-        logger.info("User {} edited his profile", user.getUsername());
+        String message = messageService.getLocalizedMessage("user.edited", locale);
+        logger.info(message, user.getUsername());
 
         return new ModelAndView("redirect:/dashboard");
     }
@@ -140,9 +148,10 @@ public class DashboardController {
 
     @PostMapping("/change_password")
     public ModelAndView changePassword(@AuthenticationPrincipal AuthenticationDetails userDetails, @Valid @ModelAttribute("user") ChangePasswordRequest changePasswordRequest,
-                                       BindingResult bindingResult) {
+                                       BindingResult bindingResult, Locale locale) {
         if (!changePasswordRequest.getPassword().equals(changePasswordRequest.getRepeat_password())) {
-            bindingResult.rejectValue("password", "password.empty", "Both password must match!");
+            String message = messageService.getLocalizedMessage("password_match", locale);
+            bindingResult.rejectValue("password", "password.empty", message);
         }
 
         User user = userService.getById(userDetails.getId());
@@ -153,13 +162,15 @@ public class DashboardController {
             mav.addObject("page", "home");
             mav.addObject("title", "Home");
 
-            logger.error("User {} had errors when trying to change his password: {}", user.getUsername(), bindingResult.getAllErrors());
+            String message = messageService.getLocalizedMessage("user.password_change_error", locale);
+            logger.error(message, user.getUsername(), bindingResult.getAllErrors());
 
             return mav;
         }
 
         userService.changePassword(user.getId(), changePasswordRequest);
-        logger.info("User {} has changed his password", user.getUsername());
+        String message = messageService.getLocalizedMessage("user.password_changed", locale);
+        logger.info(message, user.getUsername());
 
         return new ModelAndView("redirect:/dashboard");
     }

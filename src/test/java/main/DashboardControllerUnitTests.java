@@ -20,6 +20,7 @@ import project.web.dto.EditProfileRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,7 +66,8 @@ class DashboardControllerUnitTests {
 
         when(userService.getById(details.getId())).thenReturn(user);
 
-        ModelAndView mav = controller.editProfile(details);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.editProfile(details, locale);
 
         assertEquals("profile_edit", mav.getViewName());
         assertEquals("Home", mav.getModel().get("title"));
@@ -86,7 +88,8 @@ class DashboardControllerUnitTests {
         user.setId(details.getId());
         when(userService.getById(details.getId())).thenReturn(user);
 
-        ModelAndView mav = controller.changePassword(details, req, br);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.changePassword(details, req, br, locale);
 
         assertEquals("profile_change_password", mav.getViewName());
         assertTrue(br.hasErrors());
@@ -111,7 +114,8 @@ class DashboardControllerUnitTests {
 
         BindingResult br = new BeanPropertyBindingResult(req, "user");
 
-        ModelAndView mv = controller.changePassword(details, req, br);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.changePassword(details, req, br, locale);
 
         assertEquals("redirect:/dashboard", mv.getViewName());
 
@@ -168,7 +172,8 @@ class DashboardControllerUnitTests {
         BindingResult br = mock(BindingResult.class);
         when(br.hasErrors()).thenReturn(false);
 
-        ModelAndView mv = controller.editProfile(details, req, br);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.editProfile(details, req, br, locale);
 
         assertEquals("redirect:/dashboard", mv.getViewName());
         verify(userService).edit(eq(id), eq(req), anyString());
@@ -194,7 +199,8 @@ class DashboardControllerUnitTests {
         BindingResult br = mock(BindingResult.class);
         when(br.hasErrors()).thenReturn(false);
 
-        ModelAndView mv = controller.editProfile(details, req, br);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.editProfile(details, req, br, locale);
 
         assertEquals("redirect:/dashboard", mv.getViewName());
         verify(userService).edit(id, req, null);
@@ -223,7 +229,8 @@ class DashboardControllerUnitTests {
         BindingResult br = mock(BindingResult.class);
         when(br.hasErrors()).thenReturn(false);
 
-        ModelAndView mv = controller.editProfile(details, req, br);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.editProfile(details, req, br, locale);
 
         assertEquals("redirect:/dashboard", mv.getViewName());
         verify(userService).edit(id, req, null);
@@ -248,7 +255,8 @@ class DashboardControllerUnitTests {
         when(userService.getById(id)).thenReturn(user);
         when(userService.findByUsername(id, "taken")).thenReturn(true); // force duplicate username
 
-        ModelAndView mv = controller.editProfile(details, req, br);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.editProfile(details, req, br, locale);
 
         assertEquals("profile_edit", mv.getViewName());
         assertEquals(req, mv.getModel().get("game"));
@@ -277,7 +285,8 @@ class DashboardControllerUnitTests {
         when(userService.getById(id)).thenReturn(user);
         when(userService.findByUsername(id, "")).thenReturn(false);
 
-        ModelAndView mv = controller.editProfile(details, req, br);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.editProfile(details, req, br, locale);
 
         assertEquals("profile_edit", mv.getViewName());
         assertEquals(req, mv.getModel().get("game"));

@@ -15,6 +15,7 @@ import project.web.FriendsController;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -108,7 +109,8 @@ class FriendsControllerUnitTests {
         when(userService.getById(details.getId())).thenReturn(sender);
         when(userService.getById(receiverId)).thenReturn(friend);
 
-        Map<String, String> result = controller.sendFriendRequest(receiverId, details);
+        Locale locale = Locale.getDefault();
+        Map<String, String> result = controller.sendFriendRequest(receiverId, details, locale);
 
         assertEquals("Friend invitation sent successfully!", result.get("message"));
         verify(notificationService).createFriendInvite(sender, receiverId);
@@ -133,7 +135,8 @@ class FriendsControllerUnitTests {
         when(userService.userNotFriend(currentUser, friendId)).thenReturn(true);
         when(userService.getById(friendId)).thenReturn(friend);
 
-        ModelAndView mv = controller.acceptFriendRequest(friendId, auth);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.acceptFriendRequest(friendId, auth, locale);
 
         assertEquals("redirect:/dashboard/friends", mv.getViewName());
         verify(userService).addFriend(currentUser, friendId);
@@ -157,7 +160,8 @@ class FriendsControllerUnitTests {
         when(userService.getById(currentUser)).thenReturn(user);
         when(userService.userNotFriend(currentUser, friendId)).thenReturn(false);
 
-        ModelAndView mv = controller.acceptFriendRequest(friendId, auth);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.acceptFriendRequest(friendId, auth, locale);
 
         assertEquals("redirect:/dashboard/friends", mv.getViewName());
         verify(userService, never()).addFriend(any(), any());
@@ -211,7 +215,8 @@ class FriendsControllerUnitTests {
         when(userService.userNotFriend(currentId, friendId)).thenReturn(true);
         when(userService.getById(friendId)).thenReturn(friend);
 
-        ModelAndView mv = controller.acceptFriendRequest(friendId, notifyId, auth);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.acceptFriendRequest(friendId, notifyId, auth, locale);
 
         assertEquals("redirect:/dashboard/notifications/remove/" + notifyId, mv.getViewName());
         verify(userService).addFriend(currentId, friendId);
@@ -236,7 +241,8 @@ class FriendsControllerUnitTests {
         when(userService.getById(currentUser)).thenReturn(user);
         when(userService.userNotFriend(currentUser, friendId)).thenReturn(false);
 
-        ModelAndView mv = controller.acceptFriendRequest(friendId, notifyId, auth);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.acceptFriendRequest(friendId, notifyId, auth, locale);
 
         assertEquals("redirect:/dashboard/notifications/remove/" + notifyId, mv.getViewName());
         verify(userService, never()).addFriend(any(), any());
@@ -260,7 +266,8 @@ class FriendsControllerUnitTests {
         when(userService.getById(currentId)).thenReturn(user);
         when(userService.getById(friendId)).thenReturn(friend);
 
-        ModelAndView mv = controller.removeFriend(friendId, auth);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.removeFriend(friendId, auth, locale);
 
         assertEquals("redirect:/dashboard/friends", mv.getViewName());
         verify(userService).removeFriend(currentId, friendId);
