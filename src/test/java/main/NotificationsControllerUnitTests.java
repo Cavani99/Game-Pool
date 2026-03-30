@@ -19,6 +19,7 @@ import project.web.NotificationsController;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -75,7 +76,8 @@ class NotificationsControllerUnitTests {
         when(notificationService.removeNotification(nid))
                 .thenReturn(HttpStatus.OK);
 
-        ModelAndView mav = controller.removeNotification(nid);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.removeNotification(nid, locale);
 
         assertEquals("redirect:/dashboard/notifications", mav.getViewName());
     }

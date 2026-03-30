@@ -14,10 +14,7 @@ import project.web.dto.GameFilterRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -110,7 +107,8 @@ class GamesControllerUnitTests {
 
         Map<String, String> req = Map.of("id", gid.toString());
 
-        Map<String, Object> res = controller.wishlistGame(req, details);
+        Locale locale = Locale.getDefault();
+        Map<String, Object> res = controller.wishlistGame(req, details, locale);
 
         verify(userService).wishlistGame(user, game);
     }
@@ -132,7 +130,8 @@ class GamesControllerUnitTests {
         when(userService.getById(details.getId())).thenReturn(user);
         when(userService.hasFundsForGame(user, game)).thenReturn(true);
 
-        Map<String, Object> res = controller.buyGame(Map.of("id", gid.toString()), details);
+        Locale locale = Locale.getDefault();
+        Map<String, Object> res = controller.buyGame(Map.of("id", gid.toString()), details, locale);
 
         verify(userService).buyGame(user, game);
         verify(transactionService).createBuyGameTransaction(user.getId(), game);
@@ -156,7 +155,8 @@ class GamesControllerUnitTests {
         when(userService.getById(details.getId())).thenReturn(user);
         when(userService.hasFundsForGame(user, game)).thenReturn(false);
 
-        Map<String, Object> res = controller.buyGame(Map.of("id", gid.toString()), details);
+        Locale locale = Locale.getDefault();
+        Map<String, Object> res = controller.buyGame(Map.of("id", gid.toString()), details, locale);
 
         assertEquals("error", res.get("status"));
     }
@@ -232,7 +232,8 @@ class GamesControllerUnitTests {
         when(userService.getById(userId)).thenReturn(user);
         when(gameService.findById(gameId)).thenReturn(game);
 
-        ModelAndView mav = controller.wishlistGame(gameId, auth);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.wishlistGame(gameId, auth, locale);
 
         verify(userService).wishlistGame(user, game);
 

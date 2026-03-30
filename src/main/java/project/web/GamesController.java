@@ -15,10 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/dashboard/games")
@@ -31,14 +28,16 @@ public class GamesController {
 
     private final TransactionService transactionService;
     private final Logger logger;
+    private final MessageService messageService;
 
     public GamesController(UserService userService, GameService gameService,
-                           CompanyService companyService, CategoryService categoryService, TransactionService transactionService) {
+                           CompanyService companyService, CategoryService categoryService, TransactionService transactionService, MessageService messageService) {
         this.userService = userService;
         this.gameService = gameService;
         this.companyService = companyService;
         this.categoryService = categoryService;
         this.transactionService = transactionService;
+        this.messageService = messageService;
         this.logger = LoggerFactory.getLogger(GamesController.class);
     }
 
@@ -139,7 +138,7 @@ public class GamesController {
 
     @PostMapping("wishlist")
     @ResponseBody
-    public Map<String, Object> wishlistGame(@RequestBody Map<String, String> request, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public Map<String, Object> wishlistGame(@RequestBody Map<String, String> request, @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         UUID gameId = UUID.fromString(request.get("id"));
         Game game = gameService.findById(gameId);
 
@@ -149,14 +148,16 @@ public class GamesController {
         boolean isWishlisted = user.gameIsWishlisted(game.getId());
         Map<String, Object> response = new HashMap<>();
         response.put("wishlisted", isWishlisted);
-        logger.info("Game {} is wishlisted", game.getTitle());
+
+        String message = messageService.getLocalizedMessage("game_wishlisted", locale);
+        logger.info(message, game.getTitle());
 
         return response;
     }
 
     @PostMapping("buy")
     @ResponseBody
-    public Map<String, Object> buyGame(@RequestBody Map<String, String> request, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public Map<String, Object> buyGame(@RequestBody Map<String, String> request, @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         UUID gameId = UUID.fromString(request.get("id"));
         Game game = gameService.findById(gameId);
         User user = userService.getById(userDetails.getId());
@@ -164,9 +165,11 @@ public class GamesController {
         Map<String, Object> response = new HashMap<>();
         if (!userService.hasFundsForGame(user, game)) {
             response.put("status", "error");
-            response.put("message", "You do not have enough funds to buy this game!");
+            String message = messageService.getLocalizedMessage("game_no_funds", locale);
+            response.put("message", message);
 
-            logger.error("User {} tried to buy {}, but does not have enough funds", user.getUsername(), game.getTitle());
+            message = messageService.getLocalizedMessage("game_no_funds_user_message", locale);
+            logger.error(message, user.getUsername(), game.getTitle());
 
             return response;
         }
@@ -174,19 +177,23 @@ public class GamesController {
         userService.buyGame(user, game);
         transactionService.createBuyGameTransaction(userDetails.getId(), game);
         response.put("status", "success");
-        logger.info("Game {} successfully bought", game.getTitle());
+
+        String message = messageService.getLocalizedMessage("game_bought", locale);
+        logger.info(message, game.getTitle());
 
         return response;
     }
 
     @GetMapping("remove_wishlist/{id}")
     @ResponseBody
-    public ModelAndView wishlistGame(@PathVariable("id") UUID gameId, @AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public ModelAndView wishlistGame(@PathVariable("id") UUID gameId, @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         Game game = gameService.findById(gameId);
 
         User user = userService.getById(userDetails.getId());
         userService.wishlistGame(user, game);
-        logger.info("Game {} removed from wishlist", game.getTitle());
+
+        String message = messageService.getLocalizedMessage("game_remove_wishlist", locale);
+        logger.info(message, game.getTitle());
 
         return new ModelAndView("redirect:/dashboard/games/wishlist");
     }

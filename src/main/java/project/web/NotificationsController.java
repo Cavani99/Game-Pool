@@ -4,6 +4,7 @@ import project.model.Game;
 import project.model.User;
 import project.security.AuthenticationDetails;
 import project.service.GameService;
+import project.service.MessageService;
 import project.service.NotificationService;
 import project.service.UserService;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Controller
@@ -29,12 +31,14 @@ public class NotificationsController {
     private final GameService gameService;
     private final NotificationService notificationService;
     private final Logger logger;
+    private final MessageService messageService;
 
 
-    public NotificationsController(UserService userService, GameService gameService, NotificationService notificationService) {
+    public NotificationsController(UserService userService, GameService gameService, NotificationService notificationService, MessageService messageService) {
         this.userService = userService;
         this.gameService = gameService;
         this.notificationService = notificationService;
+        this.messageService = messageService;
         this.logger = LoggerFactory.getLogger(NotificationsController.class);
     }
 
@@ -68,9 +72,11 @@ public class NotificationsController {
 
     @GetMapping("remove/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ModelAndView removeNotification(@PathVariable("id") UUID id) {
+    public ModelAndView removeNotification(@PathVariable("id") UUID id, Locale locale) {
         HttpStatusCode status = notificationService.removeNotification(id);
-        logger.info("Notification with id {} deleted with Status {}", id, status);
+
+        String message = messageService.getLocalizedMessage("notification_deleted", locale);
+        logger.info(message, id, status);
 
         return new ModelAndView("redirect:/dashboard/notifications");
     }

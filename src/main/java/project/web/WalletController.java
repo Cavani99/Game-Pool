@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import project.model.Transaction;
 import project.model.User;
 import project.security.AuthenticationDetails;
+import project.service.MessageService;
 import project.service.TransactionService;
 import project.service.UserService;
 import project.web.dto.AddFundsRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("dashboard/wallet")
@@ -28,10 +30,12 @@ public class WalletController {
     private final UserService userService;
     private final TransactionService transactionService;
     private final Logger logger;
+    private final MessageService messageService;
 
-    public WalletController(UserService userService, TransactionService transactionService) {
+    public WalletController(UserService userService, TransactionService transactionService, MessageService messageService) {
         this.userService = userService;
         this.transactionService = transactionService;
+        this.messageService = messageService;
         this.logger = LoggerFactory.getLogger(WalletController.class);
     }
 
@@ -54,7 +58,7 @@ public class WalletController {
 
     @GetMapping("add")
     @PreAuthorize("hasAuthority('USER')")
-    public ModelAndView addWalletFunds(@AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public ModelAndView addWalletFunds(@AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("wallet_add");
 
@@ -64,7 +68,9 @@ public class WalletController {
         modelAndView.addObject("add_funds", new AddFundsRequest());
         modelAndView.addObject("page", "wallet");
         modelAndView.addObject("title", "Wallet");
-        logger.info("Form for adding funds to user {} opened", user.getUsername());
+
+        String message = messageService.getLocalizedMessage("wallet_form_add_funds", locale);
+        logger.info(message, user.getUsername());
 
         return modelAndView;
     }
@@ -72,7 +78,7 @@ public class WalletController {
     @PostMapping("add")
     @PreAuthorize("hasAuthority('USER')")
     public ModelAndView addWalletFunds(@AuthenticationPrincipal AuthenticationDetails userDetails, @Valid @ModelAttribute("add_funds") AddFundsRequest addFundsRequest,
-                                       BindingResult bindingResult) {
+                                       BindingResult bindingResult, Locale locale) {
         User user = userService.getById(userDetails.getId());
 
         if (bindingResult.hasErrors()) {
@@ -83,14 +89,16 @@ public class WalletController {
             mav.addObject("page", "wallet");
             mav.addObject("title", "Wallet");
 
-            logger.error("Errors in adding funds to {}: {}", user.getUsername(), bindingResult.getAllErrors());
+            String message = messageService.getLocalizedMessage("wallet_add_funds_error", locale);
+            logger.error(message, user.getUsername(), bindingResult.getAllErrors());
 
             return mav;
         }
 
         userService.addFunds(userDetails.getId(), addFundsRequest);
         transactionService.createSelfTransaction(userDetails.getId(), addFundsRequest);
-        logger.info("{} € of funds added to user {}", addFundsRequest.getAmount(), user.getUsername());
+        String message = messageService.getLocalizedMessage("wallet_funds_added", locale);
+        logger.info(message, addFundsRequest.getAmount(), user.getUsername());
 
         return new ModelAndView("redirect:/dashboard/wallet");
     }
@@ -109,7 +117,7 @@ public class WalletController {
 
     @GetMapping("send")
     @PreAuthorize("hasAuthority('USER')")
-    public ModelAndView sendWalletFunds(@AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public ModelAndView sendWalletFunds(@AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("wallet_send");
 
@@ -121,7 +129,8 @@ public class WalletController {
         modelAndView.addObject("page", "wallet");
         modelAndView.addObject("title", "Wallet");
 
-        logger.info("Form for sending funds to a friend opened from user {}", user.getUsername());
+        String message = messageService.getLocalizedMessage("wallet_form_send_funds", locale);
+        logger.info(message, user.getUsername());
 
         return modelAndView;
     }
@@ -129,12 +138,14 @@ public class WalletController {
     @PostMapping("send")
     @PreAuthorize("hasAuthority('USER')")
     public ModelAndView sendWalletFunds(@AuthenticationPrincipal AuthenticationDetails userDetails, @Valid @ModelAttribute("send_request") SendFundsRequest sendFundsRequest,
-                                        BindingResult bindingResult) {
+                                        BindingResult bindingResult, Locale locale) {
         User user = userService.getById(userDetails.getId());
 
         if (sendFundsRequest.getAmount() != null && sendFundsRequest.getAmount().compareTo(BigDecimal.ZERO) > 0 &&
                 !userService.hasFunds(userDetails.getId(), sendFundsRequest.getAmount())) {
-            bindingResult.rejectValue("amount", "amount.empty", "The user does not have enough funds to send!");
+
+            String message = messageService.getLocalizedMessage("wallet_not_enough_funds", locale);
+            bindingResult.rejectValue("amount", "amount.empty", message);
         }
 
         if (bindingResult.hasErrors()) {
@@ -146,7 +157,8 @@ public class WalletController {
             mav.addObject("page", "wallet");
             mav.addObject("title", "Wallet");
 
-            logger.error("Errors in sending funds from user {}: {}", user.getUsername(), bindingResult.getAllErrors());
+            String message = messageService.getLocalizedMessage("wallet_send_funds_error", locale);
+            logger.error(message, user.getUsername(), bindingResult.getAllErrors());
 
             return mav;
         }
@@ -155,7 +167,9 @@ public class WalletController {
         transactionService.createSendFundsTransaction(userDetails.getId(), sendFundsRequest);
 
         User friend = userService.getById(sendFundsRequest.getFriend());
-        logger.info("{} € of funds sent to friend {} from user {}", sendFundsRequest.getAmount(), friend.getUsername(), user.getUsername());
+
+        String message = messageService.getLocalizedMessage("wallet_funds_send", locale);
+        logger.info(message, sendFundsRequest.getAmount(), friend.getUsername(), user.getUsername());
 
         return new ModelAndView("redirect:/dashboard/wallet");
     }

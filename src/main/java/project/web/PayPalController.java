@@ -13,10 +13,12 @@ import com.paypal.sdk.models.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import project.config.PayPalConfig;
+import project.service.MessageService;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -26,6 +28,7 @@ public class PayPalController {
 
     private final PaypalServerSdkClient client;
     private final PayPalConfig paypalConfig;
+    private final MessageService messageService;
 
     @GetMapping("/api/config")
     @ResponseBody
@@ -34,8 +37,8 @@ public class PayPalController {
     }
 
     @PostMapping("/api/orders")
-    public ResponseEntity<Map<String, String>> createOrder(@RequestBody Map<String, Object> request) {
-        String message = "Please, write a valid payment amount!";
+    public ResponseEntity<Map<String, String>> createOrder(@RequestBody Map<String, Object> request, Locale locale) {
+        String message = messageService.getLocalizedMessage("paypal_valid_pay_amount", locale);
         try {
             String transactionAmount = String.valueOf(request.get("amount"));
 

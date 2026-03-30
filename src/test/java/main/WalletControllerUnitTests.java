@@ -22,6 +22,7 @@ import project.web.dto.SendFundsRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,7 +78,8 @@ class WalletControllerUnitTests {
         when(userService.getById(details.getId()))
                 .thenReturn(user);
 
-        ModelAndView mv = walletController.addWalletFunds(details);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = walletController.addWalletFunds(details, locale);
 
         assertEquals("wallet_add", mv.getViewName());
         assertEquals(user, mv.getModel().get("user"));
@@ -97,7 +99,8 @@ class WalletControllerUnitTests {
         when(userService.getById(details.getId()))
                 .thenReturn(user);
 
-        ModelAndView mv = walletController.addWalletFunds(details, req, bindingResult);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = walletController.addWalletFunds(details, req, bindingResult, locale);
 
         assertEquals("wallet_add", mv.getViewName());
         assertEquals(req, mv.getModel().get("add_funds"));
@@ -121,7 +124,8 @@ class WalletControllerUnitTests {
         when(userService.getById(details.getId()))
                 .thenReturn(user);
 
-        ModelAndView mv = walletController.addWalletFunds(details, req, bindingResult);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = walletController.addWalletFunds(details, req, bindingResult, locale);
 
         assertEquals("redirect:/dashboard/wallet", mv.getViewName());
 
@@ -140,7 +144,8 @@ class WalletControllerUnitTests {
         when(userService.getById(details.getId()))
                 .thenReturn(user);
 
-        ModelAndView mv = walletController.sendWalletFunds(details);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = walletController.sendWalletFunds(details, locale);
 
         assertEquals("wallet_send", mv.getViewName());
         assertEquals(user, mv.getModel().get("user"));
@@ -169,7 +174,8 @@ class WalletControllerUnitTests {
         when(userService.hasFunds(details.getId(), BigDecimal.valueOf(100)))
                 .thenReturn(false);
 
-        ModelAndView mv = walletController.sendWalletFunds(details, req, bindingResult);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = walletController.sendWalletFunds(details, req, bindingResult, locale);
 
         assertEquals("wallet_send", mv.getViewName());
 
@@ -203,7 +209,8 @@ class WalletControllerUnitTests {
 
         when(userService.getById(details.getId())).thenReturn(user);
 
-        ModelAndView mv = walletController.sendWalletFunds(details, req, bindingResult);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = walletController.sendWalletFunds(details, req, bindingResult, locale);
 
         assertEquals("wallet_send", mv.getViewName());
         assertTrue(bindingResult.hasErrors());
@@ -238,7 +245,8 @@ class WalletControllerUnitTests {
 
         when(userService.getById(details.getId())).thenReturn(user);
 
-        ModelAndView mv = walletController.sendWalletFunds(details, req, bindingResult);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = walletController.sendWalletFunds(details, req, bindingResult, locale);
 
         assertEquals("wallet_send", mv.getViewName());
         assertTrue(bindingResult.hasErrors());
@@ -271,7 +279,8 @@ class WalletControllerUnitTests {
         when(bindingResult.hasErrors()).thenReturn(false);
         when(userService.getById(friendId)).thenReturn(friend);
 
-        ModelAndView mv = walletController.sendWalletFunds(details, req, bindingResult);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = walletController.sendWalletFunds(details, req, bindingResult, locale);
 
         assertEquals("redirect:/dashboard/wallet", mv.getViewName());
 
