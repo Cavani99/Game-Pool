@@ -14,6 +14,7 @@ import project.web.admin.CompaniesAdminController;
 import project.web.dto.CreateCompanyRequest;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +42,8 @@ class CompaniesAdminControllerUnitTests {
 
     @Test
     void getAddCompanyForm_ShouldReturnModelAndView() {
-        ModelAndView mav = controller.createCompany();
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createCompany(locale);
 
         assertEquals("admin/company_form", mav.getViewName());
         assertInstanceOf(CreateCompanyRequest.class, mav.getModel().get("company"));
@@ -53,7 +55,8 @@ class CompaniesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
 
-        ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/company_form", mav.getViewName());
     }
@@ -65,7 +68,8 @@ class CompaniesAdminControllerUnitTests {
         when(result.hasErrors()).thenReturn(false);
         when(companyService.create(req)).thenReturn(true);
 
-        ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/companies", mav.getViewName());
     }
@@ -77,7 +81,8 @@ class CompaniesAdminControllerUnitTests {
         when(result.hasErrors()).thenReturn(false);
         when(companyService.create(req)).thenReturn(false);
 
-        ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/company_form", mav.getViewName());
         verify(result).rejectValue("name", "error.company", "A company with this name already exists.");
@@ -92,7 +97,8 @@ class CompaniesAdminControllerUnitTests {
 
         when(companyService.findById(id)).thenReturn(company);
 
-        ModelAndView mav = controller.editCompany(id);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.editCompany(id, locale);
 
         assertEquals("admin/company_form", mav.getViewName());
         assertEquals(id, mav.getModel().get("company_id"));
@@ -104,7 +110,8 @@ class CompaniesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
 
-        ModelAndView mav = controller.editCompany(UUID.randomUUID(), req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.editCompany(UUID.randomUUID(), req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/company_form", mav.getViewName());
     }
@@ -117,7 +124,8 @@ class CompaniesAdminControllerUnitTests {
 
         when(result.hasErrors()).thenReturn(false);
 
-        ModelAndView mav = controller.editCompany(id, req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.editCompany(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/companies", mav.getViewName());
         verify(companyService).edit(id, req);
@@ -128,7 +136,8 @@ class CompaniesAdminControllerUnitTests {
         UUID id = UUID.randomUUID();
         RedirectAttributes redirect = mock(RedirectAttributes.class);
 
-        ModelAndView mav = controller.deleteCompany(id, redirect);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.deleteCompany(id, redirect, locale);
 
         assertEquals("redirect:/admin/companies", mav.getViewName());
         verify(companyService).deleteById(id);

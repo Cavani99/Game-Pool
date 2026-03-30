@@ -14,6 +14,7 @@ import project.web.admin.CategoriesAdminController;
 import project.web.dto.CreateCategoryRequest;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +46,8 @@ class CategoriesAdminControllerUnitTests {
 
     @Test
     void getAddCategoryForm_ShouldReturnModelAndView() {
-        ModelAndView mav = controller.createCategory();
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createCategory(locale);
 
         assertEquals("admin/category_form", mav.getViewName());
         assertInstanceOf(CreateCategoryRequest.class, mav.getModel().get("category"));
@@ -59,7 +61,8 @@ class CategoriesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
 
-        ModelAndView mav = controller.createCategory(req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createCategory(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/category_form", mav.getViewName());
         assertEquals(req, mav.getModel().get("category"));
@@ -74,7 +77,8 @@ class CategoriesAdminControllerUnitTests {
 
         RedirectAttributes redirect = mock(RedirectAttributes.class);
 
-        ModelAndView mav = controller.createCategory(req, result, redirect);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createCategory(req, result, redirect, locale);
 
         assertEquals("redirect:/admin/categories", mav.getViewName());
         verify(categoryService).create(req);
@@ -88,7 +92,8 @@ class CategoriesAdminControllerUnitTests {
         when(result.hasErrors()).thenReturn(false);
         when(categoryService.create(req)).thenReturn(false);
 
-        ModelAndView mav = controller.createCategory(req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createCategory(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/category_form", mav.getViewName());
         verify(result).rejectValue("name", "error.category", "A category with this name already exists.");
@@ -103,7 +108,8 @@ class CategoriesAdminControllerUnitTests {
 
         when(categoryService.findById(id)).thenReturn(category);
 
-        ModelAndView mav = controller.editCategory(id);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.editCategory(id, locale);
 
         assertEquals("admin/category_form", mav.getViewName());
         assertEquals(id, mav.getModel().get("category_id"));
@@ -117,7 +123,8 @@ class CategoriesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
 
-        ModelAndView mav = controller.editCategory(id, req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.editCategory(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/category_form", mav.getViewName());
     }
@@ -130,7 +137,8 @@ class CategoriesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(false);
 
-        ModelAndView mav = controller.editCategory(id, req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.editCategory(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/categories", mav.getViewName());
         verify(categoryService).edit(id, req);
@@ -141,7 +149,8 @@ class CategoriesAdminControllerUnitTests {
         UUID id = UUID.randomUUID();
         RedirectAttributes redirect = mock(RedirectAttributes.class);
 
-        ModelAndView mav = controller.deleteCategory(id, redirect);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.deleteCategory(id, redirect, locale);
 
         assertEquals("redirect:/admin/categories", mav.getViewName());
         verify(categoryService).deleteById(id);

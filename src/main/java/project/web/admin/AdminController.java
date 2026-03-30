@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 import project.model.User;
 import project.security.AuthenticationDetails;
+import project.service.MessageService;
 import project.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
+import java.util.Locale;
 import java.util.UUID;
 
 @Controller
@@ -31,9 +33,11 @@ public class AdminController {
 
     private final UserService userService;
     private final Logger logger;
+    private final MessageService messageService;
 
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, MessageService messageService) {
         this.userService = userService;
+        this.messageService = messageService;
         this.logger = LoggerFactory.getLogger(AdminController.class);
     }
 
@@ -54,7 +58,7 @@ public class AdminController {
 
     @GetMapping("/profile")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ModelAndView editAdmin(@AuthenticationPrincipal AuthenticationDetails userDetails) {
+    public ModelAndView editAdmin(@AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/edit-profile");
 
@@ -66,7 +70,8 @@ public class AdminController {
         modelAndView.addObject("page", "profile");
         modelAndView.addObject("title", "Profile");
 
-        logger.info("User " + user.getUsername() + " editing profile!");
+        String message = messageService.getLocalizedMessage("user_editing", locale);
+        logger.info(message, user.getUsername());
 
         return modelAndView;
     }
@@ -74,16 +79,18 @@ public class AdminController {
     @PostMapping("/profile")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ModelAndView editProfile(@AuthenticationPrincipal AuthenticationDetails userDetails, @Valid @ModelAttribute("user") EditProfileRequest editProfileRequest,
-                                    BindingResult bindingResult) throws IOException {
+                                    BindingResult bindingResult, Locale locale) throws IOException {
 
         User user = userService.getById(userDetails.getId());
 
         if (userService.findByUsername(user.getId(), editProfileRequest.getUsername())) {
-            bindingResult.rejectValue("username", "username.empty", "Please, write unique username!");
+            String message = messageService.getLocalizedMessage("unique_username", locale);
+            bindingResult.rejectValue("username", "username.empty", message);
         }
 
         if (bindingResult.hasErrors()) {
-            logger.error("Admin {} had errors editing profile: {}", user.getUsername(), bindingResult.getAllErrors());
+            String message = messageService.getLocalizedMessage("admin_error_editing_profile", locale);
+            logger.error(message, user.getUsername(), bindingResult.getAllErrors());
             editProfileRequest.setAvatarPath(user.getAvatar());
 
             ModelAndView mav = new ModelAndView("admin/edit-profile");
@@ -112,7 +119,9 @@ public class AdminController {
         }
 
         userService.edit(user.getId(), editProfileRequest, avatarPath);
-        logger.info("Admin {} edited his profile", user.getUsername());
+
+        String message = messageService.getLocalizedMessage("admin_profile_edit", locale);
+        logger.info(message, user.getUsername());
 
         return new ModelAndView("redirect:/admin");
     }
