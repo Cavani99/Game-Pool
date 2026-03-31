@@ -2,10 +2,7 @@ package project.web.admin;
 
 import jakarta.validation.Valid;
 import project.model.*;
-import project.service.CategoryService;
-import project.service.CompanyService;
-import project.service.DiscountService;
-import project.service.GameService;
+import project.service.*;
 import project.utils.ImagesCleanupService;
 import project.web.dto.CreateDiscountRequest;
 import project.web.dto.CreateGameRequest;
@@ -26,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,15 +38,17 @@ public class GamesAdminController {
     private final Logger logger;
 
     private final ImagesCleanupService imagesCleanupService;
+    private final MessageService messageService;
 
     @Autowired
     public GamesAdminController(GameService gameService, DiscountService discountService, CategoryService categoryService,
-                                CompanyService companyService, ImagesCleanupService imagesCleanupService) {
+                                CompanyService companyService, ImagesCleanupService imagesCleanupService, MessageService messageService) {
         this.gameService = gameService;
         this.discountService = discountService;
         this.categoryService = categoryService;
         this.companyService = companyService;
         this.imagesCleanupService = imagesCleanupService;
+        this.messageService = messageService;
         this.logger = LoggerFactory.getLogger(GamesAdminController.class);
     }
 
@@ -69,7 +69,7 @@ public class GamesAdminController {
 
     @GetMapping("/add")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ModelAndView createGame() {
+    public ModelAndView createGame(Locale locale) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/game_form");
         modelAndView.addObject("game", new CreateGameRequest());
@@ -81,7 +81,9 @@ public class GamesAdminController {
 
         modelAndView.addObject("categories", categories);
         modelAndView.addObject("companies", companies);
-        logger.info("Form for creating game is opened");
+
+        String message = messageService.getLocalizedMessage("form_games", locale);
+        logger.info(message);
 
         return modelAndView;
     }
@@ -89,12 +91,13 @@ public class GamesAdminController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ModelAndView createGame(@Valid @ModelAttribute("game") CreateGameRequest createGameRequest, BindingResult bindingResult,
-                                   RedirectAttributes redirectAttributes) throws IOException {
+                                   RedirectAttributes redirectAttributes, Locale locale) throws IOException {
         List<Category> categories = categoryService.findAll();
         List<Company> companies = companyService.findAll();
 
         if (createGameRequest.getImage() == null || createGameRequest.getImage().isEmpty()) {
-            bindingResult.rejectValue("image", "image.empty", "Please, pick an image");
+            String message = messageService.getLocalizedMessage("pick_image", locale);
+            bindingResult.rejectValue("image", "image.empty", message);
         }
 
         if (bindingResult.hasErrors()) {
@@ -105,7 +108,8 @@ public class GamesAdminController {
             mav.addObject("categories", categories);
             mav.addObject("companies", companies);
 
-            logger.error("Errors in creating game: {}", bindingResult.getAllErrors());
+            String message = messageService.getLocalizedMessage("errors_create_game", locale);
+            logger.error(message, bindingResult.getAllErrors());
 
             return mav;
         }
@@ -134,12 +138,17 @@ public class GamesAdminController {
 
         if (gameService.create(createGameRequest, category, company, imagePath)) {
 
-            redirectAttributes.addFlashAttribute("message", "Game " + createGameRequest.getTitle() + " created successfully!");
-            logger.info("Game {} created!", createGameRequest.getTitle());
+            String message = messageService.getLocalizedMessage("game_name_created", locale);
+            message = message.replace("{}", createGameRequest.getTitle());
+            redirectAttributes.addFlashAttribute("message", message);
+
+            message = messageService.getLocalizedMessage("game_created", locale);
+            logger.info(message, createGameRequest.getTitle());
 
             return new ModelAndView("redirect:/admin/games");
         } else {
-            bindingResult.rejectValue("title", "error.game", "A Game with this name already exists.");
+            String message = messageService.getLocalizedMessage("game_exists", locale);
+            bindingResult.rejectValue("title", "error.game", message);
             ModelAndView mav = new ModelAndView("admin/game_form");
             mav.addObject("game", createGameRequest);
             mav.addObject("page", "games");
@@ -147,7 +156,8 @@ public class GamesAdminController {
             mav.addObject("categories", categories);
             mav.addObject("companies", companies);
 
-            logger.error("Errors in creating game: {}", bindingResult.getAllErrors());
+            message = messageService.getLocalizedMessage("errors_create_game", locale);
+            logger.error(message, bindingResult.getAllErrors());
 
             return mav;
         }
@@ -155,7 +165,7 @@ public class GamesAdminController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ModelAndView editGame(@PathVariable("id") UUID id) {
+    public ModelAndView editGame(@PathVariable("id") UUID id, Locale locale) {
         Game game = gameService.findById(id);
         CreateGameRequest createGameRequest = new CreateGameRequest(game.getTitle(), game.getDescription(), null,
                 game.getCategory().getId(), game.getCompany().getId(), game.getImage(), game.getPrice());
@@ -172,7 +182,8 @@ public class GamesAdminController {
         modelAndView.addObject("categories", categories);
         modelAndView.addObject("companies", companies);
 
-        logger.info("Edit Game {}", game.getTitle());
+        String message = messageService.getLocalizedMessage("game_edit", locale);
+        logger.info(message, game.getTitle());
 
         return modelAndView;
     }
@@ -180,7 +191,7 @@ public class GamesAdminController {
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ModelAndView editGame(@PathVariable("id") UUID id, @Valid @ModelAttribute("game") CreateGameRequest createGameRequest,
-                                 BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
+                                 BindingResult bindingResult, RedirectAttributes redirectAttributes, Locale locale) throws IOException {
         List<Category> categories = categoryService.findAll();
         List<Company> companies = companyService.findAll();
 
@@ -196,7 +207,8 @@ public class GamesAdminController {
             mav.addObject("categories", categories);
             mav.addObject("companies", companies);
 
-            logger.error("Errors in editing game: {}", bindingResult.getAllErrors());
+            String message = messageService.getLocalizedMessage("errors_edit_game", locale);
+            logger.error(message, bindingResult.getAllErrors());
 
             return mav;
         }
@@ -224,26 +236,33 @@ public class GamesAdminController {
 
         gameService.edit(id, createGameRequest, category, company, imagePath);
 
-        redirectAttributes.addFlashAttribute("message", "Game " + createGameRequest.getTitle() + " saved successfully!");
-        logger.info("Game {} edited!", createGameRequest.getTitle());
+        String message = messageService.getLocalizedMessage("game_saved", locale);
+        message = message.replace("{}", createGameRequest.getTitle());
+        redirectAttributes.addFlashAttribute("message", message);
+
+        message = messageService.getLocalizedMessage("game_edited", locale);
+        logger.info(message, createGameRequest.getTitle());
 
         return new ModelAndView("redirect:/admin/games");
     }
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ModelAndView deleteGame(@PathVariable("id") UUID id, RedirectAttributes redirectAttributes) {
+    public ModelAndView deleteGame(@PathVariable("id") UUID id, RedirectAttributes redirectAttributes, Locale locale) {
         gameService.deleteById(id);
 
-        redirectAttributes.addFlashAttribute("message", "Game deleted!");
-        logger.info("Game with id {} deleted!", id);
+        String message = messageService.getLocalizedMessage("game_deleted", locale);
+        redirectAttributes.addFlashAttribute("message", message);
+
+        message = messageService.getLocalizedMessage("game_id_deleted", locale);
+        logger.info(message, id);
 
         return new ModelAndView("redirect:/admin/games");
     }
 
     @GetMapping("/discount/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ModelAndView addDiscount(@PathVariable("id") UUID id) {
+    public ModelAndView addDiscount(@PathVariable("id") UUID id, Locale locale) {
         Game game = gameService.findById(id);
         Discount discount = game.getDiscount();
 
@@ -262,7 +281,9 @@ public class GamesAdminController {
         modelAndView.addObject("game_id", id);
         modelAndView.addObject("page", "games");
         modelAndView.addObject("title", "Games");
-        logger.info("Adding discount to Game {}!", game.getTitle());
+
+        String message = messageService.getLocalizedMessage("game_add_discount", locale);
+        logger.info(message, game.getTitle());
 
         return modelAndView;
     }
@@ -270,10 +291,10 @@ public class GamesAdminController {
     @PostMapping("/discount/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ModelAndView addDiscount(@PathVariable("id") UUID id, @Valid @ModelAttribute("discount") CreateDiscountRequest createDiscountRequest,
-                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                                    BindingResult bindingResult, RedirectAttributes redirectAttributes, Locale locale) {
 
         Game game = gameService.findById(id);
-        setManualValidations(bindingResult, createDiscountRequest);
+        setManualValidations(bindingResult, createDiscountRequest, locale);
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView("admin/discount_form");
             mav.addObject("discount", createDiscountRequest);
@@ -281,7 +302,8 @@ public class GamesAdminController {
             mav.addObject("page", "games");
             mav.addObject("title", "Games");
 
-            logger.error("Errors in adding discount to {}: {}", game.getTitle(), bindingResult.getAllErrors());
+            String message = messageService.getLocalizedMessage("game_add_discount_error", locale);
+            logger.error(message, game.getTitle(), bindingResult.getAllErrors());
 
             return mav;
         }
@@ -290,35 +312,46 @@ public class GamesAdminController {
         discount = discountService.persist(discount, createDiscountRequest);
         game = gameService.addDiscount(id, discount);
 
-        redirectAttributes.addFlashAttribute("message", "Discount for " + game.getTitle() + " saved successfully!");
-        logger.info("Discount added to {}!", game.getTitle());
+        String message = messageService.getLocalizedMessage("game_discount_saved", locale);
+        message = message.replace("{}", game.getTitle());
+        redirectAttributes.addFlashAttribute("message", message);
+
+        message = messageService.getLocalizedMessage("game_discount_added", locale);
+        logger.info(message, game.getTitle());
 
         return new ModelAndView("redirect:/admin/games");
     }
 
-    private void setManualValidations(BindingResult bindingResult, CreateDiscountRequest createDiscountRequest) {
+    private void setManualValidations(BindingResult bindingResult, CreateDiscountRequest createDiscountRequest, Locale locale) {
         if (createDiscountRequest.getAmount() <= 0) {
-            bindingResult.rejectValue("amount", "amount.empty", "Write a discount amount more than 0");
+            String message = messageService.getLocalizedMessage("game_discount_more_than_zero", locale);
+            bindingResult.rejectValue("amount", "amount.empty", message);
         } else if (createDiscountRequest.getAmount() > 100 && createDiscountRequest.getType().equals(DiscountType.PERCENT)) {
-            bindingResult.rejectValue("amount", "amount.empty", "Discount Percentage can not be more than 100%");
+            String message = messageService.getLocalizedMessage("game_discount_percentage_error", locale);
+            bindingResult.rejectValue("amount", "amount.empty", message);
         }
 
         if (createDiscountRequest.getStartDate() != null && createDiscountRequest.getEndDate() != null &&
                 createDiscountRequest.getStartDate().isAfter(createDiscountRequest.getEndDate())) {
-            bindingResult.rejectValue("startDate", "startDate.empty", "Start Date cannot be after the End Date");
+            String message = messageService.getLocalizedMessage("game_discount_dates_error", locale);
+            bindingResult.rejectValue("startDate", "startDate.empty", message);
         }
     }
 
     @GetMapping("/remove_discount/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ModelAndView removeDiscount(@PathVariable("id") UUID id, RedirectAttributes redirectAttributes) {
+    public ModelAndView removeDiscount(@PathVariable("id") UUID id, RedirectAttributes redirectAttributes, Locale locale) {
         Game game = gameService.findById(id);
         Discount discount = game.getDiscount();
 
         discountService.unsetDiscount(discount);
 
-        redirectAttributes.addFlashAttribute("message", "Discount for " + game.getTitle() + " removed!");
-        logger.info("Discount removed from {}!", game.getTitle());
+        String message = messageService.getLocalizedMessage("game_discount_removed", locale);
+        message = message.replace("{}", game.getTitle());
+        redirectAttributes.addFlashAttribute("message", message);
+
+        message = messageService.getLocalizedMessage("game_discount_removed_log", locale);
+        logger.info(message, game.getTitle());
 
         return new ModelAndView("redirect:/admin/games");
     }
@@ -326,9 +359,10 @@ public class GamesAdminController {
     @PostMapping("/delete-images")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseBody
-    public Map<String, String> removeImages() {
-        imagesCleanupService.deleteUnusedGameImages(logger);
+    public Map<String, String> removeImages(Locale locale) {
+        imagesCleanupService.deleteUnusedGameImages(logger, locale);
 
-        return Map.of("message", "Unused game images deleted successfully!");
+        String message = messageService.getLocalizedMessage("games_images_deleted", locale);
+        return Map.of("message", message);
     }
 }

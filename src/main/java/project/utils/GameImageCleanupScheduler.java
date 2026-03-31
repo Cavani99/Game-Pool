@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Locale;
+
 @Component
 public class GameImageCleanupScheduler {
 
@@ -17,7 +19,7 @@ public class GameImageCleanupScheduler {
     }
 
     @Scheduled(cron = "0 0 4 ? * SUN")
-    public void scheduledGameImagesCleanup() {
-        imagesCleanupService.deleteUnusedGameImages(logger);
+    public void scheduledGameImagesCleanup(Locale locale) {
+        imagesCleanupService.deleteUnusedGameImages(logger, locale);
     }
 }

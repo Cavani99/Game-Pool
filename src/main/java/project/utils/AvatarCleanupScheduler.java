@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Locale;
+
 @Component
 public class AvatarCleanupScheduler {
 
@@ -17,7 +19,7 @@ public class AvatarCleanupScheduler {
     }
 
     @Scheduled(cron = "0 0 3 ? * SUN")
-    public void scheduledAvatarCleanup() {
-        imagesCleanupService.deleteUnusedUserAvatars(logger);
+    public void scheduledAvatarCleanup(Locale locale) {
+        imagesCleanupService.deleteUnusedUserAvatars(logger, locale);
     }
 }

@@ -21,6 +21,7 @@ import project.web.dto.CreateGameRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,7 +60,8 @@ class GamesAdminControllerUnitTests {
         when(categoryService.findAll()).thenReturn(List.of());
         when(companyService.findAll()).thenReturn(List.of());
 
-        ModelAndView mav = controller.createGame();
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createGame(locale);
 
         assertEquals("admin/game_form", mav.getViewName());
         assertInstanceOf(CreateGameRequest.class, mav.getModel().get("game"));
@@ -74,7 +76,8 @@ class GamesAdminControllerUnitTests {
         when(categoryService.findAll()).thenReturn(List.of());
         when(companyService.findAll()).thenReturn(List.of());
 
-        ModelAndView mav = controller.createGame(req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createGame(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/game_form", mav.getViewName());
     }
@@ -103,7 +106,8 @@ class GamesAdminControllerUnitTests {
         when(categoryService.findAll()).thenReturn(List.of(cat));
         when(companyService.findAll()).thenReturn(List.of(comp));
 
-        ModelAndView mav = controller.createGame(req, mock(BindingResult.class), mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createGame(req, mock(BindingResult.class), mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mav.getViewName());
     }
@@ -132,7 +136,8 @@ class GamesAdminControllerUnitTests {
         when(categoryService.findAll()).thenReturn(List.of(cat));
         when(companyService.findAll()).thenReturn(List.of(comp));
 
-        ModelAndView mav = controller.createGame(req, mock(BindingResult.class), mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.createGame(req, mock(BindingResult.class), mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/game_form", mav.getViewName());
     }
@@ -148,7 +153,8 @@ class GamesAdminControllerUnitTests {
         when(categoryService.findAll()).thenReturn(List.of());
         when(companyService.findAll()).thenReturn(List.of());
 
-        ModelAndView mav = controller.editGame(id);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.editGame(id, locale);
 
         assertEquals("admin/game_form", mav.getViewName());
     }
@@ -157,7 +163,8 @@ class GamesAdminControllerUnitTests {
     void deleteGame_ShouldRedirect() {
         UUID id = UUID.randomUUID();
 
-        ModelAndView mav = controller.deleteGame(id, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.deleteGame(id, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mav.getViewName());
         verify(gameService).deleteById(id);
@@ -169,7 +176,8 @@ class GamesAdminControllerUnitTests {
         Game game = new Game();
         when(gameService.findById(id)).thenReturn(game);
 
-        ModelAndView mav = controller.addDiscount(id);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.addDiscount(id, locale);
 
         assertEquals("admin/discount_form", mav.getViewName());
     }
@@ -185,7 +193,8 @@ class GamesAdminControllerUnitTests {
         game.setDiscount(discount);
         when(gameService.findById(id)).thenReturn(game);
 
-        ModelAndView mav = controller.addDiscount(id);
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.addDiscount(id, locale);
 
         CreateDiscountRequest discountRequest = (CreateDiscountRequest) mav.getModel().get("discount");
         assertEquals("admin/discount_form", mav.getViewName());
@@ -206,7 +215,8 @@ class GamesAdminControllerUnitTests {
 
         BindingResult br = new BeanPropertyBindingResult(req, "discount");
 
-        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/discount_form", mv.getViewName());
         assertTrue(br.hasFieldErrors("amount"));
@@ -225,7 +235,8 @@ class GamesAdminControllerUnitTests {
 
         BindingResult br = new BeanPropertyBindingResult(req, "discount");
 
-        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/discount_form", mv.getViewName());
         assertTrue(br.hasFieldErrors("amount"));
@@ -246,7 +257,8 @@ class GamesAdminControllerUnitTests {
 
         BindingResult br = new BeanPropertyBindingResult(req, "discount");
 
-        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/discount_form", mv.getViewName());
         assertTrue(br.hasFieldErrors("startDate"));
@@ -271,7 +283,8 @@ class GamesAdminControllerUnitTests {
         when(discountService.persist(any(), eq(req))).thenReturn(discount);
         when(gameService.addDiscount(id, discount)).thenReturn(game);
 
-        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
         assertFalse(br.hasErrors());
@@ -296,7 +309,8 @@ class GamesAdminControllerUnitTests {
         when(discountService.persist(any(), eq(req))).thenReturn(discount);
         when(gameService.addDiscount(id, discount)).thenReturn(game);
 
-        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
         assertFalse(br.hasErrors());
@@ -311,7 +325,8 @@ class GamesAdminControllerUnitTests {
         when(result.hasErrors()).thenReturn(true);
         when(gameService.findById(id)).thenReturn(new Game());
 
-        ModelAndView mav = controller.addDiscount(id, req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.addDiscount(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/discount_form", mav.getViewName());
     }
@@ -330,7 +345,8 @@ class GamesAdminControllerUnitTests {
         when(discountService.persist(any(), any())).thenReturn(new Discount());
         when(gameService.addDiscount(eq(id), any())).thenReturn(game);
 
-        ModelAndView mav = controller.addDiscount(id, req, result, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.addDiscount(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mav.getViewName());
     }
@@ -343,7 +359,8 @@ class GamesAdminControllerUnitTests {
 
         when(gameService.findById(id)).thenReturn(game);
 
-        ModelAndView mav = controller.removeDiscount(id, mock(RedirectAttributes.class));
+        Locale locale = Locale.getDefault();
+        ModelAndView mav = controller.removeDiscount(id, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mav.getViewName());
         verify(discountService).unsetDiscount(any());
@@ -379,7 +396,8 @@ class GamesAdminControllerUnitTests {
 
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
-        ModelAndView mv = controller.editGame(id, req, br, redirectAttributes);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.editGame(id, req, br, redirectAttributes, locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
         verify(gameService).edit(eq(id), eq(req), eq(category), eq(company), anyString());
@@ -409,7 +427,8 @@ class GamesAdminControllerUnitTests {
 
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
-        ModelAndView mv = controller.editGame(id, req, br, redirectAttributes);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.editGame(id, req, br, redirectAttributes, locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
         verify(gameService).edit(id, req, category, company, null);
@@ -442,7 +461,8 @@ class GamesAdminControllerUnitTests {
 
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
-        ModelAndView mv = controller.editGame(id, req, br, redirectAttributes);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.editGame(id, req, br, redirectAttributes, locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
         verify(gameService).edit(id, req, category, company, null);
@@ -468,7 +488,8 @@ class GamesAdminControllerUnitTests {
 
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
-        ModelAndView mv = controller.editGame(id, req, br, redirectAttributes);
+        Locale locale = Locale.getDefault();
+        ModelAndView mv = controller.editGame(id, req, br, redirectAttributes, locale);
 
         assertEquals("admin/game_form", mv.getViewName());
         assertEquals(req, mv.getModel().get("game"));

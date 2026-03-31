@@ -2,6 +2,7 @@ package project.utils;
 
 import org.springframework.stereotype.Service;
 import project.service.GameService;
+import project.service.MessageService;
 import project.service.UserService;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -22,10 +24,12 @@ public class ImagesCleanupService {
 
     private final UserService userService;
     private final GameService gameService;
+    private final MessageService messageService;
 
-    public ImagesCleanupService(UserService userService, GameService gameService) {
+    public ImagesCleanupService(UserService userService, GameService gameService, MessageService messageService) {
         this.userService = userService;
         this.gameService = gameService;
+        this.messageService = messageService;
     }
 
     private boolean isExternalUrl(String path) {
@@ -37,7 +41,7 @@ public class ImagesCleanupService {
         }
     }
 
-    public void deleteUnusedUserAvatars(Logger logger) {
+    public void deleteUnusedUserAvatars(Logger logger, Locale locale) {
         Set<String> usedAvatars = userService.findUsersWithAvatar().stream()
                 .filter(path -> !isExternalUrl(path))
                 .map(path -> Paths.get(path).getFileName().toString())
@@ -52,17 +56,21 @@ public class ImagesCleanupService {
                     .forEach(file -> {
                         try {
                             Files.delete(file);
-                            System.out.println("Deleted unused avatar: " + file);
+
+                            String message = messageService.getLocalizedMessage("avatar_deleted", locale);
+                            logger.info(message, file);
                         } catch (IOException e) {
-                            logger.error("Failed to delete avatar: " + file, e);
+                            String message = messageService.getLocalizedMessage("avatar_delete_fail", locale);
+                            logger.error(message, file, e);
                         }
                     });
         } catch (IOException e) {
-            logger.warn("No files in this directory!");
+            String message = messageService.getLocalizedMessage("no_files", locale);
+            logger.warn(message);
         }
     }
 
-    public void deleteUnusedGameImages(Logger logger) {
+    public void deleteUnusedGameImages(Logger logger, Locale locale) {
         Set<String> usedImages = gameService.findGamesWithImage().stream()
                 .filter(path -> !isExternalUrl(path))
                 .map(path -> Paths.get(path).getFileName().toString())
@@ -77,13 +85,18 @@ public class ImagesCleanupService {
                     .forEach(file -> {
                         try {
                             Files.delete(file);
-                            System.out.println("Deleted unused image: " + file);
+
+                            String message = messageService.getLocalizedMessage("image_deleted", locale);
+                            logger.info(message, file);
                         } catch (IOException e) {
-                            logger.error("Failed to delete image: " + file, e);
+
+                            String message = messageService.getLocalizedMessage("image_delete_fail", locale);
+                            logger.error(message, file, e);
                         }
                     });
         } catch (IOException e) {
-            logger.warn("No files in this directory!");
+            String message = messageService.getLocalizedMessage("no_files", locale);
+            logger.warn(message);
         }
     }
 }

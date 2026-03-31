@@ -2,6 +2,7 @@ package project.web.admin;
 
 import org.springframework.web.bind.annotation.*;
 import project.model.User;
+import project.service.MessageService;
 import project.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import project.utils.ImagesCleanupService;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,10 +23,12 @@ public class UsersAdminController {
     private final UserService userService;
     private final ImagesCleanupService imagesCleanupService;
     private final Logger logger;
+    private final MessageService messageService;
 
-    public UsersAdminController(UserService userService, ImagesCleanupService imagesCleanupService) {
+    public UsersAdminController(UserService userService, ImagesCleanupService imagesCleanupService, MessageService messageService) {
         this.userService = userService;
         this.imagesCleanupService = imagesCleanupService;
+        this.messageService = messageService;
         this.logger = LoggerFactory.getLogger(UsersAdminController.class);
     }
 
@@ -68,9 +72,10 @@ public class UsersAdminController {
     @PostMapping("/delete-avatars")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseBody
-    public Map<String, String> removeAvatars() {
-        imagesCleanupService.deleteUnusedUserAvatars(logger);
+    public Map<String, String> removeAvatars(Locale locale) {
+        imagesCleanupService.deleteUnusedUserAvatars(logger, locale);
 
-        return Map.of("message", "Unused user avatars deleted successfully!");
+        String message = messageService.getLocalizedMessage("users_avatars_deleted", locale);
+        return Map.of("message", message);
     }
 }
