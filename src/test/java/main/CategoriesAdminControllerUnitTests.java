@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.model.Category;
 import project.service.CategoryService;
+import project.service.MessageService;
 import project.web.admin.CategoriesAdminController;
 import project.web.dto.CreateCategoryRequest;
 
@@ -25,6 +26,8 @@ class CategoriesAdminControllerUnitTests {
 
     @Mock
     private CategoryService categoryService;
+    @Mock
+    private MessageService messageService;
 
     @InjectMocks
     private CategoriesAdminController controller;
@@ -46,7 +49,7 @@ class CategoriesAdminControllerUnitTests {
 
     @Test
     void getAddCategoryForm_ShouldReturnModelAndView() {
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.createCategory(locale);
 
         assertEquals("admin/category_form", mav.getViewName());
@@ -61,7 +64,7 @@ class CategoriesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.createCategory(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/category_form", mav.getViewName());
@@ -75,9 +78,11 @@ class CategoriesAdminControllerUnitTests {
         when(result.hasErrors()).thenReturn(false);
         when(categoryService.create(req)).thenReturn(true);
 
+
         RedirectAttributes redirect = mock(RedirectAttributes.class);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("category_name_created", locale)).thenReturn("Category {} created successfully!");
         ModelAndView mav = controller.createCategory(req, result, redirect, locale);
 
         assertEquals("redirect:/admin/categories", mav.getViewName());
@@ -92,7 +97,8 @@ class CategoriesAdminControllerUnitTests {
         when(result.hasErrors()).thenReturn(false);
         when(categoryService.create(req)).thenReturn(false);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("category_exists", locale)).thenReturn("A category with this name already exists.");
         ModelAndView mav = controller.createCategory(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/category_form", mav.getViewName());
@@ -108,7 +114,7 @@ class CategoriesAdminControllerUnitTests {
 
         when(categoryService.findById(id)).thenReturn(category);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.editCategory(id, locale);
 
         assertEquals("admin/category_form", mav.getViewName());
@@ -123,7 +129,7 @@ class CategoriesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.editCategory(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/category_form", mav.getViewName());
@@ -137,7 +143,8 @@ class CategoriesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(false);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("category_saved", locale)).thenReturn("Category {} saved successfully!");
         ModelAndView mav = controller.editCategory(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/categories", mav.getViewName());
@@ -149,7 +156,7 @@ class CategoriesAdminControllerUnitTests {
         UUID id = UUID.randomUUID();
         RedirectAttributes redirect = mock(RedirectAttributes.class);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.deleteCategory(id, redirect, locale);
 
         assertEquals("redirect:/admin/categories", mav.getViewName());

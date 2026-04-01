@@ -33,6 +33,8 @@ class GamesControllerUnitTests {
     CategoryService categoryService;
     @Mock
     TransactionService transactionService;
+    @Mock
+    private MessageService messageService;
 
     @InjectMocks
     GamesController controller;
@@ -107,7 +109,7 @@ class GamesControllerUnitTests {
 
         Map<String, String> req = Map.of("id", gid.toString());
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         Map<String, Object> res = controller.wishlistGame(req, details, locale);
 
         verify(userService).wishlistGame(user, game);
@@ -130,7 +132,7 @@ class GamesControllerUnitTests {
         when(userService.getById(details.getId())).thenReturn(user);
         when(userService.hasFundsForGame(user, game)).thenReturn(true);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         Map<String, Object> res = controller.buyGame(Map.of("id", gid.toString()), details, locale);
 
         verify(userService).buyGame(user, game);
@@ -155,7 +157,7 @@ class GamesControllerUnitTests {
         when(userService.getById(details.getId())).thenReturn(user);
         when(userService.hasFundsForGame(user, game)).thenReturn(false);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         Map<String, Object> res = controller.buyGame(Map.of("id", gid.toString()), details, locale);
 
         assertEquals("error", res.get("status"));
@@ -232,7 +234,7 @@ class GamesControllerUnitTests {
         when(userService.getById(userId)).thenReturn(user);
         when(gameService.findById(gameId)).thenReturn(game);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.wishlistGame(gameId, auth, locale);
 
         verify(userService).wishlistGame(user, game);

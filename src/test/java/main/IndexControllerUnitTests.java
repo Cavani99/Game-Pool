@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import project.model.User;
 import project.model.UserRole;
+import project.service.MessageService;
 import project.service.NotificationService;
 import project.service.UserService;
 import project.web.IndexController;
@@ -29,6 +30,8 @@ class IndexControllerUnitTests {
     UserService userService;
     @Mock
     NotificationService notificationService;
+    @Mock
+    private MessageService messageService;
 
     @InjectMocks
     IndexController controller;

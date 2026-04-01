@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.servlet.ModelAndView;
 import project.model.User;
+import project.service.MessageService;
 import project.service.UserService;
 import project.web.admin.UsersAdminController;
 
@@ -24,6 +25,8 @@ class UsersAdminControllerTests {
 
     @Mock
     private UserService userService;
+    @Mock
+    private MessageService messageService;
 
     @InjectMocks
     private UsersAdminController controller;

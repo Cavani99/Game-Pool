@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.model.Company;
 import project.service.CompanyService;
+import project.service.MessageService;
 import project.web.admin.CompaniesAdminController;
 import project.web.dto.CreateCompanyRequest;
 
@@ -25,6 +26,9 @@ class CompaniesAdminControllerUnitTests {
 
     @Mock
     private CompanyService companyService;
+
+    @Mock
+    private MessageService messageService;
 
     @InjectMocks
     private CompaniesAdminController controller;
@@ -42,7 +46,7 @@ class CompaniesAdminControllerUnitTests {
 
     @Test
     void getAddCompanyForm_ShouldReturnModelAndView() {
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.createCompany(locale);
 
         assertEquals("admin/company_form", mav.getViewName());
@@ -55,7 +59,7 @@ class CompaniesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/company_form", mav.getViewName());
@@ -68,7 +72,7 @@ class CompaniesAdminControllerUnitTests {
         when(result.hasErrors()).thenReturn(false);
         when(companyService.create(req)).thenReturn(true);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/companies", mav.getViewName());
@@ -81,7 +85,7 @@ class CompaniesAdminControllerUnitTests {
         when(result.hasErrors()).thenReturn(false);
         when(companyService.create(req)).thenReturn(false);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/company_form", mav.getViewName());
@@ -97,7 +101,7 @@ class CompaniesAdminControllerUnitTests {
 
         when(companyService.findById(id)).thenReturn(company);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.editCompany(id, locale);
 
         assertEquals("admin/company_form", mav.getViewName());
@@ -110,7 +114,7 @@ class CompaniesAdminControllerUnitTests {
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.editCompany(UUID.randomUUID(), req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/company_form", mav.getViewName());
@@ -124,7 +128,7 @@ class CompaniesAdminControllerUnitTests {
 
         when(result.hasErrors()).thenReturn(false);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.editCompany(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/companies", mav.getViewName());
@@ -136,7 +140,7 @@ class CompaniesAdminControllerUnitTests {
         UUID id = UUID.randomUUID();
         RedirectAttributes redirect = mock(RedirectAttributes.class);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.deleteCompany(id, redirect, locale);
 
         assertEquals("redirect:/admin/companies", mav.getViewName());

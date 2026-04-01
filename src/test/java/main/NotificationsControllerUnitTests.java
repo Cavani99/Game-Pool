@@ -12,6 +12,7 @@ import project.model.User;
 import project.model.UserRole;
 import project.security.AuthenticationDetails;
 import project.service.GameService;
+import project.service.MessageService;
 import project.service.NotificationService;
 import project.service.UserService;
 import project.event.payloads.NotificationResponse;
@@ -35,6 +36,8 @@ class NotificationsControllerUnitTests {
     GameService gameService;
     @Mock
     NotificationService notificationService;
+    @Mock
+    private MessageService messageService;
 
     @InjectMocks
     NotificationsController controller;
@@ -76,7 +79,7 @@ class NotificationsControllerUnitTests {
         when(notificationService.removeNotification(nid))
                 .thenReturn(HttpStatus.OK);
 
-        Locale locale = Locale.getDefault();
+        Locale locale = Locale.ENGLISH;
         ModelAndView mav = controller.removeNotification(nid, locale);
 
         assertEquals("redirect:/dashboard/notifications", mav.getViewName());
