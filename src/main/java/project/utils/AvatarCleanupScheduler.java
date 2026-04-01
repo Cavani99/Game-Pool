@@ -19,7 +19,8 @@ public class AvatarCleanupScheduler {
     }
 
     @Scheduled(cron = "0 0 3 ? * SUN")
-    public void scheduledAvatarCleanup(Locale locale) {
+    public void scheduledAvatarCleanup() {
+        Locale locale = Locale.getDefault();
         imagesCleanupService.deleteUnusedUserAvatars(logger, locale);
     }
 }

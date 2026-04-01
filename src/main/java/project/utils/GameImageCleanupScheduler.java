@@ -19,7 +19,8 @@ public class GameImageCleanupScheduler {
     }
 
     @Scheduled(cron = "0 0 4 ? * SUN")
-    public void scheduledGameImagesCleanup(Locale locale) {
+    public void scheduledGameImagesCleanup() {
+        Locale locale = Locale.getDefault();
         imagesCleanupService.deleteUnusedGameImages(logger, locale);
     }
 }
