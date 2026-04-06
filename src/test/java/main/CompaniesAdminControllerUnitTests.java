@@ -73,6 +73,7 @@ class CompaniesAdminControllerUnitTests {
         when(companyService.create(req)).thenReturn(true);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("company_name_created", locale)).thenReturn("Company {} created successfully!");
         ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/companies", mav.getViewName());
@@ -86,6 +87,7 @@ class CompaniesAdminControllerUnitTests {
         when(companyService.create(req)).thenReturn(false);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("company_exists", locale)).thenReturn("A company with this name already exists.");
         ModelAndView mav = controller.createCompany(req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("admin/company_form", mav.getViewName());
@@ -129,6 +131,7 @@ class CompaniesAdminControllerUnitTests {
         when(result.hasErrors()).thenReturn(false);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("company_saved", locale)).thenReturn("Company {} saved successfully!");
         ModelAndView mav = controller.editCompany(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/companies", mav.getViewName());

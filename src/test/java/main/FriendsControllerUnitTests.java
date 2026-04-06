@@ -113,6 +113,8 @@ class FriendsControllerUnitTests {
         when(userService.getById(receiverId)).thenReturn(friend);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("friend_invite", locale)).thenReturn("Friend invitation sent to {}");
+        when(messageService.getLocalizedMessage("friend_invite_success", locale)).thenReturn("Friend invitation sent successfully!");
         Map<String, String> result = controller.sendFriendRequest(receiverId, details, locale);
 
         assertEquals("Friend invitation sent successfully!", result.get("message"));

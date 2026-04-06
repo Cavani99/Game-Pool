@@ -68,7 +68,8 @@ class IndexControllerUnitTests {
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);
 
-        ModelAndView mv = controller.register(req, bindingResult, Locale.getDefault());
+        Locale locale = Locale.ENGLISH;
+        ModelAndView mv = controller.register(req, bindingResult, locale);
 
         assertEquals("redirect:/login", mv.getViewName());
         verify(userService).create(eq(req), anyString());
@@ -85,7 +86,10 @@ class IndexControllerUnitTests {
 
         BindingResult bindingResult = new BeanPropertyBindingResult(req, "user");
 
-        ModelAndView mv = controller.register(req, bindingResult, Locale.getDefault());
+        Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("register.no_image", locale)).thenReturn("You need to pick an image!");
+
+        ModelAndView mv = controller.register(req, bindingResult, locale);
 
         assertEquals("register", mv.getViewName());
         assertEquals("You need to pick an image!", mv.getModel().get("errorMessage"));
@@ -107,7 +111,10 @@ class IndexControllerUnitTests {
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);
 
-        ModelAndView mv = controller.register(req, bindingResult, Locale.getDefault());
+        Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("register.no_image", locale)).thenReturn("You need to pick an image!");
+
+        ModelAndView mv = controller.register(req, bindingResult, locale);
 
         assertEquals("register", mv.getViewName());
         assertEquals("You need to pick an image!", mv.getModel().get("errorMessage"));
@@ -125,7 +132,8 @@ class IndexControllerUnitTests {
         BindingResult bindingResult = new BeanPropertyBindingResult(req, "user");
         bindingResult.rejectValue("username", "username.empty", "Username required");
 
-        ModelAndView mv = controller.register(req, bindingResult, Locale.getDefault());
+        Locale locale = Locale.ENGLISH;
+        ModelAndView mv = controller.register(req, bindingResult, locale);
 
         assertEquals("register", mv.getViewName());
         assertEquals(req, mv.getModel().get("user"));
@@ -136,7 +144,8 @@ class IndexControllerUnitTests {
 
     @Test
     void testLogin() {
-        ModelAndView mav = controller.getLogin(null, null, Locale.getDefault());
+        Locale locale = Locale.ENGLISH;
+        ModelAndView mav = controller.getLogin(null, null, locale);
 
         assertEquals("login", mav.getViewName());
         assertNull(mav.getModel().get("error"));
@@ -144,11 +153,13 @@ class IndexControllerUnitTests {
 
     @Test
     void testLoginErrorMessage() {
-        ModelAndView mav = controller.getLogin("error", null, Locale.getDefault());
+        Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("login.error", locale)).thenReturn("Invalid email or password!");
+
+        ModelAndView mav = controller.getLogin("error", null, locale);
 
         assertEquals("login", mav.getViewName());
         assertEquals("Invalid email or password!", mav.getModel().get("error"));
-
     }
 
     @Test

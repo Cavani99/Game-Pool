@@ -106,6 +106,7 @@ class GamesAdminControllerUnitTests {
         when(companyService.findAll()).thenReturn(List.of(comp));
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_name_created", locale)).thenReturn("Game {} created successfully!");
         ModelAndView mav = controller.createGame(req, mock(BindingResult.class), mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mav.getViewName());
@@ -283,6 +284,7 @@ class GamesAdminControllerUnitTests {
         when(gameService.addDiscount(id, discount)).thenReturn(game);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_discount_saved", locale)).thenReturn("Discount for {} saved successfully!");
         ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
@@ -309,6 +311,7 @@ class GamesAdminControllerUnitTests {
         when(gameService.addDiscount(id, discount)).thenReturn(game);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_discount_saved", locale)).thenReturn("Discount for {} saved successfully!");
         ModelAndView mv = controller.addDiscount(id, req, br, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
@@ -334,6 +337,7 @@ class GamesAdminControllerUnitTests {
     void addDiscountPost_Success_ShouldRedirect() {
         UUID id = UUID.randomUUID();
         Game game = new Game();
+        game.setTitle("Game");
         when(gameService.findById(id)).thenReturn(game);
 
         CreateDiscountRequest req = new CreateDiscountRequest();
@@ -345,6 +349,8 @@ class GamesAdminControllerUnitTests {
         when(gameService.addDiscount(eq(id), any())).thenReturn(game);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_discount_more_than_zero", locale)).thenReturn("Write a discount amount more than 0");
+        when(messageService.getLocalizedMessage("game_discount_saved", locale)).thenReturn("Discount for {} saved successfully!");
         ModelAndView mav = controller.addDiscount(id, req, result, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mav.getViewName());
@@ -354,11 +360,13 @@ class GamesAdminControllerUnitTests {
     void removeDiscount_ShouldRedirect() {
         UUID id = UUID.randomUUID();
         Game game = new Game();
+        game.setTitle("Game");
         game.setDiscount(new Discount());
 
         when(gameService.findById(id)).thenReturn(game);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_discount_removed", locale)).thenReturn("Discount for {} removed!");
         ModelAndView mav = controller.removeDiscount(id, mock(RedirectAttributes.class), locale);
 
         assertEquals("redirect:/admin/games", mav.getViewName());
@@ -396,6 +404,7 @@ class GamesAdminControllerUnitTests {
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_saved", locale)).thenReturn("Game {} saved successfully!");
         ModelAndView mv = controller.editGame(id, req, br, redirectAttributes, locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
@@ -427,6 +436,7 @@ class GamesAdminControllerUnitTests {
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_saved", locale)).thenReturn("Game {} saved successfully!");
         ModelAndView mv = controller.editGame(id, req, br, redirectAttributes, locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
@@ -461,6 +471,7 @@ class GamesAdminControllerUnitTests {
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
         Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_saved", locale)).thenReturn("Game {} saved successfully!");
         ModelAndView mv = controller.editGame(id, req, br, redirectAttributes, locale);
 
         assertEquals("redirect:/admin/games", mv.getViewName());
