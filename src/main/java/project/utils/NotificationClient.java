@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "notification-system", url = "http://localhost:8081/notification/v1", fallback = NotificationFallback.class)
+@FeignClient(name = "notification-system", url = "http://localhost:8082/notification/v1", fallback = NotificationFallback.class)
 public interface NotificationClient {
 
     @PostMapping("/user")
