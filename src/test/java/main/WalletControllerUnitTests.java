@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
@@ -289,5 +291,24 @@ class WalletControllerUnitTests {
 
         verify(userService).sendFunds(details.getId(), req);
         verify(transactionService).createSendFundsTransaction(details.getId(), req);
+    }
+
+    @Test
+    void testGetAddWalletFundsAjaxFunction() {
+        AuthenticationDetails details = new AuthenticationDetails(UUID.randomUUID(), "test",
+                "12", UserRole.USER, BigDecimal.valueOf(10.00), false);
+        User user = new User();
+        user.setId(details.getId());
+        user.setUsername(details.getUsername());
+
+        AddFundsRequest addFundsRequest = new AddFundsRequest(BigDecimal.valueOf(15.00));
+
+        ResponseEntity<?> response = walletController.addWalletFundsAjax(details, addFundsRequest);
+
+
+        assertEquals(response.getStatusCode(), HttpStatusCode.valueOf(200));
+
+        verify(userService).addFunds(details.getId(), addFundsRequest);
+        verify(transactionService).createSelfTransaction(details.getId(), addFundsRequest);
     }
 }

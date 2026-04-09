@@ -11,12 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import project.model.User;
 import project.model.UserRole;
+import project.security.AuthenticationDetails;
 import project.service.MessageService;
 import project.service.NotificationService;
 import project.service.UserService;
 import project.web.IndexController;
 import project.web.dto.RegisterRequest;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -41,6 +43,15 @@ class IndexControllerUnitTests {
         ModelAndView mav = controller.getRegister(null);
         assertEquals("register", mav.getViewName());
         assertInstanceOf(RegisterRequest.class, mav.getModel().get("user"));
+    }
+
+    @Test
+    void register_WithAuthenticatedUser_ShouldRedirectToDashboard() {
+        AuthenticationDetails details = new AuthenticationDetails(UUID.randomUUID(), "test",
+                "12", UserRole.USER, BigDecimal.valueOf(10.00), false);
+
+        ModelAndView mav = controller.getRegister(details);
+        assertEquals("redirect:/dashboard", mav.getViewName());
     }
 
     @Test
@@ -149,6 +160,15 @@ class IndexControllerUnitTests {
 
         assertEquals("login", mav.getViewName());
         assertNull(mav.getModel().get("error"));
+    }
+
+    @Test
+    void login_WithAuthenticatedUser_ShouldRedirectToDashboard() {
+        AuthenticationDetails details = new AuthenticationDetails(UUID.randomUUID(), "test",
+                "12", UserRole.USER, BigDecimal.valueOf(10.00), false);
+
+        ModelAndView mav = controller.getLogin(null, details, Locale.ENGLISH);
+        assertEquals("redirect:/dashboard", mav.getViewName());
     }
 
     @Test
