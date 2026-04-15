@@ -5,13 +5,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import project.model.User;
 import project.service.MessageService;
 import project.service.UserService;
+import project.utils.ImagesCleanupService;
+import project.web.admin.GamesAdminController;
 import project.web.admin.UsersAdminController;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,6 +32,9 @@ class UsersAdminControllerTests {
     private UserService userService;
     @Mock
     private MessageService messageService;
+
+    @Mock
+    private ImagesCleanupService imagesCleanupService;
 
     @InjectMocks
     private UsersAdminController controller;
@@ -75,5 +83,15 @@ class UsersAdminControllerTests {
         verify(userService).changeBanStatus(eq(id), any());
     }
 
+    @Test
+    void removeImages_ShouldReturnRightMessage() {
+        Locale locale = Locale.ENGLISH;
+
+        when(messageService.getLocalizedMessage("users_avatars_deleted", locale)).thenReturn("Unused user avatars deleted successfully!");
+        Map<String, String> result = controller.removeAvatars(locale);
+
+        assertEquals("Unused user avatars deleted successfully!", result.get("message"));
+        verify(imagesCleanupService).deleteUnusedUserAvatars(LoggerFactory.getLogger(UsersAdminController.class), locale);
+    }
 }
 

@@ -116,22 +116,19 @@ public class GamesAdminController {
 
         //save image and get path
         MultipartFile image = createGameRequest.getImage();
-        String imagePath = null;
-        if (image != null && !image.isEmpty()) {
-            String uploadDir = "uploads/games/";
-            Files.createDirectories(Paths.get(uploadDir));
+        String uploadDir = "uploads/games/";
+        Files.createDirectories(Paths.get(uploadDir));
 
-            String originalName = image.getOriginalFilename();
-            String latinName = Normalizer.normalize(originalName, Normalizer.Form.NFD)
-                    .replaceAll("[^\\p{ASCII}]", "")
-                    .replaceAll("[^a-zA-Z0-9._-]", "_");
+        String originalName = image.getOriginalFilename();
+        String latinName = Normalizer.normalize(originalName, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "")
+                .replaceAll("[^a-zA-Z0-9._-]", "_");
 
-            String filename = UUID.randomUUID() + "_" + latinName;
-            Path filePath = Paths.get(uploadDir + filename);
-            Files.write(filePath, image.getBytes());
+        String filename = UUID.randomUUID() + "_" + latinName;
+        Path filePath = Paths.get(uploadDir + filename);
+        Files.write(filePath, image.getBytes());
 
-            imagePath = "/uploads/games/" + filename;
-        }
+        String imagePath = "/uploads/games/" + filename;
         Category category = categoryService.findById(createGameRequest.getCategoryId());
         Company company = companyService.findById(createGameRequest.getCompanyId());
 

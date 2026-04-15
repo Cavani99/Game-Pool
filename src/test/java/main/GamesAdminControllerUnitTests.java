@@ -5,6 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.model.*;
 import project.service.*;
+import project.utils.ImagesCleanupService;
 import project.web.admin.GamesAdminController;
 import project.web.dto.CreateDiscountRequest;
 import project.web.dto.CreateGameRequest;
@@ -19,6 +22,7 @@ import project.web.dto.CreateGameRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,6 +43,9 @@ class GamesAdminControllerUnitTests {
     private CompanyService companyService;
     @Mock
     private MessageService messageService;
+
+    @Mock
+    private ImagesCleanupService imagesCleanupService;
 
     @InjectMocks
     private GamesAdminController controller;
@@ -71,6 +78,25 @@ class GamesAdminControllerUnitTests {
         CreateGameRequest req = new CreateGameRequest();
         BindingResult result = mock(BindingResult.class);
         when(result.hasErrors()).thenReturn(true);
+
+        when(categoryService.findAll()).thenReturn(List.of());
+        when(companyService.findAll()).thenReturn(List.of());
+
+        Locale locale = Locale.ENGLISH;
+        ModelAndView mav = controller.createGame(req, result, mock(RedirectAttributes.class), locale);
+
+        assertEquals("admin/game_form", mav.getViewName());
+    }
+
+    @Test
+    void createGame_WithEmptyImage_ShouldReturnForm() throws Exception {
+        CreateGameRequest req = new CreateGameRequest();
+        BindingResult result = mock(BindingResult.class);
+        when(result.hasErrors()).thenReturn(true);
+
+        MultipartFile mockFile = mock(MultipartFile.class);
+        when(mockFile.isEmpty()).thenReturn(true);
+        req.setImage(mockFile);
 
         when(categoryService.findAll()).thenReturn(List.of());
         when(companyService.findAll()).thenReturn(List.of());
@@ -240,6 +266,64 @@ class GamesAdminControllerUnitTests {
 
         assertEquals("admin/discount_form", mv.getViewName());
         assertTrue(br.hasFieldErrors("amount"));
+    }
+
+    @Test
+    void addDiscountValidations_Pass_WhenStartDateIsMissing() {
+        UUID id = UUID.randomUUID();
+        Discount discount = new Discount();
+        discount.setAmount(15);
+        discount.setType(DiscountType.FIXED);
+
+        Game game = new Game();
+        game.setTitle("Test Game");
+        when(gameService.findById(id)).thenReturn(game);
+
+        CreateDiscountRequest req = new CreateDiscountRequest();
+        req.setAmount(50);
+        req.setType(DiscountType.PERCENT);
+        req.setStartDate(null);
+        req.setEndDate(LocalDateTime.now().plusDays(15));
+
+        when(discountService.persist(any(), eq(req))).thenReturn(discount);
+        when(gameService.addDiscount(id, discount)).thenReturn(game);
+
+        BindingResult br = new BeanPropertyBindingResult(req, "discount");
+
+        Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_discount_saved", locale)).thenReturn("Discount for {} saved successfully!");
+        controller.addDiscount(id, req, br, mock(RedirectAttributes.class), locale);
+
+        assertFalse(br.hasErrors());
+    }
+
+    @Test
+    void addDiscountValidations_Pass_WhenEndDateIsMissing() {
+        UUID id = UUID.randomUUID();
+        Discount discount = new Discount();
+        discount.setAmount(15);
+        discount.setType(DiscountType.FIXED);
+
+        Game game = new Game();
+        game.setTitle("Test Game");
+        when(gameService.findById(id)).thenReturn(game);
+
+        CreateDiscountRequest req = new CreateDiscountRequest();
+        req.setAmount(50);
+        req.setType(DiscountType.PERCENT);
+        req.setStartDate(LocalDateTime.now().plusDays(5));
+        req.setEndDate(null);
+
+        when(discountService.persist(any(), eq(req))).thenReturn(discount);
+        when(gameService.addDiscount(id, discount)).thenReturn(game);
+
+        BindingResult br = new BeanPropertyBindingResult(req, "discount");
+
+        Locale locale = Locale.ENGLISH;
+        when(messageService.getLocalizedMessage("game_discount_saved", locale)).thenReturn("Discount for {} saved successfully!");
+        controller.addDiscount(id, req, br, mock(RedirectAttributes.class), locale);
+
+        assertFalse(br.hasErrors());
     }
 
     @Test
@@ -504,6 +588,17 @@ class GamesAdminControllerUnitTests {
         assertEquals("admin/game_form", mv.getViewName());
         assertEquals(req, mv.getModel().get("game"));
         verify(gameService, never()).edit(any(), any(), any(), any(), any());
+    }
+
+    @Test
+    void removeImages_ShouldReturnRightMessage() {
+        Locale locale = Locale.ENGLISH;
+
+        when(messageService.getLocalizedMessage("games_images_deleted", locale)).thenReturn("Unused game images deleted successfully!");
+        Map<String, String> result = controller.removeImages(locale);
+
+        assertEquals("Unused game images deleted successfully!", result.get("message"));
+        verify(imagesCleanupService).deleteUnusedGameImages(LoggerFactory.getLogger(GamesAdminController.class), locale);
     }
 }
 
