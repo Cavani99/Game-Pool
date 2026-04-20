@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="/css/top-bar.css">
     <link rel="stylesheet" type="text/css" href="/css/user-common.css">
     <link rel="stylesheet" type="text/css" href="/css/friends.css">
+    <link rel="stylesheet" type="text/css" href="/css/chat.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="/js/chat.js"></script>
@@ -36,7 +37,7 @@
 
                         <div class="friend-actions">
                             <a th:href="@{/chat/open_chat/{id} (id=${user.id})}"
-                               class="friend-btn details-btn" th:text="#{chat}">
+                               class="friend-btn details-btn chat-btn" th:text="#{chat}">
                             </a>
                         </div>
                     </div>
@@ -47,8 +48,18 @@
             </div>
             <div class="chat-side">
                 <div class="result-container">
-                    <div class="event-message"></div>
-                    <div class="result-search">
+                    <div class="chat-wrapper">
+                        <div class="chat-box">
+                            <div class="messages-list"></div>
+                            <div class="send-message-wrapper">
+                                <div class="send-message-box">
+                                    <input class="form-control message-field" type="text" placeholder="Message">
+                                    <a th:href="@{/chat/send_message}"
+                                       class="friend-btn send-message-btn chat-btn" th:text="#{send}">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

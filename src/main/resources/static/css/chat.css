@@ -1,0 +1,45 @@
+.chat-wrapper {
+    display: none;
+    background: aliceblue;
+    width: 90%;
+    height: 90%;
+    margin-left: 3%;
+    margin-top: 1%;
+    border-radius: 1em;
+}
+
+.chat-box{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+}
+
+.messages-list{
+    flex: 6;
+}
+
+.send-message-wrapper{
+    flex: 1;
+    background: darkseagreen;
+    border-radius: 0em 0em 1em 1em;
+}
+
+.send-message-box{
+    display: flex;
+    padding: 2em;
+    justify-content: space-around;
+}
+
+.message-field{
+    height: 30px;
+    width: 75%;
+    border-radius: 10%;
+}
+
+.send-message-btn{
+    color: white;
+    background: cadetblue;
+    width: 12%;
+}
+
