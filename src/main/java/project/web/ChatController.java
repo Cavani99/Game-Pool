@@ -3,10 +3,7 @@ package project.web;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.model.User;
 import project.security.AuthenticationDetails;
@@ -46,6 +43,7 @@ public class ChatController {
     }
 
     @PostMapping("open_chat/{id}")
+    @ResponseBody
     @PreAuthorize("hasAuthority('USER')")
     public Map<String, String> getChatForUser(@PathVariable("id") UUID friendId, @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         User user = userService.getById(userDetails.getId());
@@ -58,6 +56,6 @@ public class ChatController {
 
         //get messages
 
-        return Map.of("message", "");
+        return Map.of("message", "success");
     }
 }
