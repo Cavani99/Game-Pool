@@ -113,4 +113,19 @@ public class NotificationService {
             }
         }
     }
+
+    public List<NotificationObject> getChatNotifications(UUID userId, UUID friendId) {
+        List<NotificationResponse> notifications = notificationClient.getChatNotifications(userId, friendId);
+
+        return notifications.stream()
+                .map(notification -> {
+                    if (notification.getSender() != null) {
+                        User sender = userService.getById(notification.getSender());
+                        return new NotificationObject(notification, sender.getUsername());
+                    } else {
+                        return new NotificationObject(notification, null);
+                    }
+                })
+                .toList();
+    }
 }

@@ -30,4 +30,7 @@ public interface NotificationClient {
 
     @DeleteMapping("/notification/{id}")
     ResponseEntity<Void> removeNotification(@PathVariable UUID id);
+
+    @GetMapping("/messages/{user_id}/{friend_id}")
+    List<NotificationResponse> getChatNotifications(@PathVariable("user_id") UUID userId, @PathVariable("friend_id") UUID friendId);
 }

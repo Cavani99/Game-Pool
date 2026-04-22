@@ -5,11 +5,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import project.event.payloads.NotificationObject;
 import project.model.User;
 import project.security.AuthenticationDetails;
 import project.service.MessageService;
+import project.service.NotificationService;
 import project.service.UserService;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -22,9 +25,12 @@ public class ChatController {
 
     private final MessageService messageService;
 
-    public ChatController(UserService userService, MessageService messageService) {
+    private final NotificationService notificationService;
+
+    public ChatController(UserService userService, MessageService messageService, NotificationService notificationService) {
         this.userService = userService;
         this.messageService = messageService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -55,6 +61,7 @@ public class ChatController {
         }
 
         //get messages
+        List<NotificationObject> chatMessages = notificationService.getChatNotifications(user.getId(), friendId);
 
         return Map.of("message", "success");
     }
