@@ -1,5 +1,6 @@
 package project.web;
 
+import org.springframework.web.bind.annotation.*;
 import project.model.Game;
 import project.model.User;
 import project.security.AuthenticationDetails;
@@ -14,13 +15,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -79,6 +78,14 @@ public class NotificationsController {
         logger.info(message, id, status);
 
         return new ModelAndView("redirect:/dashboard/notifications");
+    }
+
+    @PostMapping("sent/{friend_id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public void sendChatMessage(@AuthenticationPrincipal AuthenticationDetails userDetails, @PathVariable("friend_id") UUID friendId,
+                                @RequestBody Map<String, String> messageRequest) {
+        String message = messageRequest.get("message");
+        notificationService.createChatMessageRequest(userDetails.getId(), friendId, message);
     }
 
     @Scheduled(cron = "0 0 * * * ?")

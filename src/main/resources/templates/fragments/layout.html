@@ -50,6 +50,10 @@
                                    th:text="#{friends}"></a>
                             </li>
                             <li>
+                                <a th:href="@{/chat}" th:classappend="${page} == 'chat' ? 'active'"
+                                   th:text="#{chat}"></a>
+                            </li>
+                            <li>
                                 <a th:href="@{/dashboard/games/wishlist}"
                                    th:classappend="${page} == 'wishlist' ? 'active'" th:text="#{wish_list}"></a>
                             </li>

@@ -1,5 +1,6 @@
 package project.service;
 
+import project.event.interfaces.ChatEventPublisher;
 import project.event.interfaces.NotificationEventPublisher;
 import project.event.interfaces.UserEventPublisher;
 import project.model.Game;
@@ -27,14 +28,17 @@ public class NotificationService {
     private final UserEventPublisher userEventPublisher;
     private final NotificationEventPublisher notificationEventPublisher;
 
+    private final ChatEventPublisher chatEventPublisher;
+
 
     public NotificationService(NotificationClient notificationClient, UserService userService, GameService gameService,
-                               UserEventPublisher userEventPublisher, NotificationEventPublisher notificationEventPublisher) {
+                               UserEventPublisher userEventPublisher, NotificationEventPublisher notificationEventPublisher, ChatEventPublisher chatEventPublisher) {
         this.notificationClient = notificationClient;
         this.userService = userService;
         this.gameService = gameService;
         this.userEventPublisher = userEventPublisher;
         this.notificationEventPublisher = notificationEventPublisher;
+        this.chatEventPublisher = chatEventPublisher;
     }
 
     public void saveUser(UUID userId, String username) {
@@ -127,5 +131,18 @@ public class NotificationService {
                     }
                 })
                 .toList();
+    }
+
+    public void createChatMessageRequest(UUID userId, UUID friendId, String message) {
+        User sender = userService.getById(userId);
+        User receiver = userService.getById(friendId);
+
+        CreateNotificationRequest request = new CreateNotificationRequest();
+        request.setTitle("Message sent from: " + sender.getUsername() + " to: " + receiver.getUsername());
+        request.setMessage(message);
+        request.setType(NotificationType.MESSAGE);
+        request.setSenderId(userId);
+        request.setReceiverId(friendId);
+        chatEventPublisher.send(request);
     }
 }

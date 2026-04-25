@@ -39,4 +39,9 @@ public class NotificationFallback implements NotificationClient {
     public ResponseEntity<Void> removeNotification(UUID id) {
         return ResponseEntity.notFound().build();
     }
+
+    @Override
+    public List<NotificationResponse> getChatNotifications(UUID userId, UUID friendId) {
+        return Collections.emptyList();
+    }
 }
