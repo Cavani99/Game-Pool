@@ -37,7 +37,9 @@
 
                         <div class="friend-actions">
                             <a th:href="@{/chat/open_chat/{id} (id=${user.id})}"
-                               class="friend-btn details-btn chat-btn" th:text="#{chat}">
+                               th:attr="data-user-id=${user.id}"
+                               class="friend-btn details-btn open-chat-btn"
+                               th:text="#{chat}">
                             </a>
                         </div>
                     </div>
@@ -47,6 +49,7 @@
                 </div>
             </div>
             <div class="chat-side">
+                <input type="hidden" id="userId">
                 <div class="result-container">
                     <div class="chat-wrapper">
                         <div class="chat-box">

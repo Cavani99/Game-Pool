@@ -1,5 +1,6 @@
 package project.web;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.model.Game;
 import project.model.User;
@@ -81,11 +82,14 @@ public class NotificationsController {
     }
 
     @PostMapping("sent/{friend_id}")
+    @ResponseBody
     @PreAuthorize("hasAuthority('USER')")
-    public void sendChatMessage(@AuthenticationPrincipal AuthenticationDetails userDetails, @PathVariable("friend_id") UUID friendId,
-                                @RequestBody Map<String, String> messageRequest) {
+    public ResponseEntity<?> sendChatMessage(@AuthenticationPrincipal AuthenticationDetails userDetails, @PathVariable("friend_id") UUID friendId,
+                                             @RequestBody Map<String, String> messageRequest) {
         String message = messageRequest.get("message");
         notificationService.createChatMessageRequest(userDetails.getId(), friendId, message);
+
+        return ResponseEntity.ok().build();
     }
 
     @Scheduled(cron = "0 0 * * * ?")

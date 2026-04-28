@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import project.event.interfaces.ChatEventPublisher;
 import project.event.payloads.CreateNotificationRequest;
 
-import static project.config.KafkaConfiguration.NOTIFICATION_SAVE_KAFKA_EVENT;
+import static project.config.KafkaConfiguration.CHAT_MESSAGE_KAFKA_EVENT;
 
 @Component
 @ConditionalOnProperty(name = "kafka.enabled", havingValue = "true")
@@ -20,6 +20,6 @@ public class ChatMessageEventPublisher implements ChatEventPublisher {
     }
 
     public void send(CreateNotificationRequest request) {
-        notificationRequestKafkaTemplate.send(NOTIFICATION_SAVE_KAFKA_EVENT, request);
+        notificationRequestKafkaTemplate.send(CHAT_MESSAGE_KAFKA_EVENT, request);
     }
 }
