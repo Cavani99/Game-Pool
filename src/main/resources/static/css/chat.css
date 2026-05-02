@@ -17,6 +17,9 @@
 
 .messages-list{
     flex: 6;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .send-message-wrapper{
@@ -63,5 +66,34 @@
     max-width: 100%;
     white-space: nowrap;
     text-decoration: none;
+}
+
+.message {
+    display: flex;
+    margin: 5px 0;
+}
+
+.message.sent {
+    justify-content: flex-end;
+}
+
+.message.received {
+    justify-content: flex-start;
+}
+
+.message-content {
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 60%;
+}
+
+.message.sent .message-content {
+    background-color: #007bff;
+    color: white;
+}
+
+.message.received .message-content {
+    background-color: #e5e5ea;
+    color: black;
 }
 

@@ -2,6 +2,7 @@ package project.utils;
 
 import project.event.payloads.CreateNotificationRequest;
 import project.event.payloads.CreateUserRequest;
+import project.event.payloads.NotificationMessage;
 import project.event.payloads.NotificationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +33,5 @@ public interface NotificationClient {
     ResponseEntity<Void> removeNotification(@PathVariable UUID id);
 
     @GetMapping("/messages/{user_id}/{friend_id}")
-    List<NotificationResponse> getChatNotifications(@PathVariable("user_id") UUID userId, @PathVariable("friend_id") UUID friendId);
+    List<NotificationMessage> getChatNotifications(@PathVariable("user_id") UUID userId, @PathVariable("friend_id") UUID friendId);
 }

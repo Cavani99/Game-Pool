@@ -2,6 +2,7 @@ package project.utils;
 
 import project.event.payloads.CreateNotificationRequest;
 import project.event.payloads.CreateUserRequest;
+import project.event.payloads.NotificationMessage;
 import project.event.payloads.NotificationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -41,7 +42,7 @@ public class NotificationFallback implements NotificationClient {
     }
 
     @Override
-    public List<NotificationResponse> getChatNotifications(UUID userId, UUID friendId) {
+    public List<NotificationMessage> getChatNotifications(UUID userId, UUID friendId) {
         return Collections.emptyList();
     }
 }

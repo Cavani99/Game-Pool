@@ -5,17 +5,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import project.event.payloads.NotificationObject;
+import project.event.payloads.NotificationMessage;
 import project.model.User;
 import project.security.AuthenticationDetails;
 import project.service.MessageService;
 import project.service.NotificationService;
 import project.service.UserService;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/chat")
@@ -51,7 +48,7 @@ public class ChatController {
     @PostMapping("open_chat/{id}")
     @ResponseBody
     @PreAuthorize("hasAuthority('USER')")
-    public Map<String, String> getChatForUser(@PathVariable("id") UUID friendId, @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
+    public Map<String, Object> getChatForUser(@PathVariable("id") UUID friendId, @AuthenticationPrincipal AuthenticationDetails userDetails, Locale locale) {
         User user = userService.getById(userDetails.getId());
         User friend = userService.getById(friendId);
 
@@ -61,8 +58,13 @@ public class ChatController {
         }
 
         //get messages
-        List<NotificationObject> chatMessages = notificationService.getChatNotifications(user.getId(), friendId);
+        List<NotificationMessage> chatMessages = notificationService.getChatNotifications(user.getId(), friendId);
 
-        return Map.of("message", "success");
+        Map<String, Object> result = new HashMap<>();
+        result.put("userId", userDetails.getId());
+        result.put("chat", chatMessages);
+        result.put("message", "success");
+
+        return result;
     }
 }

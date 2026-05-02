@@ -3,14 +3,11 @@ package project.service;
 import project.event.interfaces.ChatEventPublisher;
 import project.event.interfaces.NotificationEventPublisher;
 import project.event.interfaces.UserEventPublisher;
+import project.event.payloads.*;
 import project.model.Game;
 import project.model.NotificationType;
 import project.model.User;
 import project.utils.NotificationClient;
-import project.event.payloads.CreateNotificationRequest;
-import project.event.payloads.CreateUserRequest;
-import project.event.payloads.NotificationObject;
-import project.event.payloads.NotificationResponse;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -118,19 +115,10 @@ public class NotificationService {
         }
     }
 
-    public List<NotificationObject> getChatNotifications(UUID userId, UUID friendId) {
-        List<NotificationResponse> notifications = notificationClient.getChatNotifications(userId, friendId);
+    public List<NotificationMessage> getChatNotifications(UUID userId, UUID friendId) {
+        List<NotificationMessage> notifications = notificationClient.getChatNotifications(userId, friendId);
 
-        return notifications.stream()
-                .map(notification -> {
-                    if (notification.getSender() != null) {
-                        User sender = userService.getById(notification.getSender());
-                        return new NotificationObject(notification, sender.getUsername());
-                    } else {
-                        return new NotificationObject(notification, null);
-                    }
-                })
-                .toList();
+        return notifications.stream().toList();
     }
 
     public void createChatMessageRequest(UUID userId, UUID friendId, String message) {
