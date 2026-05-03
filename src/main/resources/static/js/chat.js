@@ -18,30 +18,18 @@ $(document).ready(function () {
                    xhr.setRequestHeader(header, token);
                },
                success: function(response) {
-                   let chat = $('.chat-wrapper');
-                   let messagesList = $('.messages-list');
-                   const userId = response.userId;
+                    let chat = $('.chat-wrapper');
+                    let messagesList = $('.messages-list');
+                    const userId = response.userId;
 
-                   chat.css('display', 'block');
-                   chat.stop(true, true)
+                    chat.css('display', 'block');
+                    chat.stop(true, true)
                          .fadeIn(300);
 
-                   messagesList.html('');
-                   response.chat.forEach(msg => {
-                       let isSender = msg.sender === userId;
-                       let formattedTime = formatDate(msg.createdOn);
-
-                       let messageHtml = `
-                           <div class="message ${isSender ? 'sent' : 'received'}">
-                               <div class="message-content" title="${formattedTime}">
-                                   <p>${msg.message}</p>
-                               </div>
-                           </div>
-                       `;
-
-                       messagesList.append(messageHtml);
-                   });
-                   messagesList.scrollTop(messagesList[0].scrollHeight);
+                    messagesList.html('');
+                    response.chat.forEach(msg => {
+                        renderMessage(msg, response.userId);
+                    });
                },
                error: function(xhr) {
                    console.error("Error opening chat:", xhr);
@@ -62,35 +50,61 @@ $(document).ready(function () {
                e.preventDefault();
 
                let chat = $('.chat-wrapper');
+                $('#userId').val('');
 
                chat.css('display', 'block');
                chat.stop(true, true)
                   .fadeOut(300);
     });
 
-     $(document).on('click', '.send-message-btn', function (e) {
-                e.preventDefault();
+    $(document).on('click', '.send-message-btn', function (e) {
+        e.preventDefault();
 
-                const userId = $('#userId').val();
-                const url = `/dashboard/notifications/sent/${userId}`;
-                const message = $('.message-field').val().trim();
+        const receiverId = $('#userId').val();
+        const messageInput = $('.message-field');
+        const message = messageInput.val().trim();
 
-                $.ajax({
-                     url: url,
-                     type: 'POST',
-                     contentType: 'application/json',
-                     data: JSON.stringify({ message: message }),
-                     beforeSend: function(xhr) {
-                         xhr.setRequestHeader(header, token);
-                     },
-                     success: function(response) {
-                        let messageInput = $('.message-field');
-                        messageInput.val('');
-                     },
-                     error: function(xhr) {
-                         console.error("Error sending message:", xhr);
-                     }
-                });
+        if (!message) return;
+
+        stompClient.send("/app/chat", {}, JSON.stringify({
+            senderId: currentUserId,
+            receiverId: receiverId,
+            message: message
+        }));
+
+        messageInput.val('');
+    });
+
+    function renderMessage(msg, currentUserId) {
+       const messagesList = $('.messages-list');
+
+       let isSender = msg.sender === currentUserId;
+       let formattedTime = formatDate(msg.createdOn);
+
+       let messageHtml = `
+           <div class="message ${isSender ? 'sent' : 'received'}">
+               <div class="message-content" title="${formattedTime}">
+                   <p>${msg.message}</p>
+               </div>
+           </div>
+       `;
+
+       messagesList.append(messageHtml);
+       messagesList.scrollTop(messagesList[0].scrollHeight);
+    }
+
+     let socket = new SockJS('/chat');
+     let stompClient = Stomp.over(socket);
+
+     stompClient.connect({}, function () {
+
+        const userId = $('#currentUserId').val();
+        stompClient.subscribe('/queue/messages/' + userId, function (message) {
+             let msg = JSON.parse(message.body);
+
+             renderMessage(msg, userId);
+        });
+
      });
     //insert functions here
 });

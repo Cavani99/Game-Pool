@@ -1,7 +1,8 @@
 package project.web;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
+import project.event.payloads.CreateNotificationRequest;
 import project.model.Game;
 import project.model.User;
 import project.security.AuthenticationDetails;
@@ -18,10 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/dashboard/notifications")
@@ -84,12 +82,25 @@ public class NotificationsController {
     @PostMapping("sent/{friend_id}")
     @ResponseBody
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> sendChatMessage(@AuthenticationPrincipal AuthenticationDetails userDetails, @PathVariable("friend_id") UUID friendId,
-                                             @RequestBody Map<String, String> messageRequest) {
+    public Map<String, Object> sendChatMessage(@AuthenticationPrincipal AuthenticationDetails userDetails, @PathVariable("friend_id") UUID friendId,
+                                               @RequestBody Map<String, String> messageRequest) {
         String message = messageRequest.get("message");
         notificationService.createChatMessageRequest(userDetails.getId(), friendId, message);
 
-        return ResponseEntity.ok().build();
+        Map<String, Object> result = new HashMap<>();
+        result.put("userId", userDetails.getId());
+        result.put("friendId", friendId);
+
+        return result;
+    }
+
+    @MessageMapping("/chat")
+    public void handleChatMessage(CreateNotificationRequest request) {
+        notificationService.createChatMessageRequest(
+                request.getSenderId(),
+                request.getReceiverId(),
+                request.getMessage()
+        );
     }
 
     @Scheduled(cron = "0 0 * * * ?")

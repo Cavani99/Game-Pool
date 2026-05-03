@@ -39,6 +39,7 @@ public class ChatController {
         User user = userService.getById(userDetails.getId());
 
         modelAndView.addObject("friends", user.getFriends());
+        modelAndView.addObject("currentUser", userDetails.getId());
         modelAndView.addObject("page", "chat");
         modelAndView.addObject("title", "Chat");
 
