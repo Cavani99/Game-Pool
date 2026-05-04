@@ -32,7 +32,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                         .requestMatchers("/", "/register").permitAll()
                         .requestMatchers("/login", "/error", "/.well-known/**", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
-                ).formLogin(form -> form
+                ).csrf(csrf -> csrf.ignoringRequestMatchers("/chat/**"))
+                .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("email")
                         .defaultSuccessUrl("/home")

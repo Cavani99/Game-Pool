@@ -60,6 +60,7 @@ $(document).ready(function () {
     $(document).on('click', '.send-message-btn', function (e) {
         e.preventDefault();
 
+        const userId = $('#currentUserId').val();
         const receiverId = $('#userId').val();
         const messageInput = $('.message-field');
         const message = messageInput.val().trim();
@@ -67,7 +68,7 @@ $(document).ready(function () {
         if (!message) return;
 
         stompClient.send("/app/chat", {}, JSON.stringify({
-            senderId: currentUserId,
+            senderId: userId,
             receiverId: receiverId,
             message: message
         }));
@@ -96,15 +97,17 @@ $(document).ready(function () {
      let socket = new SockJS('/chat');
      let stompClient = Stomp.over(socket);
 
-     stompClient.connect({}, function () {
+    stompClient.connect({
+        [header]: token
+    }, function () {
 
         const userId = $('#currentUserId').val();
-        stompClient.subscribe('/queue/messages/' + userId, function (message) {
-             let msg = JSON.parse(message.body);
 
-             renderMessage(msg, userId);
+        stompClient.subscribe('/queue/messages/' + userId, function (message) {
+            let msg = JSON.parse(message.body);
+            renderMessage(msg, userId);
         });
 
-     });
+    });
     //insert functions here
 });
