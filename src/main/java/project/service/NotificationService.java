@@ -1,5 +1,6 @@
 package project.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import project.event.interfaces.ChatEventPublisher;
 import project.event.interfaces.NotificationEventPublisher;
 import project.event.interfaces.UserEventPublisher;
@@ -17,6 +18,9 @@ import java.util.UUID;
 
 @Service
 public class NotificationService {
+
+    @Value("${server.port}")
+    private String serverPort;
 
     private final NotificationClient notificationClient;
     private final UserService userService;
@@ -48,7 +52,12 @@ public class NotificationService {
         request.setTitle("Friend Invitation!");
         request.setMessage("You got a friend invitation from " + user.getUsername() + "!");
         request.setType(NotificationType.REQUEST);
-        request.setLink("localhost:8080/dashboard/friends/accept_request/" + user.getId());
+
+        String link = "localhost:" + serverPort
+                + "/dashboard/friends/accept_request/"
+                + user.getId();
+
+        request.setLink(link);
         request.setLinkTitle("Accept");
         request.setSenderId(user.getId());
         request.setReceiverId(invitedUserId);
@@ -65,12 +74,18 @@ public class NotificationService {
     }
 
     private void createGameDiscountNotifications(Game game, List<User> users) {
+        String link;
         for (User user : users) {
             CreateNotificationRequest request = new CreateNotificationRequest();
             request.setTitle("Wishlisted Game got discounted!");
             request.setMessage("Game " + game.getTitle() + " got a discount!");
             request.setType(NotificationType.INFORMATION);
-            request.setLink("localhost:8080/dashboard/games/details/" + game.getId());
+
+            link = "localhost:" + serverPort
+                    + "/dashboard/games/details/"
+                    + game.getId();
+
+            request.setLink(link);
             request.setLinkTitle("See Game");
             request.setReceiverId(user.getId());
             notificationEventPublisher.send(request);

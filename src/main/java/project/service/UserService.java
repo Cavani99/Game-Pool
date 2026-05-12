@@ -167,6 +167,12 @@ public class UserService implements UserDetailsService {
         user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
+
+        friends = friendUser.getFriends();
+        friends.add(user);
+        friendUser.setFriends(friends);
+        friendUser.setUpdatedOn(LocalDateTime.now());
+        userRepository.save(friendUser);
     }
 
     public void removeFriend(UUID id, UUID friendId) {
