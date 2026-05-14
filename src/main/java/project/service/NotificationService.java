@@ -136,7 +136,7 @@ public class NotificationService {
         return notifications.stream().toList();
     }
 
-    public void createChatMessageRequest(UUID userId, UUID friendId, String message) {
+    public CreateNotificationRequest createChatMessageRequest(UUID userId, UUID friendId, String message) {
         User sender = userService.getById(userId);
         User receiver = userService.getById(friendId);
 
@@ -146,6 +146,11 @@ public class NotificationService {
         request.setType(NotificationType.MESSAGE);
         request.setSenderId(userId);
         request.setReceiverId(friendId);
+        request.setSenderEmail(sender.getEmail());
+        request.setReceiverEmail(receiver.getEmail());
+
         chatEventPublisher.send(request);
+
+        return request;
     }
 }

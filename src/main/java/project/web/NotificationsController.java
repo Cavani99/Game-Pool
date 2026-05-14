@@ -1,8 +1,6 @@
 package project.web;
 
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
-import project.event.payloads.CreateNotificationRequest;
 import project.model.Game;
 import project.model.User;
 import project.security.AuthenticationDetails;
@@ -92,15 +90,6 @@ public class NotificationsController {
         result.put("friendId", friendId);
 
         return result;
-    }
-
-    @MessageMapping("/chat")
-    public void handleChatMessage(CreateNotificationRequest request) {
-        notificationService.createChatMessageRequest(
-                request.getSenderId(),
-                request.getReceiverId(),
-                request.getMessage()
-        );
     }
 
     @Scheduled(cron = "0 0 * * * ?")

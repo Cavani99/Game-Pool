@@ -1,6 +1,8 @@
 $(document).ready(function () {
     const token = $("meta[name='_csrf']").attr("content");
     const header = $("meta[name='_csrf_header']").attr("content");
+    const socket = new SockJS('/chat');
+    const stompClient = Stomp.over(socket);
 
     $(document).on('click', '.open-chat-btn', function (e) {
            e.preventDefault();
@@ -94,18 +96,19 @@ $(document).ready(function () {
        messagesList.scrollTop(messagesList[0].scrollHeight);
     }
 
-     let socket = new SockJS('/chat');
-     let stompClient = Stomp.over(socket);
-
     stompClient.connect({
         [header]: token
     }, function () {
 
-        const userId = $('#currentUserId').val();
+        const userId = $('#currentUserId').val().trim();
 
-        stompClient.subscribe('/queue/messages/' + userId, function (message) {
+        stompClient.subscribe('/user/queue/messages', function (message) {
             let msg = JSON.parse(message.body);
-            renderMessage(msg, userId);
+            try {
+                renderMessage(msg, userId);
+            } catch (e) {
+                console.error(e);
+            }
         });
 
     });
